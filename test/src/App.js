@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+import React from 'react';
+import Header from './component/Header';
+import Map from './component/MapPage';
+import Gombangba from './component/Gombangba';
+import Zzimlist from './component/Zimlist';
+import Roomout from './component/Roomout';
+import Signuplogin from './component/Signuplogin';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className='App'>
+        <Routes>
+          <Route path="/" element={<Header />}>
+            <Route path="/map" element={<Map />}></Route>
+            <Route path="/gombangba" element={<Gombangba />}></Route>
+            <Route path="/zzim" element={<Zzimlist />}></Route>
+            <Route path="/roomout" element={<Roomout />}></Route>
+          </Route>
+        </Routes>
+        
+        <Signuplogin />
+      </div>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
+
+
