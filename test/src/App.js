@@ -1,10 +1,11 @@
 import React from 'react';
-import Header from './component/Header';
-import Map from './component/MapPage';
-import Gombangba from './component/Gombangba';
-import Zzimlist from './component/Zimlist';
-import Roomout from './component/Roomout';
-import Signuplogin from './component/Signuplogin';
+import Header from './components/Header';
+import Map from './components/MapPage';
+import Zzimlist from './components/Zimlist';
+import Roomout from './components/Roomout';
+import Signuplogin from './components/Signuplogin';
+import GbbCreate from './components/GbbCreate';
+
 import { BrowserRouter, Route, Routes  } from "react-router-dom";
 import './App.css';
 
@@ -15,7 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Header  />}>
             <Route path="/map" element={<Map />} />
-            <Route path="/gombangba" element={<Gombangba />} />
+            <Route path="/gombangba" element={<GbbCreate />} />
             <Route path="/zzim" element={<Zzimlist />} />
             <Route path="/roomout" element={<Roomout />} />
             <Route path="/login" element={<Signuplogin />} />
