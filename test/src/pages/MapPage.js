@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import Header from '../components/Header';
 
 const MapPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Axios를 사용하여 데이터 가져오기
-        // const response = await axios.get('https://apis.map.kakao.com/download/web/data/chicken.json');
-        const response = await axios.get('/chicken.json');
+        const response = await axios.get('https://apis.map.kakao.com/download/web/data/chicken.json');
+        // const response = await axios.get('/chicken.json');
         const data = response.data;
 
         const container = document.getElementById('map');
         const map = new window.kakao.maps.Map(container, {
-          center: new window.kakao.maps.LatLng(36.2683, 127.6358),
-          level: 13,
+          center: new window.kakao.maps.LatLng(37.5019, 127.0397),
+          level: 6,
         });
         map.setMinLevel(6);
         const clusterer = new window.kakao.maps.MarkerClusterer({
           map: map,
           averageCenter: true,
-          minLevel: 6,
+          minLevel: 1,
           minClusterSize: 1,
         });
 
@@ -39,7 +40,10 @@ const MapPage = () => {
   }, []);
 
   return (
-    <div id="map" style={{ width: '100%', height: '500px' }}></div>
+    <div>
+      <Header/>
+      <div id="map" style={{ width: '100%', height: '500px' }}></div>
+    </div>
   );
 };
 

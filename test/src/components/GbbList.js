@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Header from '../components/Header';
+
 
     function Nav(props) {
     const lis = [ ]
@@ -159,8 +161,8 @@ import { useState } from 'react';
 
     return (
         <>
-
         <div class="background">
+        <Header/>
             <h1 class="titlebar">당신의 곰방을 보여주세요</h1>
             <div class="content">
 

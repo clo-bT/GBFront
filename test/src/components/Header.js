@@ -1,33 +1,26 @@
 import React from 'react';
-import { Link, Outlet } from "react-router-dom";
+import {Link} from "react-router-dom";
 import './Header.css';
 
 const Header = () => {
-    return (
-        <>
-        <header className='navbar'>
-        <nav>
-            <ul>
-                <li><Link to = "/">곰방</Link></li>
-                <li><Link to = "/map">지도</Link></li>
-                <li><Link to = "/gombangba">곰방봐</Link></li>
-                <li><Link to = "/zzim">찜 목록</Link></li>
-                <li><Link to="/roomout">방 내놓기</Link></li>
-               
-            </ul>
-            </nav>
-            <div>
-                <Link to="/login">
-                    <button>회원가입/로그인</button>
-                </Link>
+  return (
+    <div>
+      <div className='header'>
+          <div className='parent'>
+            <div className='logoparents'>
+              <Link to = "/">
+                <img className='logoIcon' alt="" src='/assets/logo.png'/>
+              </Link>
             </div>
-        </header>
-            <div>
-                <Outlet />
-            </div>
-            </>
-        
-    )
+              <Link to = "/map" className='b1'>지도</Link>
+              <Link to = "/gombangba" className='b1'>곰방봐</Link>
+              <Link to = "/zzim" className='b1'>찜 목록</Link>
+              <Link to="/roomout" className='b1'>방 내놓기</Link>
+          </div>
+          <Link to="/login" className='b2'>회원가입/로그인</Link>
+      </div>
+    </div>
+  )
 }
 
 export default Header;
