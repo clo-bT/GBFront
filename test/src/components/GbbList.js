@@ -8,9 +8,9 @@ import { useLocation, useNavigate  } from 'react-router-dom';
         const images = location.state && location.state.images ? location.state.images : [];
     return (
         <>
-        <div class="background">
+        <div className="background">
         <Header/>
-                <h1 class="titlebar">당신의 곰방을 보여주세요</h1>
+                <h1 className="titlebar">당신의 곰방을 보여주세요</h1>
                 <button className='plus-button' onClick={() => navigate("/gbbcreate")}>+</button>
             <div class="content">
             {images.map((image, id) => (
