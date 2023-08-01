@@ -1,5 +1,5 @@
 
-import "./Signuplogin.module.css";
+import "./Signuplogin.css";
 const Loginpage = () => {
 
   const Rest_api_key='a20ef37212e1ae86b20e09630f6590ce' //REST API KEY
@@ -10,20 +10,24 @@ const Loginpage = () => {
       window.location.href = kakaoURL
   }
 
-  return (  
-    <div className='loginpage'>
-          <div>카카오톡으로 <b className='b6'>곰방</b> 시작하기</div>
-          <div className='b6'>곰방</div>
-          <div>
-            {/* <a id="kakao-login-btn" href="javascript:loginWithKakao()">
-  <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
-    alt="카카오 로그인 버튼" onClick={handleLogin} />
-</a> */}
-            <b className='b6' onClick={handleLogin}>
-              카카오톡으로 시작하기
-            </b>
-          </div>
-    </div>
+  return (
+    <div className="wrapper">
+      <div className='loginpage'>
+            <div>카카오톡으로 <b className='b5'>곰방</b> 시작하기</div>
+            
+            <img className="logoimg" alt="곰방로고" src='/assets/logo.png'/>
+
+            <div>
+                <img
+                  className="kakaologo" 
+                  src="/assets/kakao_login_large_wide.png" 
+                  alt="카카오 로그인 버튼" 
+                  onClick={handleLogin} 
+                />
+
+            </div>
+      </div>
+  </div>  
   );
 };
 
