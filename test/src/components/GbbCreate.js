@@ -1,7 +1,10 @@
+import Header from '../components/Header';
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const GbbCreate = () => {
         const [showImages, setShowImages] = useState([]);
+        const navigate = useNavigate();
     
         // 이미지 상대경로 저장
         const handleAddImages = (event) => {
@@ -24,9 +27,14 @@ const GbbCreate = () => {
         const handleDeleteImage = (id) => {
         setShowImages(showImages.filter((_, index) => index !== id));
         };
+        const handleSubmit = () => {
+            navigate('/gbblist', { state: { images: showImages } });
+        };
+
     
     return (
         <div className="addPicture">
+            <Header/>
             <h1>당신의 곰방을 보여주세요</h1> 
             <div className="gom-container">
                 <h2>곰방 올리기</h2>
@@ -44,7 +52,7 @@ const GbbCreate = () => {
                     <button onClick={() => handleDeleteImage(id)}>X</button>
             </div>
             ))}
-            <button className="submit-button">입력</button>
+            <button className="submit-button" onClick={handleSubmit}>입력</button>
         </div>
         );
     };
