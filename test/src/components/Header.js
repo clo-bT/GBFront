@@ -13,7 +13,7 @@ const Header = () => {
               </Link>
             </div>
               <Link to = "/map" className='b1'>지도</Link>
-              <Link to = "/gombangba" className='b1'>곰방봐</Link>
+              <Link to = "/gbblist" className='b1'>곰방봐</Link>
               <Link to = "/zzim" className='b1'>찜 목록</Link>
               <Link to="/roomout" className='b1'>방 내놓기</Link>
           </div>
