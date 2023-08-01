@@ -5,6 +5,7 @@ import Roomout from './pages/Roomout';
 import Signuplogin from './pages/Signuplogin';
 import GbbList from './components/GbbList';
 import GbbCreate from './components/GbbCreate';
+import TestApp from './components/TestApp';
 import Main from './pages/Main'
 import Auth from './pages/Auth';
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/login" element={<Signuplogin />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/gbbcreate" element={<GbbCreate />} />
+          <Route path="/test" element={<TestApp />} />
         </Routes>
       </div>
     </BrowserRouter>
