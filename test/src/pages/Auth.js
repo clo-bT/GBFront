@@ -5,6 +5,7 @@ import axios from 'axios';
 export default function Auth() {
     const [c, setcode] = useState('')    
     const [accessToken,setaccessToken] =useState('')
+    const [userpp,setuserpp] = useState([])
     
     
     useEffect(()=>{
@@ -32,8 +33,7 @@ export default function Auth() {
                 .then(function(r){
                     console.log('tokkensuccess',r.data)
                     setaccessToken(r.data.access_token)
-                    // getUserInfo(r.data.access_token)
-                    getUserInfo('f9223e4dda8be0f6be60acdb05638277')
+                    getUserInfo(r.data.access_token)
                 })
             }
             catch(error){
@@ -42,40 +42,21 @@ export default function Auth() {
         }
 
         const getUserInfo = async (at)=>{
-            // const headers = {
-            //     'Authorization' : 'Bearer '+ at,
-            // }
-            // console.log(headers)
-            // // 엑세스 토큰 헤더에 담기
-
-            // // 카카오 사용자 정보 조회
-            // await axios.get("https://kapi.kakao.com/v2/user/me", headers)
-            // .then(function(r){console.log(r)})
-            // .catch(function(error){console.error('error',error)})
-            
-            
-            
-            // id, email 추출
-            // return {id:result.id,email:result.kakao_account.email}
-
             const headers = {
-                'Authorization': 'KakaoAK '+ at,
-                'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                'Authorization' : 'Bearer '+ at,
             }
-            const params = {
-                'target_id_type': 'user_id',
-                'target_id' : 2943193607
-            }
-            await axios.get("https://kapi.kakao.com/v2/user/me", {params:params,headers:headers})
+            console.log(headers)
+            // 엑세스 토큰 헤더에 담기
+
+            // 카카오 사용자 정보 조회
+            await axios.get("https://kapi.kakao.com/v2/user/me", {headers:headers})
             .then(function(r){
-                console.log(r)
-                setcode(r.data.properties.nickname)
+                console.log(r.data)
+                console.log(r.data.properties)
+                setuserpp(r.data)
             })
-
+            .catch(function(error){console.error('error',error)})
         }
-
-
-
         gettoken()
 
     },[])
@@ -91,6 +72,16 @@ export default function Auth() {
             <div>
                 토큰정보 : {accessToken}
             </div>
+            #properties
+            {Object.entries(userpp).map(([_,userinfo])=>(
+                <div key={_}>
+                    <div>{_}:{userinfo}</div>
+                    <div>connected:{userinfo.connected_at}</div>
+                    <div>channelID:{userinfo.id}</div>
+                    {/* <div>kakao_account:{Object.entries(userinfo.kakao_account).map(([key,value])=>(<div>{key}:{value}</div>))}</div> */}
+                    {/* <div>properties:{Object.entries(userinfo.properties).map(([key,value])=>(<div>{key}:{value}</div>))}</div> */}
+                </div>
+            ))}
         </div>
         
     )
