@@ -1,0 +1,45 @@
+.header {
+    position: relative;
+    height: 121px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-gray-100);
+    font-family: var(--font-magra);
+    font-size: var(--font-size-6xl);
+    font-weight: bold;
+    }
+
+.b1,
+.b2,
+.logoIcon {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    }
+
+.b2 {
+    padding: 20px;
+    position: relative;
+    border-radius: var(--br-xl);
+    background-color: var(--color-tan);
+    margin-right: 20px;
+    }
+.logoIcon {
+    width: 133px;
+    height: 75px;
+    margin: 30px;
+    overflow: hidden;
+    }
+
+.parent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-50xl);
+}
+
+
