@@ -1,11 +1,11 @@
 import Header from '../components/Header';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 const GbbCreate = () => {
+    const navigate = useNavigate();
     const [showImages, setShowImages] = useState([]);
     const [hashtags, setHashtags] = useState([]);
-    const navigate = useNavigate();
     const [gbbList, setGbbList] = useState([]);
 
     // 이미지 상대경로 저장
@@ -17,7 +17,7 @@ const GbbCreate = () => {
         const currentImageUrl = URL.createObjectURL(imageLists[i]);
         imageUrlLists.push(currentImageUrl);
     }
-
+    // 이미지가 10개 초과면 나중에 들어온걸 삭제
     if (imageUrlLists.length > 10) {
         imageUrlLists = imageUrlLists.slice(0, 10);
     }
@@ -48,24 +48,18 @@ const GbbCreate = () => {
         setHashtags(newHashtags);
     };
     const handleSubmit = () => {
-        const newGbb = {
-            images: showImages,
-            hashtags: hashtags,
-        };
-        console.log(newGbb)
-
-        // 새로운 입력 내용을 배열에 추가
-        setGbbList([...gbbList, newGbb]);
-
-        console.log(gbbList);
-        console.log(newGbb);
-        // 입력창 초기화
-        
-        const query = new URLSearchParams(gbbList.map(gbb => JSON.stringify(gbb))).toString();
+        const params = new URLSearchParams();
+        showImages.forEach(img => {
+          params.append('img', JSON.stringify(img));
+        });
+        hashtags.forEach(tag => {
+          params.append('tag', JSON.stringify(tag));
+        });
+        const query = params.toString();
+        console.log('query',query)
+        setShowImages([]);
+        setHashtags([]);
         navigate('/gbblist?' + query);
-        // setShowImages([]);
-        // setHashtags([]);
-    
     };
 
     
@@ -93,7 +87,7 @@ const GbbCreate = () => {
                     className="title-input"
                     type="text"
                     placeholder="# 해시태그를 입력하세요"
-                    onKeyPress={handleHashTagKeyPress}/>
+                    onKeyDown={handleHashTagKeyPress}/>
             </div>
 
             <div className='hashtags'>
@@ -105,12 +99,14 @@ const GbbCreate = () => {
             ))}
             </div>
             
-            {showImages.map((image, id) => (
-            <div className="imageContainer" key={id}>
-                <img src={image} alt={`${image}-${id}`} width={'200px'} />
+            <div className="imageContainer" >
+                {showImages.map((image, id) => (
+                <div key={id}>
+                    <img src={image} alt={`${image}-${id}`} width={'200px'}/>
                     <button onClick={() => handleDeleteImage(id)}>X</button>
+                </div>
+                    ))}
             </div>
-            ))}
             <button className="submit-button" onClick={handleSubmit}>입력</button>
         </div>
         );
