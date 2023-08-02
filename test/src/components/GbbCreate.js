@@ -1,12 +1,13 @@
 import Header from '../components/Header';
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 const GbbCreate = () => {
     const navigate = useNavigate();
     const [showImages, setShowImages] = useState([]);
     const [hashtags, setHashtags] = useState([]);
-    const [gbbList, setGbbList] = useState([]);
+    // const [gbbList, setGbbList] = useState([]);
 
     // 이미지 상대경로 저장
     const handleAddImages = (event) => {
