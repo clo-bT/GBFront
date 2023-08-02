@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate   } from 'react-router-dom';
-import Header from './Header';
+import Header from '../components/Header';
 
 const Create = ({ onImageUpload }) => {
     const [selectedImages, setSelectedImages] = useState([]);
