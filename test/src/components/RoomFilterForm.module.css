@@ -9,7 +9,7 @@
 }
 .head{
   font-size: var(--font-size-16xl);
-
+  font-weight: 600;
 }
 
 
@@ -54,17 +54,17 @@
   border-color: transparent;
   text-indent: 50px;
   background-color: var(--color-white-60);
-  
+  background-image: url(https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-256.png) ;
+  background-size:  35px;
+  background-position:  20px center;
+  background-repeat: no-repeat;
 }
 
 .myinput:focus{
   outline: none;
+  
 }
 .myinput::placeholder{
-  background-image: url(https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-256.png) ;
-  background-size: contain;
-  background-position:  1px center;
-  background-repeat: no-repeat;
   text-indent: 50px;
   font-size: var(--font-size-3xl);
 }
