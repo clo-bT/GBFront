@@ -3,8 +3,8 @@ import Map from './pages/MapPage';
 import Zzimlist from './pages/Zimlist';
 import Roomout from './pages/Roomout';
 import Signuplogin from './pages/Signuplogin';
-import GbbList from './components/List';
-import GbbCreate from './components/Create';
+import GbbList from './pages/List';
+import GbbCreate from './pages/Create';
 import TestApp from './components/TestApp';
 import Main from './pages/Main'
 import Auth from './pages/Auth';

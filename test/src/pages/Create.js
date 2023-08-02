@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate   } from 'react-router-dom';
-import Header from './Header';
+import Header from '../components/Header';
 
 const Create = ({ onImageUpload }) => {
     const [selectedImages, setSelectedImages] = useState([]);
@@ -19,7 +19,7 @@ const Create = ({ onImageUpload }) => {
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             const value = event.target.value.trim();
-            if (hashtag.trim() !== '' && !selectedHashtags.includes(value)) {
+            if (hashtag.trim() !== '' && !selectedHashtags.includes('#'+value)) {
                 setSelectedHashtags([...selectedHashtags, '#'+hashtag]);
                 setHashtag('');
             }else {
