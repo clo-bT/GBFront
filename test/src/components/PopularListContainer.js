@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./PopularListContainer.module.css";
 // import { useCallback } from "react";
 
@@ -15,7 +16,7 @@ const PopularListContainer = () => {
       <div className={styles.frame}>
         <div className={styles.textparent}>
           <div className={styles.b}>곰방에서 인기 많은 매물</div>
-          <div className={styles.b1}>더보기</div>
+          <Link to='/map' className={styles.b1}>더보기</Link>
         </div>
         <div className={styles.imageParent}>
           {imgtags}
@@ -25,7 +26,7 @@ const PopularListContainer = () => {
       <div className={styles.frame} >
         <div className={styles.textparent}>
           <div className={styles.b}>곰방봐 보러 오세요</div>
-          <div className={styles.b1}>더보기</div>
+          <Link to='/gbblist' className={styles.b1}>더보기</Link>
         </div>
         <div className={styles.imageParent}>
           {imgtags}
