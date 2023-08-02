@@ -30,9 +30,12 @@ code {
   --font-size-16xl: 35px;
 
   /* Colors */
+  --color-white-100: rgba(255,255,255,1);
+  --color-white-60: rgba(255,255,255,0.6);
   --color-gray-100: #282828;
   --color-gray-200: rgba(40, 40, 40, 0.6);
   --color-tan: rgba(199, 173, 146, 0.4);
+  --color-tan2: rgba(199, 173, 146, 0.8);
   --color-black: #000;
 
   /* Gaps */

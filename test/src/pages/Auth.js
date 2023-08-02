@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function Auth() {
     const [c, setcode] = useState('')    
     const [accessToken,setaccessToken] =useState('')
-    const [userpp,setuserpp] = useState([])
+    const [userinfo,setuserpp] = useState([])
     
     
     useEffect(()=>{
@@ -73,15 +73,34 @@ export default function Auth() {
                 토큰정보 : {accessToken}
             </div>
             #properties
-            {Object.entries(userpp).map(([_,userinfo])=>(
-                <div key={_}>
-                    <div>{_}:{userinfo}</div>
-                    <div>connected:{userinfo.connected_at}</div>
-                    <div>channelID:{userinfo.id}</div>
-                    {/* <div>kakao_account:{Object.entries(userinfo.kakao_account).map(([key,value])=>(<div>{key}:{value}</div>))}</div> */}
-                    {/* <div>properties:{Object.entries(userinfo.properties).map(([key,value])=>(<div>{key}:{value}</div>))}</div> */}
+            {userinfo ? (
+            <div>
+                <div>connected: {userinfo.connected_at}</div>
+                <div>channelID: {userinfo.id}</div>
+                <div>
+                kakao_account:
+                {userinfo.kakao_account
+                    ? Object.entries(userinfo.kakao_account).map(([key, value]) => (
+                        <div key={key}>
+                        {key}: {JSON.stringify(value)}
+                        </div>
+                    ))
+                    : ''}
                 </div>
-            ))}
+                <div>
+                properties:
+                {userinfo.properties
+                    ? Object.entries(userinfo.properties).map(([key, value]) => (
+                        <div key={key}>
+                        {key}: {JSON.stringify(value)}
+                        </div>
+                    ))
+                    : ''}
+                </div>
+            </div>
+            ) : (
+            ''
+            )}
         </div>
         
     )
