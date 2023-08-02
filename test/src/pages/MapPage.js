@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import KakaoMap from'../components/KakaoMap'
+import FilterNav from '../components/FilterNav';
 import styles from './MapPage.module.css'
-
 
 const MapPage = () => {
   useEffect(() => {
@@ -47,7 +47,7 @@ const MapPage = () => {
       <Header/>
       <div className={styles.body}>
         <div className={styles.background}><KakaoMap/></div>
-        <div className={styles.nav}></div>
+        <div className={styles.nav}><FilterNav/></div>
       </div>
     </div>
   );

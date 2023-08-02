@@ -1,0 +1,70 @@
+.Frame{
+    width: 100%;
+    height: 50px;
+    background-color: var(--color-tan2);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: center;
+}
+
+.LocSearch {
+    width: 30vw;
+}
+
+
+.ContSearch{
+    width: 50vw;
+}
+
+.ContSearch,
+.LocSearch {
+    padding: 0px 10px;
+    margin: 10px 30px;
+    font-size: var(--font-size-lg);
+    box-sizing: border-box;
+    border-radius: var(--br-3xs) ;
+    border-color: transparent;
+    text-indent: 50px;
+    background-color: var(--color-white-60);
+    background-image: url(https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-256.png) ;
+    background-size:  35px;
+    background-position:  10px center;
+    background-repeat: no-repeat;
+    /* background-color: transparent; */
+}
+.ContSearch:focus,  
+.LocSearch:focus{
+    outline: none;
+    
+}
+.ContSearch::placeholder,   
+.LocSearch::placeholder{
+    text-indent: 50px;
+    font-size: var(--font-size-lg);
+    color: gray;
+    align-self: center;
+}
+
+.verticalLine{
+    margin: 0;
+    height:100%;
+    width: 1px;
+    border-width:0;
+    color:#000;
+    background-color:#000;
+}
+
+.icon_parents{
+    position: relative;
+    margin:  10px 80px;
+    width: 120px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.icon_detail{
+    width: 40px;
+}
