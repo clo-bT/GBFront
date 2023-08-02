@@ -1,0 +1,70 @@
+.b {
+  font-size: var(--font-size-3xl);
+  font-weight: bold;
+  text-decoration: underline;
+}
+.b1{
+  font-size: var(--font-size-3xl);
+
+}
+.head{
+  font-size: var(--font-size-16xl);
+
+}
+
+
+.group {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-8xl);
+}
+
+.parent {
+  margin: 0 !important;
+  position: absolute;
+  top: 160px;
+  left: 212px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  text-align: left;
+  color: var(--color-gray-100);
+}
+
+.bbody{
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 70vh;
+  background-color: var(--color-tan2);
+  font-family: var(--font-istok-web);
+
+}
+
+.myinput {
+  width: 160vh;
+  padding: 20px 20px;
+  margin: 8px 0;
+  font-size: var(--font-size-3xl);
+  box-sizing: border-box;
+  border-radius: var(--br-3xs) ;
+  border-color: transparent;
+  text-indent: 50px;
+  background-color: var(--color-white-60);
+  
+}
+
+.myinput:focus{
+  outline: none;
+}
+.myinput::placeholder{
+  background-image: url(https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-256.png) ;
+  background-size: contain;
+  background-position:  1px center;
+  background-repeat: no-repeat;
+  text-indent: 50px;
+  font-size: var(--font-size-3xl);
+}
