@@ -8,7 +8,7 @@
     justify-content: space-between;
     color: var(--color-gray-100);
     font-family: var(--font-magra);
-    font-size: 20px;
+    font-size: var(--font-size-xl);
     font-weight:600;
     }
 
@@ -43,7 +43,7 @@
     overflow:hidden;
 
     /* 상우하좌 북동남서 */
-    margin: 10px 10px 10px 10px; 
+    margin: 10px 10px 10px 30px; 
 }
 
 .parent {

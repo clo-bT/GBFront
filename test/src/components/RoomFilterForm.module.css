@@ -4,7 +4,7 @@
   text-decoration: underline;
 }
 .option{
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-xl);
 
 }
 .head{
@@ -19,6 +19,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-8xl);
+  margin-top: 20px;
 }
 
 .parent {
@@ -29,7 +30,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-sm);
+  /* gap: var(--gap-sm); */
   text-align: left;
   color: var(--color-gray-100);
 }
@@ -66,5 +67,5 @@
 }
 .myinput::placeholder{
   text-indent: 50px;
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-xl);
 }

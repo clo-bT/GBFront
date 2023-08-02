@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import Header from '../components/Header';
-import KakaoMap from'../components/KakaoMap'
-import styles from './MapPage.module.css'
 
-
-const MapPage = () => {
+const KakaoMap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,14 +39,8 @@ const MapPage = () => {
   }, []);
 
   return (
-    <div>
-      <Header/>
-      <div className={styles.body}>
-        <div className={styles.background}><KakaoMap/></div>
-        <div className={styles.nav}></div>
-      </div>
-    </div>
+        <div id="map" style={{margin : '0', width : '100%', height : '720px'}} ></div>
   );
 };
 
-export default MapPage;
+export default KakaoMap;
