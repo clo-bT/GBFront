@@ -38,7 +38,7 @@ const List = ({ imageList }) => {
                     width="100px"
                 />
                 )}
-                <p># {imageGroup.hashtag}</p>
+                <p>{imageGroup.hashtag}</p>
                 
             </div>
             ))}
