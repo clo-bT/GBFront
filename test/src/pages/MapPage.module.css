@@ -1,5 +1,6 @@
 .body{
     position: relative;
+    top: 0;
     margin: 0;
 }
 
@@ -7,14 +8,19 @@
     position: absolute;
     margin: 0;
     width: 100%; 
-    height: 720px;
+    height: calc(100vh - 100px);
     overflow: hidden;
     z-index: 1; 
 }
 .nav{
-    position: absolute;
+    position: relative;
     z-index: 2;
-    top: 0;
+    /* top: 0; */
     width: 100%;
     height: auto;
+}
+.rlist{
+    position:relative;
+    z-index: 3;
+    width: 30%;
 }

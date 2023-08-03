@@ -63,7 +63,6 @@
 
 .myinput:focus{
   outline: none;
-  
 }
 .myinput::placeholder{
   text-indent: 50px;
