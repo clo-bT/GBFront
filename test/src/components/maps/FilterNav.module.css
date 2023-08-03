@@ -4,17 +4,18 @@
     background-color: var(--color-tan2);
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     align-content: center;
 }
 
 .LocSearch {
-    width: 30vw;
+    width: 25%;
+    border-right: 3px solid black;
+    
 }
 
 
 .ContSearch{
-    width: 50vw;
+    width: 50%;
 }
 
 .ContSearch,
@@ -47,24 +48,25 @@
 }
 
 .verticalLine{
+    position: relative;
     margin: 0;
+    top: 0;
+    left: 15%;
     height:100%;
-    width: 1px;
-    border-width:0;
-    color:#000;
-    background-color:#000;
 }
 
 .icon_parents{
-    position: relative;
-    margin:  10px 80px;
-    width: 120px;
+    position: absolute;
+    margin: 10px 20px;
+    right: 0;
+    justify-content: flex-end;
     display: flex;
-    justify-content: space-around;
     align-items: center;
 
 }
 
 .icon_detail{
-    width: 40px;
+    width: 30px;
+    margin:  0px 10px;
+
 }
