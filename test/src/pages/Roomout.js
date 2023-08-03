@@ -1,7 +1,8 @@
 import Gbaddress from "../components/Gbaddress";
 import Header from "../components/Header";
-import React, { useState } from "react";
-
+import React, { useCallback, useState } from "react";
+import styles from "./Roomout.module.css";
+import DatePicker from "react-datepicker";
 
 export default function Roomout() {
     const [info, setInfo] = useState([]);
@@ -20,108 +21,185 @@ export default function Roomout() {
     const handleClickParkingButton = (e) => {
         setParking(e.target.value)
     };
+    const [selectedImages, setSelectedImages] = useState([]);
+    const handleImageChange = (event) => {
+        const files = event.target.files;
+        setSelectedImages([...selectedImages, ...files]);
+    };
+    const checkBoxList = ['에어컨', '냉장고', '세탁기', '건조기', '싱크대', '전자레인지', '가스레인지', '신발장', '화재경보기', '현관 보안', '방충망'];
+    const [checkedList, setCheckedList] = useState([]);
+
+    const checkHandler = (value) => {
+        setCheckedList((prev) => {
+            if (prev.includes(value)) {
+            return prev.filter((item) => item !== value);
+            } else {
+            return [...prev, value];
+            }
+        });
+        };
+    
+        const onSubmit = useCallback(
+        (e) => {
+            e.preventDefault();
+            console.log('checkedList:', checkedList);
+        },
+        [checkedList]
+    );
+    const [agreement, setAgreement] = useState(false);
+    const agreeBtnEvent =()=>{
+        if(agreement === false) {
+            setAgreement(true)
+        }else {
+            setAgreement(false)
+        }
+    };
+    const [date, setDate] = useState(new Date());
+
+    const handleCalendarClose = () => console.log("Calendar closed");
+    const handleCalendarOpen = () => console.log("Calendar opened");
+  
+    
 
     return (
         <div>
-            <Header/>
-            <div className="room-out">
+            <Header />
+        <div className={styles.roomout}>
+            <div className={styles.roomoutform}>
                 <h1>곰방 내놓기</h1>
-                <div className="gb-info">
+                <div className={styles.gbinfo}>
                     <h2>곰방 정보</h2>
                     <h3>곰방 유형</h3>
-                    <div className="gb-type">
+                    <div className={styles.gbtype}>
                         <label>
-                        <input type="radio" value="oneroom" checked={info === "oneroom"} onChange={handleClickInfoButton}/>
-                        원룸
+                            <input type="radio" value="oneroom" checked={info === "oneroom"} onChange={handleClickInfoButton} />
+                            원룸
                         </label>
                         <label>
-                        <input type="radio" value="officetell" checked={info === "officetell"} onChange={handleClickInfoButton}/>
-                        오피스텔
+                            <input type="radio" value="officetell" checked={info === "officetell"} onChange={handleClickInfoButton} />
+                            오피스텔
                         </label>
                         <label>
                             <input type="radio" value="villa" checked={info === "villa"} onChange={handleClickInfoButton} />
-                        빌라
+                            빌라
                         </label>
                         <label>
-                        <input type="radio" value="apartment" checked={info === "apartment"} onChange={handleClickInfoButton}/>
-                        아파트
+                            <input type="radio" value="apartment" checked={info === "apartment"} onChange={handleClickInfoButton} />
+                            아파트
                         </label>
                     </div>
                     <h3>곰방 구조</h3>
-                    <div className="gb-structure">
+                    <div className={styles.gbstructure}>
                         <label>
-                        <input type="radio" value="open" checked={struc === "open"} onChange={handleClickStrucButton}/>
-                        오픈형
+                            <input type="radio" value="open" checked={struc === "open"} onChange={handleClickStrucButton} />
+                            오픈형
                         </label>
                         <label>
-                        <input type="radio" value="seperate" checked={struc === "seperate"} onChange={handleClickStrucButton}/>
-                        분리형
+                            <input type="radio" value="seperate" checked={struc === "seperate"} onChange={handleClickStrucButton} />
+                            분리형
                         </label>
                         <label>
-                        <input type="radio" value="multiple" checked={struc === "multiple"} onChange={handleClickStrucButton}/>
-                        복층
+                            <input type="radio" value="multiple" checked={struc === "multiple"} onChange={handleClickStrucButton} />
+                            복층
                         </label>
                         <label>
-                        <input type="radio" value="tworoom" checked={struc === "tworoom"} onChange={handleClickStrucButton}/>
-                        투룸
+                            <input type="radio" value="tworoom" checked={struc === "tworoom"} onChange={handleClickStrucButton} />
+                            투룸
                         </label>
                         <label>
-                        <input type="radio" value="threenmore" checked={struc === "threenmore"} onChange={handleClickStrucButton}/>
-                        쓰리룸 이상
+                            <input type="radio" value="threenmore" checked={struc === "threenmore"} onChange={handleClickStrucButton} />
+                            쓰리룸 이상
                         </label>
                     </div>
                     <h3>주소</h3>
-                    <div className="gb-address">
-                    <Gbaddress/>
+                    <div className={styles.gbaddress}>
+                        <Gbaddress />
                     </div>
                     <h3>근처 역/학교</h3>
-                    <div><input type="text"/></div>
+                    <div><input type="text" /></div>
                     <h3>보증금</h3>
-                    <div><input type="text"/>원</div>
+                    <div><input type="text" />원</div>
                     <h3>월세</h3>
-                    <div><input type="text"/>원</div>
+                    <div><input type="text" />원</div>
                     <h3>관리비</h3>
-                    <div><input type="text"/>원</div>
+                    <div><input type="text" />원</div>
                     <h3>입주 가능 일자</h3>
-                    <div><input type="text"/>원</div>
+                        
+                            <DatePicker
+                                showIcon
+                                selected={date}
+                                onChange={(date) => setDate(date)}
+                                isClearable
+                                onCalendarClose={handleCalendarClose}
+                                onCalendarOpen={handleCalendarOpen}
+                            />일
+                        
                     <h3>계약 만료 일자</h3>
-                    <div><input type="text"/>원</div>
+                    <div><input type="text" />일</div>
                     <h3>사용 승인일</h3>
-                    <div><input type="text"/>원</div>
+                    <div><input type="text" />일</div>
                     <h3>층 수</h3>
-                    <div><input type="text"/>층 / <input type="text"/>층</div>
+                    <div><input type="text" />층 / <input type="text" />층</div>
                     <h3>엘리베이터</h3>
                     <div><label>
-                            <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton}/>
-                            있음
-                            </label>
-                            <label>
-                            <input type="radio" value="elevatorno" checked={elevator === "elevatorno"} onChange={handleClickElevatorButton}/>
+                        <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton} />
+                        있음
+                    </label>
+                        <label>
+                            <input type="radio" value="elevatorno" checked={elevator === "elevatorno"} onChange={handleClickElevatorButton} />
                             없음
-                            </label></div>
+                        </label></div>
                     <h3>욕실 수</h3>
-                    <div><input type="text"/>개</div>
+                    <div><input type="text" />개</div>
                     <h3>주차 가능 여부</h3>
                     <div><label>
-                            <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton}/>
-                            가능
-                            </label>
-                            <label>
-                            <input type="radio" value="parkingno" checked={parking === "parkingno"} onChange={handleClickParkingButton}/>
+                        <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton} />
+                        가능
+                    </label>
+                        <label>
+                            <input type="radio" value="parkingno" checked={parking === "parkingno"} onChange={handleClickParkingButton} />
                             불가능
-                            </label></div>
+                        </label></div>
+                
                     <h3>추가 옵션</h3>
-                    <div></div>
+                    <form onSubmit={onSubmit}>
+                        <div className='checkbox-group'>
+                            {checkBoxList.map((item, idx) => (
+                                <div className='checkbox' key={idx}>
+                                    <input
+                                        type='checkbox'
+                                        id={item}
+                                        checked={checkedList.includes(item)}
+                                        onChange={() => checkHandler(item)}
+                                    />
+                                    <label htmlFor={item}>{item}</label>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button type='submit'>저장</button>
+                    </form>
                     <h3>매물 사진</h3>
-                    <div></div>
+                    <div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageChange} />
+                    </div>
                     <h3>제목</h3>
                     <div><input type="text" /></div>
                     <h3>상세 설명</h3>
-                    <div><input type="text" /></div>
-                </div>
-                <p>매물관리규정을 확인하였으며, 입력한 정보는 실제 매물과 다름이 없습니다.</p>
-            </div>
+                    <div><input type="textarea" /></div>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="check1" checked={agreement} onChange={agreeBtnEvent}/>
+                        <label htmlFor="check1">매물관리규정을 확인하였으며, 입력한 정보는 실제 매물과 다름이 없습니다. <span className='pilsoo'>(필수)</span></label>
+                    </div>
             <button>곰방 내놓기</button>
-        </div>
-    )
+            </div>
+            </div>
+            </div>
+    );      
+    
 }
