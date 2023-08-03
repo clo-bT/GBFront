@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import React, { useCallback, useState } from "react";
 import styles from "./Roomout.module.css";
 import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css'
+import { ko } from 'date-fns/esm/locale';
 
 export default function Roomout() {
     const [info, setInfo] = useState([]);
@@ -54,12 +56,19 @@ export default function Roomout() {
             setAgreement(false)
         }
     };
-    const [date, setDate] = useState(new Date());
-
+    // const [date, setDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [approveDate, setApproveDate] = useState(new Date());
     const handleCalendarClose = () => console.log("Calendar closed");
     const handleCalendarOpen = () => console.log("Calendar opened");
-  
-    
+
+    const handleKeyPress = (e) => {
+        const charCode = e.which ? e.which : e.keyCode;
+        if (charCode !== 8 && charCode !== 0 && (charCode < 48 || charCode > 57)) {
+          e.preventDefault();
+        }
+    }
 
     return (
         <div>
@@ -118,28 +127,53 @@ export default function Roomout() {
                     <h3>근처 역/학교</h3>
                     <div><input type="text" /></div>
                     <h3>보증금</h3>
-                    <div><input type="text" />원</div>
+                    <div><input type="text" onInput={handleKeyPress} />원</div>
                     <h3>월세</h3>
-                    <div><input type="text" />원</div>
+                    <div><input type="text" onInput={handleKeyPress} />원</div>
                     <h3>관리비</h3>
-                    <div><input type="text" />원</div>
+                    <div><input type="text" onInput={handleKeyPress} />원</div>
                     <h3>입주 가능 일자</h3>
-                        
-                            <DatePicker
-                                showIcon
-                                selected={date}
-                                onChange={(date) => setDate(date)}
-                                isClearable
-                                onCalendarClose={handleCalendarClose}
-                                onCalendarOpen={handleCalendarOpen}
-                            />일
+                        <DatePicker
+                            showIcon
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            isClearable
+                            locale={ko}
+                            onCalendarClose={handleCalendarClose}
+                            onCalendarOpen={handleCalendarOpen}
+                            dateFormat="yyyy년 MM월 dd일"
+                            minDate={new Date()}
+                        />일
                         
                     <h3>계약 만료 일자</h3>
-                    <div><input type="text" />일</div>
+                    <DatePicker
+                            showIcon
+                            selected={endDate}
+                            onChange={(date) => setEndDate(date)}
+                            isClearable
+                            locale={ko}
+                            onCalendarClose={handleCalendarClose}
+                            onCalendarOpen={handleCalendarOpen}
+                            dateFormat="yyyy년 MM월 dd일"
+                            minDate={startDate}
+                        />일
                     <h3>사용 승인일</h3>
-                    <div><input type="text" />일</div>
+                    <DatePicker
+                        showIcon
+                        selected={approveDate}
+                        onChange={(date) => setApproveDate(date)}
+                        isClearable
+                        locale={ko}
+                        onCalendarClose={handleCalendarClose}
+                        onCalendarOpen={handleCalendarOpen}
+                        dateFormat={"yyyy년 MM월 dd일"}
+                        dateFormatCalendar={"yyyy년 MM월"}
+                        // dropdownMode="select"
+                        showYearDropdown
+                        showMonthDropdown
+                    />일
                     <h3>층 수</h3>
-                    <div><input type="text" />층 / <input type="text" />층</div>
+                    <div><input type="text" onInput={handleKeyPress} />층 / <input type="text" onInput={handleKeyPress}/>층</div>
                     <h3>엘리베이터</h3>
                     <div><label>
                         <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton} />
@@ -150,7 +184,7 @@ export default function Roomout() {
                             없음
                         </label></div>
                     <h3>욕실 수</h3>
-                    <div><input type="text" />개</div>
+                    <div><input type="text" onInput={handleKeyPress}/>개</div>
                     <h3>주차 가능 여부</h3>
                     <div><label>
                         <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton} />
@@ -190,7 +224,7 @@ export default function Roomout() {
                     <h3>제목</h3>
                     <div><input type="text" /></div>
                     <h3>상세 설명</h3>
-                    <div><input type="textarea" /></div>
+                    <div><textarea rows="5" cols="50"/></div>
                     </div>
                     <div>
                         <input type="checkbox" id="check1" checked={agreement} onChange={agreeBtnEvent}/>
