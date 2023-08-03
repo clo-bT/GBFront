@@ -1,8 +1,8 @@
 import Header from '../components/Header';
-import KakaoMap from'../components/maps/KakaoMap'
-import FilterNav from '../components/maps/FilterNav';
+import KakaoMap from'../components/Maps/KakaoMap'
+import FilterNav from '../components/Maps/FilterNav';
 import styles from './MapPage.module.css'
-import RoomList from '../components/maps/RoomList';
+import RoomList from '../components/Maps/RoomList';
 
 const MapPage = () => {
 
