@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import DaumPostcode from 'react-daum-postcode';
 
 function Gbaddress() {
+    const [showDaumPostcode, setShowDaumPostcode] = useState(false);
     const handleExecDaumPostcode = (data) => {
+
         // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
         // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
@@ -51,20 +54,40 @@ function Gbaddress() {
             guideTextBox.innerHTML = '';
             guideTextBox.style.display = 'none';
         }
+        const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${data.roadAddress}`;
+        const REST_API_KEY = 'a20ef37212e1ae86b20e09630f6590ce';
+        axios
+        .get(apiUrl, {
+            headers: {
+            Authorization: `KakaoAK ${REST_API_KEY}`,
+            },
+        })
+        .then((response) => {
+            const { documents } = response.data;
+            if (documents.length > 0) {
+            const { x, y } = documents[0];
+            console.log('Longitude:', x);
+            console.log('Latitude:', y);
+            } else {
+            console.log('No results found.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+        setShowDaumPostcode(false);
 }
-    
 
 return (
     <div>
-      <input type="text" id="sample4_postcode" placeholder="우편번호" />
-      <input type="button" onClick={handleExecDaumPostcode} value="우편번호 찾기" /><br />
-      <input type="text" id="sample4_roadAddress" placeholder="도로명주소" />
-      <input type="text" id="sample4_jibunAddress" placeholder="지번주소" />
-      <span id="guide" style={{ color: '#999', display: 'none' }}></span>
-      <input type="text" id="sample4_detailAddress" placeholder="상세주소" />
-        <input type="text" id="sample4_extraAddress" placeholder="참고항목" />
-        <DaumPostcode onComplete={handleExecDaumPostcode}/>
-      </div>
+        <input type="text" id="postcode" placeholder="우편번호" />
+        <input type="button" onClick={() => setShowDaumPostcode(true)} value="우편번호 찾기" /><br />
+        <input type="text" id="roadAddress" placeholder="도로명주소" />
+        <input type="text" id="jibunAddress" placeholder="지번주소" />
+        <span id="guide" style={{ color: '#999', display: 'none' }}></span>
+        <input type="text" id="detailAddress" placeholder="상세주소" />
+        {showDaumPostcode && <DaumPostcode onComplete={handleExecDaumPostcode} />}
+    </div>
 )
 };
 export default Gbaddress;
