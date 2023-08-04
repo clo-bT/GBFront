@@ -6,7 +6,8 @@ import Signuplogin from './pages/Signuplogin';
 import GbbList from './pages/List';
 import GbbCreate from './pages/Create';
 import TestApp from './components/TestApp';
-import Main from './pages/Main'
+import ChattingRoom from './components/Chatting/ChattingRoom';
+import Main from './pages/Main';
 import Auth from './pages/Auth';
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/login" element={<Signuplogin />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/test" element={<TestApp />} />
+          <Route path="/chatroom" element={<ChattingRoom />} />
         </Routes>
       </div>
     </BrowserRouter>
