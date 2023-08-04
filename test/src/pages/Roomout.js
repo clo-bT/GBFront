@@ -63,12 +63,6 @@ export default function Roomout() {
     const handleCalendarClose = () => console.log("Calendar closed");
     const handleCalendarOpen = () => console.log("Calendar opened");
 
-    const handleKeyPress = (e) => {
-        const charCode = e.which ? e.which : e.keyCode;
-        if (charCode !== 8 && charCode !== 0 && (charCode < 48 || charCode > 57)) {
-          e.preventDefault();
-        }
-    }
 
     return (
         <div>
@@ -125,13 +119,13 @@ export default function Roomout() {
                         <Gbaddress />
                     </div>
                     <h3>근처 역/학교</h3>
-                    <div><input type="text" /></div>
+                    <div><input type="text"/></div>
                     <h3>보증금</h3>
-                    <div><input type="text" onInput={handleKeyPress} />원</div>
+                    <div><input type="number"/>원</div>
                     <h3>월세</h3>
-                    <div><input type="text" onInput={handleKeyPress} />원</div>
+                    <div><input type="number"/>원</div>
                     <h3>관리비</h3>
-                    <div><input type="text" onInput={handleKeyPress} />원</div>
+                    <div><input type="number"/>원</div>
                     <h3>입주 가능 일자</h3>
                         <DatePicker
                             showIcon
@@ -173,7 +167,7 @@ export default function Roomout() {
                         showMonthDropdown
                     />일
                     <h3>층 수</h3>
-                    <div><input type="text" onInput={handleKeyPress} />층 / <input type="text" onInput={handleKeyPress}/>층</div>
+                    <div><input type="number" />층 / <input type="number"/>층</div>
                     <h3>엘리베이터</h3>
                     <div><label>
                         <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton} />
@@ -184,7 +178,7 @@ export default function Roomout() {
                             없음
                         </label></div>
                     <h3>욕실 수</h3>
-                    <div><input type="text" onInput={handleKeyPress}/>개</div>
+                    <div><input type="number"/>개</div>
                     <h3>주차 가능 여부</h3>
                     <div><label>
                         <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton} />
