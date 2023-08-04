@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
-import DaumPostcode, { useDaumPostcodePopup }  from 'react-daum-postcode';
+import { useDaumPostcodePopup }  from 'react-daum-postcode';
 
 function Gbaddress() {
     const scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -34,11 +34,11 @@ function Gbaddress() {
         document.getElementById("jibunAddress").value = data.jibunAddress;
                 
         // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
-        if (roadAddr !== '') {
-            document.getElementById("extraAddress").value = extraRoadAddr;
-        } else {
-            document.getElementById("extraAddress").value = '';
-        }
+        // if (roadAddr !== '') {
+        //     document.getElementById("extraAddress").value = extraRoadAddr;
+        // } else {
+        //     document.getElementById("extraAddress").value = '';
+        // }
 
         var guideTextBox = document.getElementById("guide");
         // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
@@ -79,16 +79,30 @@ function Gbaddress() {
     }
     const handleClick = () => {
         open({ onComplete: handleExecDaumPostcode });
-      };
+    };
 
 return (
     <div>
-        <input type="text" id="postcode" placeholder="우편번호" />
-        <input type="button" onClick={handleClick} value="우편번호 찾기" /><br />
-        <input type="text" id="roadAddress" placeholder="도로명주소" />
-        <input type="text" id="jibunAddress" placeholder="지번주소" />
+        <input type="text" id="postcode" placeholder="우편번호" disabled/>
+        <input
+            type="button"
+            onClick={handleClick}
+            value="우편번호 찾기"
+            style={{
+                padding: '8px 16px',
+                fontSize: '16px',
+                // fontWeight: 'bold',
+                color: 'white',
+                backgroundColor: '#C7AD92',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                // marginTop: '10px',
+            }}/><br />
+        <input type="text" id="roadAddress" placeholder="도로명주소" disabled/>
+        <input type="text" id="jibunAddress" placeholder="지번주소" disabled/>
         <span id="guide" style={{ color: '#999', display: 'none' }}></span>
-        <input type="text" id="detailAddress" placeholder="상세주소" />
+        <input type="text" id="detailAddress" placeholder="상세주소" disabled />
         {/* {<DaumPostcode onComplete={handleExecDaumPostcode} />} */}
     </div>
 )

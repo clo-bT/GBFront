@@ -63,7 +63,13 @@ export default function Roomout() {
     const handleCalendarClose = () => console.log("Calendar closed");
     const handleCalendarOpen = () => console.log("Calendar opened");
 
-
+    const [floor, setFloor] = useState('');
+    const handleFloorChange = (event) => {
+      const value = parseInt(event.target.value);
+      setFloor(value);
+    };
+    
+    
     return (
         <div>
             <Header />
@@ -74,19 +80,19 @@ export default function Roomout() {
                     <h2>곰방 정보</h2>
                     <h3>곰방 유형</h3>
                     <div className={styles.gbtype}>
-                        <label>
+                        <label className={styles.oneroom}>
                             <input type="radio" value="oneroom" checked={info === "oneroom"} onChange={handleClickInfoButton} />
                             원룸
                         </label>
-                        <label>
+                        <label className={styles.officetell}>
                             <input type="radio" value="officetell" checked={info === "officetell"} onChange={handleClickInfoButton} />
                             오피스텔
                         </label>
-                        <label>
+                        <label className={styles.villa}>
                             <input type="radio" value="villa" checked={info === "villa"} onChange={handleClickInfoButton} />
                             빌라
                         </label>
-                        <label>
+                        <label className={styles.apartment}>
                             <input type="radio" value="apartment" checked={info === "apartment"} onChange={handleClickInfoButton} />
                             아파트
                         </label>
@@ -119,13 +125,23 @@ export default function Roomout() {
                         <Gbaddress />
                     </div>
                     <h3>근처 역/학교</h3>
-                    <div><input type="text"/></div>
+                    <div className={styles.nearstation} ><input type="text" placeholder="근처 역 / 학교" /></div>
+                    <div className={styles.moneybox}>
+                    <div>
                     <h3>보증금</h3>
-                    <div><input type="number"/>원</div>
+                    <div className={ styles.money }><input type="number" step="10000" min="0" placeholder="보증금"/>원</div>
+                    </div>
+                    <div>
                     <h3>월세</h3>
-                    <div><input type="number"/>원</div>
-                    <h3>관리비</h3>
-                    <div><input type="number"/>원</div>
+                    <p className={ styles.detailtext }>전세 일 경우 0을 입력하세요.</p>
+                    <di className={ styles.money }v><input type="number" step="10000" min="0" placeholder="월세"/>원</di>
+                    </div>
+                    <div><h3>관리비</h3><p className={ styles.detailtext }>없을 경우 0을 입력하세요.</p>
+                    <div className={ styles.money }><input type="number" step="10000" min="0" placeholder="관리비 (없을 경우 0 입력)" />원</div>
+                            </div>
+                        </div>
+                        <div className={styles.datebox}>
+                            <div>
                     <h3>입주 가능 일자</h3>
                         <DatePicker
                             showIcon
@@ -137,8 +153,9 @@ export default function Roomout() {
                             onCalendarOpen={handleCalendarOpen}
                             dateFormat="yyyy년 MM월 dd일"
                             minDate={new Date()}
-                        />일
-                        
+                            />일
+                            </div>
+                            <div>
                     <h3>계약 만료 일자</h3>
                     <DatePicker
                             showIcon
@@ -150,7 +167,9 @@ export default function Roomout() {
                             onCalendarOpen={handleCalendarOpen}
                             dateFormat="yyyy년 MM월 dd일"
                             minDate={startDate}
-                        />일
+                                />일
+                            </div>
+                            <div>
                     <h3>사용 승인일</h3>
                     <DatePicker
                         showIcon
@@ -165,9 +184,14 @@ export default function Roomout() {
                         // dropdownMode="select"
                         showYearDropdown
                         showMonthDropdown
-                    />일
+                                />일
+                                </div>
+                            </div>
                     <h3>층 수</h3>
-                    <div><input type="number" />층 / <input type="number"/>층</div>
+                        <div>
+                            <input type="number" value={floor} onChange={handleFloorChange} placeholder="현재 층 수" />층 /
+                            <input type="number" placeholder="건물 전체 층 수" />층
+                        </div>
                     <h3>엘리베이터</h3>
                     <div><label>
                         <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton} />
@@ -178,7 +202,7 @@ export default function Roomout() {
                             없음
                         </label></div>
                     <h3>욕실 수</h3>
-                    <div><input type="number"/>개</div>
+                    <div><input type="number" placeholder="욕실 수"/>개</div>
                     <h3>주차 가능 여부</h3>
                     <div><label>
                         <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton} />
@@ -199,7 +223,7 @@ export default function Roomout() {
                                         id={item}
                                         checked={checkedList.includes(item)}
                                         onChange={() => checkHandler(item)}
-                                    />
+                                        />
                                     <label htmlFor={item}>{item}</label>
                                 </div>
                             ))}
@@ -207,6 +231,7 @@ export default function Roomout() {
 
                         <button type='submit'>저장</button>
                     </form>
+                    
                     <h3>매물 사진</h3>
                     <div>
                         <input
