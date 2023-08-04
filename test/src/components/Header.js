@@ -16,7 +16,8 @@ const Header = () => {
               <Link to = "/gbblist" className='b1'>곰방봐</Link>
               <Link to = "/zzim" className='b1'>찜 목록</Link>
               <Link to="/roomout" className='b1'>방 내놓기</Link>
-          </div>
+        </div>
+          <Link to="/chatroom" className='b2'>채팅</Link>
           <Link to="/login" className='b2'>회원가입/로그인</Link>
       </div>
     </div>
