@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import DaumPostcode from 'react-daum-postcode';
+import DaumPostcode, { useDaumPostcodePopup }  from 'react-daum-postcode';
 
 function Gbaddress() {
+    const scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+    const open = useDaumPostcodePopup(scriptUrl);
+
     const [showDaumPostcode, setShowDaumPostcode] = useState(false);
     const handleExecDaumPostcode = (data) => {
 
@@ -76,12 +79,15 @@ function Gbaddress() {
             console.error('Error fetching data:', error);
         });
         setShowDaumPostcode(false);
-}
+    }
+    const handleClick = () => {
+        open({ onComplete: handleExecDaumPostcode });
+      };
 
 return (
     <div>
         <input type="text" id="postcode" placeholder="우편번호" />
-        <input type="button" onClick={() => setShowDaumPostcode(true)} value="우편번호 찾기" /><br />
+        <input type="button" onClick={handleClick} value="우편번호 찾기" /><br />
         <input type="text" id="roadAddress" placeholder="도로명주소" />
         <input type="text" id="jibunAddress" placeholder="지번주소" />
         <span id="guide" style={{ color: '#999', display: 'none' }}></span>
