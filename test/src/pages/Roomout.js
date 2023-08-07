@@ -134,7 +134,7 @@ export default function Roomout() {
                     <div>
                     <h3>월세</h3>
                     <p className={ styles.detailtext }>전세 일 경우 0을 입력하세요.</p>
-                    <di className={ styles.money }v><input type="number" step="10000" min="0" placeholder="월세"/>원</di>
+                    <div className={ styles.money }><input type="number" step="10000" min="0" placeholder="월세"/>원</div>
                     </div>
                     <div><h3>관리비</h3><p className={ styles.detailtext }>없을 경우 0을 입력하세요.</p>
                     <div className={ styles.money }><input type="number" step="10000" min="0" placeholder="관리비 (없을 경우 0 입력)" />원</div>
