@@ -1,14 +1,14 @@
-
 import "./Signuplogin.css";
 const Loginpage = () => {
 
   const Rest_api_key='a20ef37212e1ae86b20e09630f6590ce' //REST API KEY
-  const redirect_uri = 'http://localhost:3000/auth' //Redirect URI
+  const redirect_uri = 'http://localhost:3000/auth' //Redirect URI to backend
   // oauth 요청 URL
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`
   const handleLogin = ()=>{
       window.location.href = kakaoURL
   }
+
 
   return (
     <div className="wrapper">
@@ -22,7 +22,7 @@ const Loginpage = () => {
                   className="kakaologo" 
                   src="/assets/kakao_login_large_wide.png" 
                   alt="카카오 로그인 버튼" 
-                  onClick={handleLogin} 
+                  onClick={handleLogin}
                 />
 
             </div>
