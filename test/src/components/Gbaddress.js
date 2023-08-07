@@ -56,11 +56,11 @@ function Gbaddress() {
             guideTextBox.style.display = 'none';
         }
         const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${data.roadAddress}`;
-        const REST_API_KEY = 'a20ef37212e1ae86b20e09630f6590ce';
+        
         axios
         .get(apiUrl, {
             headers: {
-            Authorization: `KakaoAK ${REST_API_KEY}`,
+            Authorization: `KakaoAK ${process.env.REST_API_KEY}`,
             },
         })
         .then((response) => {
