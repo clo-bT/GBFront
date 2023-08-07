@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
+import { object } from 'prop-types';
 
 export default function Auth() {
     const [c, setcode] = useState('')
     const [id, setid] = useState('')    
     const [shownameform, setshownameform] = useState(false)    
-    const [value,iptvalue] = useState('')
+    const [userinfo,setuserinfo] = useState({})
     
-        const gettoken = async ()=>{
+    useEffect(() => {
+        async function getid() {
             const code = new URL(window.location.href).searchParams.get("code");
             setcode(code)
             try{        
@@ -19,12 +21,16 @@ export default function Auth() {
                         setshownameform(true)
                         setid(r.data.data.id)
                     }
+                    if(r.data.data.member){setuserinfo(r.data.data.member)}
                 })
             }
             catch(error){
                 console.error('Error fetching data:', error);
             }
         }
+        getid()
+    },[])
+
 
         const postname = async (name) => {
             const params = {
@@ -36,11 +42,10 @@ export default function Auth() {
                 'Content-Type': 'application/json'
                 }
             }
-
             try {
-                // const response = await axios.post('http://localhost:8080/member/update',null,{params});
                 const response = await axios.post('http://localhost:8080/member/update',params,config);
                 console.log('success2', response.data);
+                if(response.data.data.member){console.log(response.data.data.member)}
             } catch (error) {
                 console.error('Error posting data:', error);
             }
@@ -48,8 +53,7 @@ export default function Auth() {
 
         function handleKeyPress(event){
             if (event.key === "Enter" || event.keyCode === 13){
-                console.log(value)
-                postname(value)
+                postname(event.target.value)
             }
         }
     
@@ -58,7 +62,6 @@ export default function Auth() {
     return(
         <div>
             <Header/>
-            <button onClick={gettoken}>12313</button>
             <div className="auth">
                 인가코드 :  {c}
                 {id? <div>uuid : {id}</div> :''}
@@ -68,9 +71,11 @@ export default function Auth() {
                 type="text" 
                 placeholder='이름을 입력하시오' 
                 onKeyDown={handleKeyPress} 
-                onChange={(event)=>{iptvalue(event.target.value)}} 
                 />}
-            
+            <div>
+                {userinfo && Object.entries(userinfo)
+                }
+            </div>
         </div>
         
     )
