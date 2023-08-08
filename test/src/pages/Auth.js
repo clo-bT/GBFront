@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
-import { object } from 'prop-types';
 
 export default function Auth() {
     const [c, setcode] = useState('')
     const [id, setid] = useState('')    
     const [shownameform, setshownameform] = useState(false)    
     const [userinfo,setuserinfo] = useState({})
+    
+    function handleLogout(){
+        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${'a20ef37212e1ae86b20e09630f6590ce'}&logout_redirect_uri=${'http://localhost:8080/'}`
+    }
     
     useEffect(() => {
         async function getid() {
@@ -21,7 +24,7 @@ export default function Auth() {
                         setshownameform(true)
                         setid(r.data.data.id)
                     }
-                    if(r.data.data.member){setuserinfo(r.data.data.member)}
+                    if(r.data.data.member){setuserinfo(r.data.data.member);setshownameform(false);}
                 })
             }
             catch(error){
@@ -45,7 +48,7 @@ export default function Auth() {
             try {
                 const response = await axios.post('http://localhost:8080/member/update',params,config);
                 console.log('success2', response.data);
-                if(response.data.data.member){console.log(response.data.data.member)}
+                if(response.data.data.member){setuserinfo(response.data.data.member);setshownameform(false);}
             } catch (error) {
                 console.error('Error posting data:', error);
             }
@@ -73,8 +76,10 @@ export default function Auth() {
                 onKeyDown={handleKeyPress} 
                 />}
             <div>
-                {userinfo && Object.entries(userinfo)
-                }
+                {userinfo && Object.entries(userinfo).map((value,index)=>{return <div key={index}>{value[0]}: {value[1]}</div>})}
+            </div>
+            <div>
+                <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
         
