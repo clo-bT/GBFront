@@ -8,23 +8,29 @@ export default function Auth() {
     const [shownameform, setshownameform] = useState(false)    
     const [userinfo,setuserinfo] = useState({})
     
-    function handleLogout(){
-        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${'a20ef37212e1ae86b20e09630f6590ce'}&logout_redirect_uri=${'http://localhost:8080/'}`
-    }
+
     
     useEffect(() => {
         async function getid() {
             const code = new URL(window.location.href).searchParams.get("code");
             setcode(code)
+            // window.location.href = 'http://localhost:3000/auth'
+            
             try{        
                 await axios.get(`http://localhost:8080/member/login?code=${code}`)
                 .then(function(r){
                     console.log('success',r.data)
+                    sessionStorage.setItem("isAuthorized", "true")
                     if(r.data.code===200){
                         setshownameform(true)
                         setid(r.data.data.id)
                     }
-                    if(r.data.data.member){setuserinfo(r.data.data.member);setshownameform(false);}
+                    if(r.data.data.member){
+                        setuserinfo(r.data.data.member);
+                        setshownameform(false)
+                        window.location.href = 'http://localhost:3000/'
+
+                    }
                 })
             }
             catch(error){
@@ -48,7 +54,11 @@ export default function Auth() {
             try {
                 const response = await axios.post('http://localhost:8080/member/update',params,config);
                 console.log('success2', response.data);
-                if(response.data.data.member){setuserinfo(response.data.data.member);setshownameform(false);}
+                sessionStorage.setItem("isAuthorized", "true");
+                if(response.data.data.member){
+                    setuserinfo(response.data.data.member);
+                    setshownameform(false);
+                }
             } catch (error) {
                 console.error('Error posting data:', error);
             }
@@ -79,7 +89,6 @@ export default function Auth() {
                 {userinfo && Object.entries(userinfo).map((value,index)=>{return <div key={index}>{value[0]}: {value[1]}</div>})}
             </div>
             <div>
-                <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
         
