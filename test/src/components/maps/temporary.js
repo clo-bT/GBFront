@@ -21,8 +21,8 @@ const FilterAdjust = () => {
             <div className={styles.headline}>유형</div>
             <div className={styles.subheadline}>중복선택이 가능합니다.</div>
             <div className={styles.optionbody}>
-              {roominfooptionlist.map((value,index) => {
-                return  <div key={index}>
+              {roominfooptionlist.map((value,index) => (
+                <div key={index}>
                 <input 
                   type="checkbox" 
                   key={info.includes(value)}
@@ -34,7 +34,7 @@ const FilterAdjust = () => {
                     {value}
                 </label>
                 </div>
-                })}
+                ))}
 
               {/* <label className={styles.oneroom} htmlFor="oneroom">
                   <input type="radio" id="oneroom" checked={info === "oneroom"} onChange={handleClickInfoButton}  key={info.includes("oneroom")}/>
