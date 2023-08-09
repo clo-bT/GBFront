@@ -5,7 +5,7 @@ import axios from 'axios';
 // import Header from '../Header';
 import { useNavigate } from 'react-router-dom';
 import styles from "./Chat.module.css";
-
+import Header from '../Header';
 
 
 const ChatList = () => {
@@ -18,32 +18,41 @@ const ChatList = () => {
         setUserid(sessionStorage.getItem("userid"));
     }, []); 
     useEffect(() => {
-        if (isAuthorized) {
-            axios.get(`/chat/list/user/${userid}`) 
+        // if (isAuthorized) {
+            axios.get(`/chatroom/list/${userid}`) 
                 .then(response => {
-                    console.log('받아온 정보:', response.data);
-                    setChatData(response.data.chat); 
+                    console.log('받아온 정보:', response.data.ChatRoom);
+                    // data : chat_room_id, grantor_id, assignee_id, room_deal_id
+                    setChatData(response.data.ChatRoom); 
                 })
                 .catch(error => {
                     console.log('오류:', error);
                 });
-        } else {
-            navigate('/login');
-        }
+        // } else {
+        //     navigate('/login');
+        // }
     }, [isAuthorized, userid, navigate]);
+    const enterChatRoom = (chat_room_id, room_deal_id) => {
+        // Chatroom 컴포넌트로 전달할 작업 수행
+        navigate(`/chatroom/${chat_room_id}/${room_deal_id}`);
+    };
+
     return (
         <div className={styles.chatlist}>
-            <h1>Chat List</h1>
-            <ul>
-                {chatData.map((chatItem, index) => (
-                    <li key={index}>
-                        Chat Room ID: {chatItem.chat_room_id}<br />
-                        Grantor ID: {chatItem.grantor_id}<br />
-                        Assignee ID: {chatItem.assignee_id}<br />
-                        Room Deal ID: {chatItem.room_deal_id}
-                    </li>
+            <Header />
+            <div className={styles.h1}>Message</div>
+                {chatData.map((ChatRoom, index) => (
+                    <label
+                        className={styles.chatlistnickname}
+                        key={index}
+                        onClick={() => enterChatRoom(ChatRoom.chat_room_id, ChatRoom.room_deal_id)}
+                    >
+                        {/* 채팅방 ID: {ChatRoom.chat_room_id}<br /> */}
+                        {/* 방 매물 ID: {ChatRoom.room_deal_id} */}
+                        {ChatRoom.grantor_id.nickname} 님과의 대화
+                        <div>입장하기</div>
+                    </label>
                 ))}
-            </ul>
         </div>
     )
 }
