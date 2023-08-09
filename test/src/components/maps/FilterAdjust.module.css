@@ -1,23 +1,26 @@
 .Frame{
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 30px;
   overflow-y: scroll;
-  height: 40vh;
-  align-items: flex-start;
+  height: inherit;
+  width: inherit;
+  align-items: stretch;
+  padding: 0;
 }
 
 .container{
+  flex: 1;
   position: relative;
-  margin: 0;
+  height: 300px; 
+  padding: 20px 20px 20px 20px;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  justify-content: flex-start;
   align-content: flex-start;
-  border: 1px black solid;
+  background-color: white;
+  border-bottom: 1px black solid;
 }
 
 .headline{
@@ -28,57 +31,57 @@
 
 .subheadline{
   position: relative;
-
+  margin-top: 10px;
   font-size: 15px;
 }
 
 .optionbody{
-  margin: 30px 0;
+  position: relative;
+  margin: auto;
+  width: 240px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-size: 20px;
+  font-size: 15px;
+  justify-content: flex-start;
 }
-/* 
+
+.roomoption{
+  display: flex;
+  margin: 10px 0px 10px 0px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 120px;
+}
+
 .mycheckbox{
+  position: relative;
   appearance: none;
+  margin-right: 10px;
   width: 1.5rem;
   height: 1.5rem;
-  border: 1.5px solid black;
+  border: 2px solid black;
   border-radius: 0.35rem;
-  background-color: brown;
-} */
-/* 
+  background-color: white;
+}
+
 .mycheckbox:checked{
+
   border-color: transparent;
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-  background-size: 100% 100%;
+  border: 2px solid black;
+
+  background-image: url("data:image/svg+xml,%3csvg width='16' height='12' viewBox='0 0 16 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M0.916748 5.99987L5.63341 10.7165L15.0834 1.2832' stroke='%23282828' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+  /* background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e"); */
+  background-size: 70% 70%;
   background-position: 50%;
   background-repeat: no-repeat;
-  background-color: limegreen;
-} */
+  background-color: var(--color-tan1);
+  color: black;
+}
 
 
-/* input[type="checkbox"] {
-  display: none;
-}
-input[type="checkbox"] + label {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border: 3px solid #707070;
-  position: relative;
-}
-input[id="check1"]:checked + label::after {
-  content: 'x';
-  font-size: 25px;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-} */
 
 
 /* .filterAdjustmentChild {
