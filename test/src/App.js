@@ -7,6 +7,7 @@ import GbbList from './pages/List';
 import GbbCreate from './pages/Create';
 import TestApp from './components/TestApp';
 import ChatRoom from './components/Chatting/ChatRoom';
+import ChatList from './components/Chatting/ChatList';
 import Main from './pages/Main';
 import Auth from './pages/Auth';
 
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/auth" element={<Auth />} />
           <Route path="/test" element={<TestApp />} />
           <Route path="/chatroom" element={<ChatRoom />} />
+          <Route path="/chatlist" element={<ChatList />} />
         </Routes>
       </div>
     </BrowserRouter>
