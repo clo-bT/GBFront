@@ -1,0 +1,27 @@
+.modal_background{
+  display: flex;
+  position: fixed;
+  margin: 0;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255,255,255,0.4);
+}
+
+.modal_contents{
+  display: flex;
+  position: fixed;  
+  width: 80vw;
+  height: 70vh;
+  margin: 0;
+  top: 150px;
+  left: 10vw;
+  align-items: flex-start;
+  justify-content: center;
+
+  background-color: aqua;
+}

@@ -1,10 +1,13 @@
 .selected {
   font-size: var(--font-size-3xl);
   font-weight: bold;
+  cursor: pointer;
   text-decoration: underline;
 }
 .option{
   font-size: var(--font-size-xl);
+  cursor: pointer;
+
 
 }
 .head{

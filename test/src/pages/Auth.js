@@ -19,18 +19,22 @@ export default function Auth() {
             try{        
                 await axios.get(`http://localhost:8080/member/login?code=${code}`)
                 .then(function(r){
-                    console.log('success',r.data)
                     sessionStorage.setItem("isAuthorized", "true")
-                    if(r.data.code===200){
-                        setshownameform(true)
-                        setid(r.data.data.id)
-                    }
-                    if(r.data.data.member){
+                    alert(r.data.message)
+                    if(r.data.code===2001){ // 로그인 성공 시
                         setuserinfo(r.data.data.member);
                         setshownameform(false)
                         window.location.href = 'http://localhost:3000/'
-
                     }
+
+                    else if(r.data.code===2002 || r.data.code ===2003){ // 회원가입 성공 시
+                        setshownameform(true)
+                        setid(r.data.data.id)
+                    }
+                    else if(r.data.code===2101){
+                        window.location.href = 'http://localhost:3000/login'
+                    }
+                    else{alert('warning')}
                 })
             }
             catch(error){
@@ -53,12 +57,16 @@ export default function Auth() {
             }
             try {
                 const response = await axios.post('http://localhost:8080/member/update',params,config);
-                console.log('success2', response.data);
                 sessionStorage.setItem("isAuthorized", "true");
-                if(response.data.data.member){
+                if(response.data.code === 1000){
                     setuserinfo(response.data.data.member);
                     setshownameform(false);
                 }
+                else if(response.data.code === 2102){
+                    alert(response.data.message)
+                }
+                else{alert('warning')}
+
             } catch (error) {
                 console.error('Error posting data:', error);
             }
