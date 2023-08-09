@@ -19,19 +19,20 @@ export default function Auth() {
             try{        
                 await axios.get(`http://localhost:8080/member/login?code=${code}`)
                 .then(function(r){
+                    console.log(r.data)
                     sessionStorage.setItem("isAuthorized", "true")
                     alert(r.data.message)
-                    if(r.data.code===2001){ // 로그인 성공 시
+                    if(r.data.code === 2001){ // 로그인 성공 시
                         setuserinfo(r.data.data.member);
                         setshownameform(false)
                         window.location.href = 'http://localhost:3000/'
                     }
 
-                    else if(r.data.code===2002 || r.data.code ===2003){ // 회원가입 성공 시
+                    else if(r.data.code === 2002 || r.data.code === 2003){ // 회원가입 성공 시
                         setshownameform(true)
                         setid(r.data.data.id)
                     }
-                    else if(r.data.code===2101){
+                    else if(r.data.code === 2101 || r.data.code === 2201 || r.data.code === 2202 ){
                         window.location.href = 'http://localhost:3000/login'
                     }
                     else{alert('warning')}
