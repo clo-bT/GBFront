@@ -102,7 +102,7 @@ return (
         <input type="text" id="roadAddress" placeholder="도로명주소" disabled/>
         <input type="text" id="jibunAddress" placeholder="지번주소" disabled/>
         <span id="guide" style={{ color: '#999', display: 'none' }}></span>
-        <input type="text" id="detailAddress" placeholder="상세주소" disabled />
+        <input type="text" id="detailAddress" placeholder="상세주소" />
         {/* {<DaumPostcode onComplete={handleExecDaumPostcode} />} */}
     </div>
 )

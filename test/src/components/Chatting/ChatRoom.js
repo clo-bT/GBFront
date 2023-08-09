@@ -1,9 +1,8 @@
-// src/components/Chat.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import Header from '../Header';
 
 const stompClient = null;
 const Chat = () => {
@@ -133,6 +132,7 @@ const Chat = () => {
 
     return (
         <div>
+            <Header/>
         {!isConnected && (
             <form onSubmit={connect}>
             <input type="text" name="name" id="name" required />
