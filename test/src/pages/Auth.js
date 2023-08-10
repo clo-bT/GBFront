@@ -19,11 +19,11 @@ export default function Auth() {
             try{        
                 await axios.get(`http://localhost:8080/member/login?code=${code}`)
                 .then(function(r){
-                    console.log(r.data)
-                    sessionStorage.setItem("isAuthorized", "true")
                     alert(r.data.message)
                     if(r.data.code === 2001){ // 로그인 성공 시
                         setuserinfo(r.data.data.member);
+                        sessionStorage.setItem("isAuthorized", "true")
+                        sessionStorage.setItem("member",JSON.stringify(r.data.data.member))
                         setshownameform(false)
                         window.location.href = 'http://localhost:3000/'
                     }
@@ -58,10 +58,12 @@ export default function Auth() {
             }
             try {
                 const response = await axios.post('http://localhost:8080/member/update',params,config);
-                sessionStorage.setItem("isAuthorized", "true");
                 if(response.data.code === 1000){
+                    sessionStorage.setItem("isAuthorized", "true");
                     setuserinfo(response.data.data.member);
+                    sessionStorage.setItem("member",JSON.stringify(response.data.data.member))
                     setshownameform(false);
+                    window.location.href = 'http://localhost:3000/'
                 }
                 else if(response.data.code === 2102){
                     alert(response.data.message)

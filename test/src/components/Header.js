@@ -5,9 +5,10 @@ import { useState, useEffect } from "react"
 
 const Header = () => {
   const [isAuthorized, setIsAuthorized] = useState('');
-
+  const [userinfo,setUserinfo] = useState({})
   useEffect(() => {
       setIsAuthorized(sessionStorage.getItem("isAuthorized"));
+      setUserinfo(JSON.parse(sessionStorage.getItem('member')))
   }, []); // This effect runs once when the component mounts
   
   function handleLogout(){
@@ -31,7 +32,8 @@ const Header = () => {
             <Link to="/zzim" className='b1'>찜 목록</Link>
             <Link to="/roomout" className='b1'>방 내놓기</Link>
           </div>
-          <Link to="/chatroom" className='b2'>채팅</Link>
+          <Link to="/chatlist" className='b2'>채팅</Link>
+          <div>반가워요, {userinfo?.name}!</div>
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
