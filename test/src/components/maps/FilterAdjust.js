@@ -7,10 +7,12 @@ const FilterAdjust = () => {
   const roomstructurelist = ['오픈형','분리형','복층','투룸','쓰리룸 이상']
   const floorlist = ['1-3층','4-6층','7-9층','10층 이상','반지층','옥탑방']
   const genderlist = ['상관 없음','동성 매물만']
+  const addtionaloptionlist = ['에어컨','냉장고','세탁기','싱크대','옷장','가스레인지','신발장','화재경보기','엘리베이터','주차가능','건조기']
   const [type, setType] = useState(roomTypelist);
   const [structure, setStructure] = useState(roomstructurelist)
   const [floor, setFloor] = useState(floorlist)
   const [gender, setGender] = useState(['상관 없음'])
+  const [additionaloption, setAdditionaloption] = useState([])
 
   const handleClickTypeButton = (e) => {
     if(type.includes(e.target.id)){setType(type.filter((element)=>element!==e.target.id))}
@@ -27,6 +29,10 @@ const FilterAdjust = () => {
   const handleClickFloorButton = (e) => {
     if(floor.includes(e.target.id)){setFloor(floor.filter((element)=>element!==e.target.id))}
     else{setFloor([...floor,e.target.id])}
+  };
+  const handleClickAdditionaloptionButton = (e) => {
+    if(additionaloption.includes(e.target.id)){setAdditionaloption(additionaloption.filter((element)=>element!==e.target.id))}
+    else{setAdditionaloption([...additionaloption,e.target.id])}
   };
   
   const [depositrange,setDepositrange] = useState([0,10090])
@@ -266,9 +272,16 @@ const FilterAdjust = () => {
             <div className={styles.headline}>추가 옵션</div>
             <div className={styles.subheadline}>중복 선택이 가능합니다.</div>
             <div className={styles.buttongroup}>
-              <button></button>
-              <button></button>
-              <button></button>
+              {addtionaloptionlist.map((value,index)=>(
+              <div 
+                key={index} 
+                className={additionaloption.includes(value) ? styles.buttonbox_selected : styles.buttonbox} 
+                id={value} 
+                onClick={handleClickAdditionaloptionButton}
+                >{value}
+              </div>
+                
+              ))}
             </div>
             
         </div>  
