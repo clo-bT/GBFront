@@ -229,17 +229,18 @@ const onRealSubmit = useCallback(async (e) => {
             guideTextBox.style.display = 'none';
         }
         const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${data.roadAddress}`;
-        console.log(data.roadAddress)
+        console.log('111111111111111111111111111111', data.roadAddress)
         console.log(process.env.REACT_APP_REST_API_MAP_KEY)
+
         axios
-        .post(apiUrl, {
-            headers: {
-            // Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_MAP_KEY}`,
-            Authorization: `KakaoAK a20ef37212e1ae86b20e09630f6590ce`,
+            .get(apiUrl, {
+                headers: {
+                    // Authorization: "KakaoAK "+ process.env.REACT_APP_REST_API_MAP_KEY,
+                    Authorization: `KakaoAK a20ef37212e1ae86b20e09630f6590ce`,
             },
         }).then((response) => {
             const { documents } = response.data;
-            console.log(response.data);
+            console.log('222222222222222222222222222222222222',response.data);
             if (documents.length > 0) {
                 const { x, y } = documents[0];
                 setLat(y);
@@ -247,13 +248,15 @@ const onRealSubmit = useCallback(async (e) => {
                 const addressData = {
                     "lat" : y,
                     "lon": x,
-                    "content" : ''
+                    // "content" : ''
                 }
-                axios.post("http://localhost:8080/roomdeal/search-nearest",
-                    addressData).then((near) => {
-                        console.log(near.data)
-                        setNearstation(near.data.data.stationName)
-                        setNearschool(near.data.univName)
+                // const RealaddressData = JSON.stringify(addressData)
+                console.log(addressData)
+                axios.post("http://localhost:8080/roomdeal/search-nearest",addressData
+                    ).then((response) => {
+                        console.log(response)
+                        // setNearstation(near.data.data.stationName)
+                        // setNearschool(near.data.univName)
 
                     }).catch((error) => {
                         console.error('Error fetching data:', error);
