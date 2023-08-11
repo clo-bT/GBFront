@@ -22,7 +22,7 @@ export default function Roomout() {
     const [roomCount, setRoomCount] = useState(0);
     const [bathroomCount, setBathroomCount] = useState(0);
     const [totalFloor, setTotalFloor] = useState(0);
-    const [content, setContent] = useState(0);
+    const [content, setContent] = useState('');
     const [elevator, setElevator] = useState("elevatoryes");
     const [parking, setParking] = useState("parkingyes");
     const handleClickInfoButton = (e) => {
@@ -169,7 +169,7 @@ const onRealSubmit = useCallback(async (e) => {
         console.error("데이터 전송 오류:", error);
         // 선택적으로 오류를 처리하거나 사용자에게 오류 메시지를 보여줄 수 있습니다
     }
-}, [info,struc,approveDate, nearstation,roomCount,deposit,pyeong, elevator, endDate, floor, managementFee, monthlyRent, parking,startDate,bathroomCount, checkedList,content,totalFloor,lat,lon]);
+}, [info,struc,approveDate, nearstation,roomCount,deposit,pyeong, elevator, endDate, floor, managementFee, monthlyRent, parking,startDate,bathroomCount, checkedList,content,totalFloor,lat,lon,nearschool]);
 
     // 여기는 주소 입력창 팝업 열리는 부분 ---------------------------------------------------------------------------------
     const scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -229,18 +229,17 @@ const onRealSubmit = useCallback(async (e) => {
             guideTextBox.style.display = 'none';
         }
         const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${data.roadAddress}`;
+        console.log(data.roadAddress)
         console.log(process.env.REACT_APP_REST_API_MAP_KEY)
         axios
-        .get(apiUrl, {
+        .post(apiUrl, {
             headers: {
             // Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_MAP_KEY}`,
             Authorization: `KakaoAK a20ef37212e1ae86b20e09630f6590ce`,
             },
-        })
-
-        .then((response) => {
+        }).then((response) => {
             const { documents } = response.data;
-            // console.log(response.data);
+            console.log(response.data);
             if (documents.length > 0) {
                 const { x, y } = documents[0];
                 setLat(y);
@@ -248,12 +247,12 @@ const onRealSubmit = useCallback(async (e) => {
                 const addressData = {
                     "lat" : y,
                     "lon": x,
-                    "content" :''
+                    "content" : ''
                 }
                 axios.post("http://localhost:8080/roomdeal/search-nearest",
                     addressData).then((near) => {
                         console.log(near.data)
-                        setNearstation(near.data.stationName)
+                        setNearstation(near.data.data.stationName)
                         setNearschool(near.data.univName)
 
                     }).catch((error) => {
@@ -346,8 +345,12 @@ const onRealSubmit = useCallback(async (e) => {
                         <input type="text" id="detailAddress" placeholder="상세주소" />
                         {/* {<DaumPostcode onComplete={handleExecDaumPostcode} />} */}
                     </div>
-                    <h3>근처 역/학교</h3>
-                        <div className={styles.nearstation} ><div>{ nearstation }</div></div>
+                        <h3>근처 역/학교</h3>
+                        {nearstation ? (
+                            <div className={styles.nearstation} ><div>{nearstation}</div></div>) : (
+                            <div className={styles.nearstation} >가까운 역이 없습니다. </div>)
+                            
+                        }
                     <div className={styles.moneybox}>
                     <div>
                     <h3>보증금</h3>
