@@ -243,12 +243,12 @@ const onRealSubmit = useCallback(async (e) => {
             console.log('222222222222222222222222222222222222',response.data);
             if (documents.length > 0) {
                 const { x, y } = documents[0];
-                setLat(y);
-                setLon(x);
+                setLat(y.toString());
+                setLon(x.toString());
                 const addressData = {
-                    "lat" : y,
-                    "lon": x,
-                    // "content" : ''
+                    "lat" : y.toString(),
+                    "lon": x.toString(),
+                    "content" : ''
                 }
                 // const RealaddressData = JSON.stringify(addressData)
                 console.log(addressData)
