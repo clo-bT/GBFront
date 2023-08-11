@@ -5,6 +5,10 @@ import { useDaumPostcodePopup }  from 'react-daum-postcode';
 function Gbaddress() {
     const scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
     const open = useDaumPostcodePopup(scriptUrl);
+    const handleClick = () => {
+        open({ onComplete: handleExecDaumPostcode });
+    };
+
     const handleExecDaumPostcode = (data) => {
 
         // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -77,9 +81,6 @@ function Gbaddress() {
             console.error('Error fetching data:', error);
         });
     }
-    const handleClick = () => {
-        open({ onComplete: handleExecDaumPostcode });
-    };
 
 return (
     <div>

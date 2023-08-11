@@ -16,9 +16,10 @@ const ChatList = () => {
     useEffect(() => {
         setIsAuthorized(sessionStorage.getItem("isAuthorized"));
         // setUserid(JSON.parse(sessionStorage.getItem("member")).id);
-        const useruuid = JSON.parse(sessionStorage.getItem("member")).id
+        const member = JSON.parse(sessionStorage.getItem("member"));
+        const useruuid = member.id;
 
-        // if (isAuthorized) {
+        if (true) {
 
         axios.get(`http://localhost:8080/chatroom/list/${useruuid}`) 
         .then(response => {
@@ -30,15 +31,15 @@ const ChatList = () => {
         .catch(error => {
             console.log('오류:', error);
         });
-        // } else {
-        //     navigate('/login');
-        // }
+        } else {
+            navigate('/login');
+        }
 
-    }, []); 
+    }, [isAuthorized, navigate]); 
 
-    const enterChatRoom = (chat_room_id, room_deal_id,useruuid) => {
+    const enterChatRoom = (chat_room_id, room_deal_id) => {
         // Chatroom 컴포넌트로 전달할 작업 수행
-        navigate(`/chatroom/${chat_room_id}/${room_deal_id}/${useruuid}`);
+        navigate(`/chatroom/${chat_room_id}/${room_deal_id}`);
     };
 
     return (
@@ -49,7 +50,7 @@ const ChatList = () => {
                     <label
                         className={styles.chatlistnickname}
                         key={index}
-                        onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId, ChatRoom.grantorId)}
+                        onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
                     >
                         {/* 채팅방 ID: {ChatRoom.id}<br /> */}
                         {/* 방 매물 ID: {ChatRoom.roomDealId} */}
