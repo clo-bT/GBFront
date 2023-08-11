@@ -33,7 +33,7 @@ const App = () => {
           <Route path="/login" element={<Signuplogin />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/test" element={<TestApp />} />
-          <Route path="/chatroom/:id/:roomDealId/:userid" element={<ChatRoom />} />
+          <Route path="/chatroom/:id/:roomDealId" element={<ChatRoom />} />
           <Route path="/chatlist" element={<ChatList />} />
         </Routes>
       </div>
