@@ -4,7 +4,7 @@ import axios from 'axios';
 // import Stomp from 'stompjs';
 // import Header from '../Header';
 import { useNavigate } from 'react-router-dom';
-import styles from "./Chat.module.css";
+import styles from "./ChatList.module.css";
 import Header from '../Header';
 
 
@@ -43,21 +43,32 @@ const ChatList = () => {
     };
 
     return (
-        <div className={styles.chatlist}>
+        <div>
             <Header />
-            <div className={styles.h1}>Message</div>
-                {chatData && chatData.map((ChatRoom, index) => (
-                    <label
-                        className={styles.chatlistnickname}
-                        key={index}
-                        onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
-                    >
-                        {/* 채팅방 ID: {ChatRoom.id}<br /> */}
-                        {/* 방 매물 ID: {ChatRoom.roomDealId} */}
-                        {ChatRoom.grantorId.nickname} 님과의 대화
-                        <div>입장하기</div>
-                    </label>
-                ))}
+            <div className={styles.chatlistpage}>
+                <div className={styles.h1}>Message</div>
+                <div className={styles.chatlist}>
+                {chatData.length > 0 ? (
+                        chatData.map((ChatRoom, index) => (
+                            <div
+                                className={styles.chatlistnickname}
+                            >
+                                <label
+                                    key={index}
+                                    onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
+                                >
+                                    {/* 채팅방 ID: {ChatRoom.id}<br /> */}
+                                    {/* 방 매물 ID: {ChatRoom.roomDealId} */}
+                                    {ChatRoom.grantorId.nickname} 님과의 대화
+                                    <div className={ styles.entering }>입장하기</div>
+                                </label>
+                            </div>
+                    ))
+                ) : (
+                    <div className={ styles.nochat }>채팅 목록이 없습니다.</div>    
+                    )}
+                    </div>
+            </div>
         </div>
     )
 }

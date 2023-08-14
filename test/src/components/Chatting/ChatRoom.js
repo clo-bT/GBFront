@@ -5,7 +5,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 // import { useNavigate, useParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import styles from "./Chat.module.css";
+import styles from "./ChatRoom.module.css";
 import axios from 'axios';
 
 
@@ -98,38 +98,43 @@ const ChatRoom = () => {
     return (
         <div className={styles.ChatRoom}>
             <Header />
-        <ul id="messageArea">
-            {previousmessage.map((chat, index) => (
-            <li key={index} className="chat-message">
-                {/* <i>{chat.sender[0]}</i> */}
-                {/* <span>{chat.sender}</span> */}
-                <p>{chat.message}</p>
-            </li>
-            ))}
-            {messages.map((chat, index) => (
-            <li key={index} className="chat-message">
-                {/* <i>{chat.sender[0]}</i> */}
-                <span>{chat.sender}</span>
-                <p>{chat.message}</p>
-            </li>
-            ))}
-            </ul>
-            <form id="messageForm">
-                <input
-                id="message"
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                />
-                <button type="submit" onClick={sendMessage}>Send</button>
-            </form>
-            <div>채팅방 id : { id }</div>
-            <div>방 매물 id : { roomDealId }</div>
-            <div className={`connecting ${connecting ? 'show' : ''}`}>
-                Connecting...
+            <div>
+                <div className={styles.messagelist}>
+                    <div className={styles.h1}>Message</div>
+                </div>
+                <div id="messageArea">
+                    {previousmessage.map((chat, index) => (
+                    <div key={index} className="chatmessage">
+                        <p>{chat.message}</p>
+                    </div>
+                    ))}
+                    {messages.map((chat, index) => (
+                    <div key={index} className="chatmessage">
+                        <span>{chat.sender}</span>
+                        <p>{chat.message}</p>
+                    </div>
+                    ))}
+                    </div>
+                    <form id="messageForm">
+                        <input
+                            id="message"
+                            type="text"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                        <button type="submit" onClick={sendMessage}>Send</button>
+                    </form>
             </div>
         </div>
     )
 }
 
 export default ChatRoom;
+
+/* 
+<div>채팅방 id : { id }</div>
+<div>방 매물 id : { roomDealId }</div>
+<div className={`connecting ${connecting ? 'show' : ''}`}>
+    Connecting...
+</div> 
+*/
