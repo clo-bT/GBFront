@@ -11,14 +11,14 @@ import Header from '../Header';
 const ChatList = () => {
     const navigate = useNavigate();
     const [isAuthorized, setIsAuthorized] = useState('');
-    // const [userid, setUserid] = useState('');
+    const [userid, setUserid] = useState('');
     const [chatData, setChatData] = useState([]);
     useEffect(() => {
         setIsAuthorized(sessionStorage.getItem("isAuthorized"));
         // setUserid(JSON.parse(sessionStorage.getItem("member")).id);
         const member = JSON.parse(sessionStorage.getItem("member"));
         const useruuid = member.id;
-
+        setUserid(useruuid)
         if (true) {
 
         axios.get(`${process.env.REACT_APP_API_ROOT}/chatroom/list/${useruuid}`) 
@@ -54,7 +54,7 @@ const ChatList = () => {
                             <div
                                 className={styles.chatlistnickname}
                             >
-                                {ChatRoom.grantorId !== this.useruuid ? (
+                                {ChatRoom.grantorId !== userid ? (
                                     <label
                                         key={index}
                                         onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
