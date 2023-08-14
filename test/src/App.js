@@ -10,6 +10,7 @@ import ChatRoom from './components/Chatting/ChatRoom';
 import ChatList from './components/Chatting/ChatList';
 import Main from './pages/Main';
 import Auth from './pages/Auth';
+import Facechat from './pages/Facechat';
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/test" element={<TestApp />} />
           <Route path="/chatroom/:id/:roomDealId" element={<ChatRoom />} />
           <Route path="/chatlist" element={<ChatList />} />
+          <Route path="/facechat" element={<Facechat />} />
         </Routes>
       </div>
     </BrowserRouter>
