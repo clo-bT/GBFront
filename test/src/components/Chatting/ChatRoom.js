@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-import Header from '../Header';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-// import { useNavigate, useParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import styles from "./ChatRoom.module.css";
 import axios from 'axios';
@@ -97,39 +94,75 @@ const ChatRoom = () => {
 
     return (
         <div className={styles.ChatRoom}>
-            <Header />
-            <div>
-                <div className={styles.messagelist}>
-                    <div className={styles.h1}>Message</div>
+            <div className={styles.chatballoon}>
+            {previousmessage.map((chat, index) => (
+                <div key={index} className={styles.chatmessage}>
+                    {/* 보낸 사람이 상대방 */}
+                    {chat.sender !== useruuid ? (
+                        <div className={styles.yourmessage}>
+                            <span>상대방: {chat.message}</span>
+                            <span>{chat.time}</span>
+                        </div>
+                    ) : (
+                    // 보낸 사람이 나
+                        <div className={styles.mymessage}>
+                            <span>{chat.time}</span>
+                            <span>나: {chat.message}</span>
+                        </div>
+                    )}
                 </div>
-                <div id="messageArea">
-                    {previousmessage.map((chat, index) => (
-                    <div key={index} className="chatmessage">
-                        <p>{chat.message}</p>
-                    </div>
-                    ))}
-                    {messages.map((chat, index) => (
-                    <div key={index} className="chatmessage">
-                        <span>{chat.sender}</span>
-                        <p>{chat.message}</p>
-                    </div>
-                    ))}
-                    </div>
-                    <form id="messageForm">
-                        <input
-                            id="message"
-                            type="text"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                        />
-                        <button type="submit" onClick={sendMessage}>Send</button>
-                    </form>
+            ))}
+            </div>
+
+            {/* --------------- 메세지 입력하는 부분 ------------ */}
+            <div className={styles.sendmessage}>
+                <form id="messageForm">
+                    <input
+                        id="message"
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <button type="submit" onClick={sendMessage}>Send</button>
+                </form>
             </div>
         </div>
     )
 }
 
 export default ChatRoom;
+
+/*
+<div id="messageArea">
+{previousmessage.map((chat, index) => (
+<div key={index} className="chatmessage">
+<p>{chat.message}</p>
+</div>
+))}
+{messages.map((chat, index) => (
+<div key={index} className="chatmessage">
+<span>{chat.sender}</span>
+<p>{chat.message}</p>
+</div>
+))}
+</div>
+<form id="messageForm">
+<input
+id="message"
+type="text"
+value={message}
+onChange={(e) => setMessage(e.target.value)}
+/>
+<button type="submit" onClick={sendMessage}>Send</button>
+</form>
+</div>
+</div>
+
+
+*/
+
+
+
 
 /* 
 <div>채팅방 id : { id }</div>
