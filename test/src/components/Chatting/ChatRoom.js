@@ -26,7 +26,7 @@ const ChatRoom = () => {
 
     function connect() {
         // 연결하고자하는 Socket 의 endPoint
-    const socket = new SockJS('http://localhost:8080/ws-stomp');
+    const socket = new SockJS(`${process.env.REACT_APP_API_ROOT}/ws-stomp`);
     stompClient = Stomp.over(socket);
     // {}는 header에 담길 내용, 뒤의 함수들은 콜백 함수
     stompClient.connect({}, onConnected, onError);
@@ -60,7 +60,7 @@ const ChatRoom = () => {
     }
     function gethistory() {
         
-    axios.get(`http://localhost:8080/chat/history/${id}`)
+    axios.get(`${process.env.REACT_APP_API_ROOT}/chatroom/list/${useruuid}`)
         .then(response => {
             console.log('받아온 정보 : ', response.data);
             setPreviousmessage(response.data.data.history);
@@ -85,12 +85,22 @@ const ChatRoom = () => {
             console.log(chatMessage)
             stompClient.send("/pub/chat/sendmessage", {}, JSON.stringify(chatMessage));
             setMessage('');
-            }
         }
-        function onMessageReceived(payload) {
-            const chat = JSON.parse(payload.body);
-            setMessages(prevMessages => [...prevMessages, chat]);
-        }
+    }
+    function onMessageReceived(payload) {
+        const chat = JSON.parse(payload.body);
+        setMessages(prevMessages => [...prevMessages, chat]);
+    }
+    function formatTime(timeString) {
+        const date = new Date(timeString);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const period = hours >= 12 ? '오후' : '오전';
+        const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+        return `${period} ${formattedHours}:${formattedMinutes}`;
+    }
 
     return (
         <div className={styles.ChatRoom}>
@@ -99,15 +109,32 @@ const ChatRoom = () => {
                 <div key={index} className={styles.chatmessage}>
                     {/* 보낸 사람이 상대방 */}
                     {chat.sender !== useruuid ? (
-                        <div className={styles.yourmessage}>
-                            <span>상대방: {chat.message}</span>
-                            <span>{chat.time}</span>
+                        <div className={styles.yourchatbox}>
+                            <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                            <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
                         </div>
                     ) : (
                     // 보낸 사람이 나
-                        <div className={styles.mymessage}>
-                            <span>{chat.time}</span>
-                            <span>나: {chat.message}</span>
+                        <div className={styles.mychatbox}>
+                            <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
+                            <span className={styles.myballoon}>나: {chat.message}</span>
+                        </div>
+                    )}
+                </div>
+            ))}
+            {messages.map((chat, index) => (
+                <div key={index} className={styles.chatmessage}>
+                    {/* 보낸 사람이 상대방 */}
+                    {chat.sender !== useruuid ? (
+                        <div className={styles.yourchatbox}>
+                            <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                            <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
+                        </div>
+                    ) : (
+                    // 보낸 사람이 나
+                        <div className={styles.mychatbox}>
+                            <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
+                            <span className={styles.myballoon}>나: {chat.message}</span>
                         </div>
                     )}
                 </div>
