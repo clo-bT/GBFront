@@ -8,7 +8,7 @@ const Create = ({ onImageUpload }) => {
     const [hashtag, setHashtag] = useState('');
     const [selectedHashtags, setSelectedHashtags] = useState([]);
     const navigate = useNavigate  ();
-    const apiUrl = 'http://localhost:8080'; // 백엔드 서버의 주소
+    const apiUrl = process.env.REACT_APP_API_ROOT; // 백엔드 서버의 주소
     const uploadUrl = `${apiUrl}/show/add`;
         
         const handleImageChange = (event) => {

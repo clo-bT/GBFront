@@ -162,7 +162,7 @@ const onRealSubmit = useCallback(async (e) => {
     };
 
     try {
-        const response = await axios.post("http://localhost:8080/roomdeal/register", formData);
+        const response = await axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/register`, formData);
         console.log("데이터 전송 성공:", response.data);
         // 선택적으로 성공을 처리하거나 사용자에게 성공 메시지를 보여줄 수 있습니다
     } catch (error) {
@@ -229,18 +229,14 @@ const onRealSubmit = useCallback(async (e) => {
             guideTextBox.style.display = 'none';
         }
         const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${data.roadAddress}`;
-        console.log('111111111111111111111111111111', data.roadAddress)
-        console.log(process.env.REACT_APP_REST_API_MAP_KEY)
 
         axios
             .get(apiUrl, {
                 headers: {
-                    // Authorization: "KakaoAK "+ process.env.REACT_APP_REST_API_MAP_KEY,
-                    Authorization: `KakaoAK a20ef37212e1ae86b20e09630f6590ce`,
+                    Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_MAP_KEY}`,
             },
         }).then((response) => {
             const { documents } = response.data;
-            console.log('222222222222222222222222222222222222',response.data);
             if (documents.length > 0) {
                 const { x, y } = documents[0];
                 setLat(y.toString());
@@ -251,8 +247,8 @@ const onRealSubmit = useCallback(async (e) => {
                     "content" : ''
                 }
                 // const RealaddressData = JSON.stringify(addressData)
-                console.log(addressData)
-                axios.post("http://localhost:8080/roomdeal/search-nearest",addressData
+                // console.log(addressData)
+                axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/search-nearest`,addressData
                     ).then((response) => {
                         console.log(response)
                         // setNearstation(near.data.data.stationName)

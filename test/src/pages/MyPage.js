@@ -9,7 +9,7 @@ const MyPage = () => {
     useEffect(() => {
         const member = JSON.parse(sessionStorage.getItem("member"));
         const userid = member.id;
-        axios.get(`http://localhost:8080/mypage/${userid}`)
+        axios.get(`${process.env.REACT_APP_API_ROOT}/mypage/${userid}`)
         .then(response => {
             console.log('받아온 정보 : ', response.data);
             setMyData(response.data.data);
