@@ -3,7 +3,7 @@ import axios from 'axios';
 // import SockJS from 'sockjs-client';
 // import Stomp from 'stompjs';
 // import Header from '../Header';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import styles from "./ChatList.module.css";
 import Header from '../Header';
 
@@ -53,15 +53,25 @@ const ChatList = () => {
                             <div
                                 className={styles.chatlistnickname}
                             >
-                                <label
-                                    key={index}
-                                    onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
-                                >
-                                    {/* 채팅방 ID: {ChatRoom.id}<br /> */}
-                                    {/* 방 매물 ID: {ChatRoom.roomDealId} */}
+                                {ChatRoom.grantorId !== this.useruuid ? (
+                                    <label
+                                        key={index}
+                                        onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
+                                    >
                                     {ChatRoom.grantorId.nickname} 님과의 대화
                                     <div className={ styles.entering }>입장하기</div>
                                 </label>
+                                ) : (
+                                    <label
+                                        key={index}
+                                        onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
+                                    >
+                                        {ChatRoom.assignee.nickname} 님과의 대화
+                                        <div className={styles.entering}>입장하기</div>
+                                    </label>
+                                )
+                                }
+
                             </div>
                     ))
                 ) : (
@@ -74,3 +84,6 @@ const ChatList = () => {
 }
 
 export default ChatList;
+
+/* 채팅방 ID: {ChatRoom.id}<br /> */
+/* 방 매물 ID: {ChatRoom.roomDealId} */

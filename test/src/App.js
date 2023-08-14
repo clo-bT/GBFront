@@ -7,7 +7,7 @@ import GbbList from './pages/List';
 import GbbCreate from './pages/Create';
 import TestApp from './components/TestApp';
 import ChatRoom from './components/Chatting/ChatRoom';
-import ChatList from './components/Chatting/ChatList';
+import ChatList from './pages/ChatListPage';
 import Main from './pages/Main';
 import Auth from './pages/Auth';
 import Facechat from './pages/Facechat';
