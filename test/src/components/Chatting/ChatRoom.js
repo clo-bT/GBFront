@@ -4,6 +4,8 @@ import Stomp from 'stompjs';
 import { useParams } from 'react-router-dom';
 import styles from "./ChatRoom.module.css";
 import axios from 'axios';
+import Header from '../Header';
+import ChatList from './ChatList';
 
 
 var stompClient = null;
@@ -14,7 +16,7 @@ const ChatRoom = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [previousmessage, setPreviousmessage] = useState([]);
-    const [connecting, setConnecting] = useState(true);
+    // const [connecting, setConnecting] = useState(true);
     useEffect(() => {
         // const userid = JSON.parse(sessionStorage.getItem("member")).id;
         const member = JSON.parse(sessionStorage.getItem("member"));
@@ -59,14 +61,13 @@ const ChatRoom = () => {
         // 오류 처리
     }
     function gethistory() {
-        
-    axios.get(`${process.env.REACT_APP_API_ROOT}/chatroom/list/${useruuid}`)
-        .then(response => {
-            console.log('받아온 정보 : ', response.data);
-            setPreviousmessage(response.data.data.history);
-        }).catch(error => {
-            console.log('오류:', error);
-        });
+        axios.get(`${process.env.REACT_APP_API_ROOT}/chat/history/${id}`)
+            .then(response => {
+                console.log('받아온 정보 : ', response.data);
+                setPreviousmessage(response.data.data.history);
+            }).catch(error => {
+                console.log('오류:', error);
+            });
     }
     function sendMessage(event) {
         event.preventDefault();
@@ -104,8 +105,9 @@ const ChatRoom = () => {
 
     return (
         <div className={styles.ChatRoom}>
+            <div className={ styles.chatlist}><ChatList /></div>
             <div className={styles.chatballoon}>
-            {previousmessage.map((chat, index) => (
+            {previousmessage && previousmessage.map((chat, index) => (
                 <div key={index} className={styles.chatmessage}>
                     {/* 보낸 사람이 상대방 */}
                     {chat.sender !== useruuid ? (
