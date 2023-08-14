@@ -21,7 +21,7 @@ const ChatList = () => {
 
         if (true) {
 
-        axios.get(`http://localhost:8080/chatroom/list/${useruuid}`) 
+        axios.get(`http://${process.env.REACT_APP_API_ROOT}/chatroom/list/${useruuid}`) 
         .then(response => {
             console.log('받아온 정보:', response.data);
             // data : chat_room_id, grantor_id, assignee_id, room_deal_id

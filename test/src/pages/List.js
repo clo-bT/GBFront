@@ -13,7 +13,7 @@ const List = ({ imageList }) => {
 
     const handleSearch = async () => {
         try {
-            const apiUrl = 'http://localhost:8080'; // 백엔드 서버의 주소
+            const apiUrl = process.env.REACT_APP_API_ROOT; // 백엔드 서버의 주소
 
             const requestBody = {
                 filter: searchText,

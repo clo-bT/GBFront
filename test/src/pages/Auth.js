@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
 import styles from './Auth.module.css'
-
+export const API_BASE_URL = process.env.REACT_APP_API_ROOT;
+export const HOME_URL = process.env.REACT_APP_HOME_URL;
 export default function Auth() {
     // const [c, setcode] = useState('')
     const [id, setid] = useState('');    
@@ -19,7 +20,7 @@ export default function Auth() {
             // window.location.href = 'http://localhost:3000/auth'
             
             try{        
-                await axios.get(`http://localhost:8080/member/login?code=${code}`)
+                await axios.get(`${API_BASE_URL}/member/login?code=${code}`)
                 .then(function(r){
                     alert(r.data.message)
                     if(r.data.code === 2001){ // 로그인 성공 시
@@ -27,7 +28,7 @@ export default function Auth() {
                         sessionStorage.setItem("isAuthorized", "true")
                         sessionStorage.setItem("member",JSON.stringify(r.data.data.member))
                         setshownameform(false)
-                        window.location.href = 'http://localhost:3000/'
+                        window.location.href = HOME_URL
                     }
 
                     else if(r.data.code === 2002 || r.data.code === 2003){ // 회원가입 성공 시
@@ -35,7 +36,7 @@ export default function Auth() {
                         setid(r.data.data.id)
                     }
                     else if(r.data.code === 2101 || r.data.code === 2201 || r.data.code === 2202 ){
-                        window.location.href = 'http://localhost:3000/login'
+                        window.location.href = `${HOME_URL}/login`
                     }
                     else{alert('warning')}
                 })
@@ -59,13 +60,13 @@ export default function Auth() {
                 }
             }
             try {
-                const response = await axios.post('http://localhost:8080/member/update',params,config);
+                const response = await axios.post(`${API_BASE_URL}/member/update`,params,config);
                 if(response.data.code === 1000){
                     sessionStorage.setItem("isAuthorized", "true");
                     // setuserinfo(response.data.data.member);
                     sessionStorage.setItem("member",JSON.stringify(response.data.data.member))
                     setshownameform(false);
-                    window.location.href = 'http://localhost:3000/'
+                    window.location.href = HOME_URL
                 }
                 else if(response.data.code === 2102){
                     alert(response.data.message)
