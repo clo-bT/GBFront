@@ -213,18 +213,38 @@ const RtcRoom = () => {
  UI Handlers
   */
   // mute video buttons handler
-  function videoOff() {
-    localVideoTracks = localStream.getVideoTracks();
-    localVideoTracks.forEach((track) => localStream.removeTrack(track));
-    localVideo.setAttribute(styles, "display:none");
+  async function videoOff() {
+    // localVideoTracks = localStream.getVideoTracks();
+    // localVideoTracks.forEach((track) => localStream.removeTrack(track));
+    // localVideo.setAttribute(styles, "display:none");
+    // localStream = await navigator.mediaDevices.getUserMedia({ video: false });
+    localVideo.style.display = "none"; // 스타일 적용
     console.log("Video Off");
   }
-  function videoOn() {
-    console.log(localVideoTracks)
-    localVideoTracks.map((track) => localStream.addTrack(track));
-    localVideo.setAttribute(styles, "display:inline");
-    console.log("Video On");
+
+  async function videoOn() {
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~`', localVideoTracks);
+    
+    // 비디오 트랙 가져오기
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    localVideoTracks = localStream.getVideoTracks();
+    
+    if (localStream) {
+      localVideoTracks.forEach((track) => {
+        if (track.kind === 'video') {
+          localStream.addTrack(track); // 비디오 트랙 추가
+        }
+      });
+  
+      // 오디오 트랙 관련 코드는 그대로 유지
+      // ...
+  
+      localVideo.style.display = "inline"; // 스타일 적용
+      localVideo.srcObject = localStream; // 비디오 요소에 스트림 연결
+      console.log("Video On");
+    }
   }
+  
   // mute audio buttons handler
   function audioOff() {
     localVideo.muted = true;
@@ -279,17 +299,20 @@ const RtcRoom = () => {
       });
     }
 
-    let mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+    let mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
     try {
+      // const videoTracks = mediaStream.getVideoTracks();
+      
       getLocalMediaStream(mediaStream);
+      
     } catch (error) {
       handleGetUserMediaError(error);
     }
 
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(getLocalMediaStream)
-      .catch(handleGetUserMediaError);
+    // navigator.mediaDevices
+    //   .getUserMedia({ video: true })
+    //   .then(getLocalMediaStream)
+    //   .catch(handleGetUserMediaError);
   }
 
   // create peer connection, get media, start negotiating when second participant appears
@@ -528,7 +551,7 @@ const RtcRoom = () => {
                       style={{ display: "none" }}
                       autoComplete="off"
                     />
-                    Audio On
+                    Audio Off
                   </label>
                   <label
                     className="btn btn-outline-warning active"
@@ -542,7 +565,7 @@ const RtcRoom = () => {
                       autoComplete="off"
                       defaultChecked={true}
                     />
-                    Audio Off
+                    Audio On
                   </label>
                 </div>
               </div>
