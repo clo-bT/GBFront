@@ -103,12 +103,13 @@ const RtcRoom = () => {
 
     // ICE 를 위한 chatList 인원 확인
     function createLiveRoom() {
+      const roomiddata = {
+        'roomId': roomId,
+      }
       axios
-        .post(`http://localhost:8080/rtc/create`, {
-          roomId: `${roomId}`,
-        })
+        .post(`${process.env.REACT_APP_API_ROOT}/rtc/create`, roomiddata)
         .then((response) => {
-          //   console.log(response);
+            console.log(response);
         })
         .catch((error) => {
           console.log("오류:", error);
@@ -118,7 +119,7 @@ const RtcRoom = () => {
     // ICE 를 위한 chatList 인원 확인
     function chatListCount() {
       axios
-        .get(`http://localhost:8080/rtc/usercount/${roomId}`)
+        .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${roomId}`)
         .then((response) => {
           console.log(response.data.data.overOne);
           return response.data.data.overOne;
@@ -216,21 +217,22 @@ const RtcRoom = () => {
     localVideoTracks = localStream.getVideoTracks();
     localVideoTracks.forEach((track) => localStream.removeTrack(track));
     localVideo.setAttribute(styles, "display:none");
-    log("Video Off");
+    console.log("Video Off");
   }
   function videoOn() {
-    localVideoTracks.forEach((track) => localStream.addTrack(track));
+    console.log(localVideoTracks)
+    localVideoTracks.map((track) => localStream.addTrack(track));
     localVideo.setAttribute(styles, "display:inline");
-    log("Video On");
+    console.log("Video On");
   }
   // mute audio buttons handler
   function audioOff() {
     localVideo.muted = true;
-    log("Audio Off");
+    console.log("Audio Off");
   }
   function audioOn() {
     localVideo.muted = false;
-    log("Audio On");
+    console.log("Audio On");
   }
 
   // room exit button handler
@@ -284,10 +286,10 @@ const RtcRoom = () => {
       handleGetUserMediaError(error);
     }
 
-    // navigator.mediaDevices
-    //   .getUserMedia(constraints)
-    //   .then(getLocalMediaStream)
-    //   .catch(handleGetUserMediaError);
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(getLocalMediaStream)
+      .catch(handleGetUserMediaError);
   }
 
   // create peer connection, get media, start negotiating when second participant appears
@@ -406,8 +408,8 @@ const RtcRoom = () => {
   }
 
   function handleOfferMessage(message) {
-    log("Accepting Offer Message");
-    log(message);
+    console.log("Accepting Offer Message");
+    console.log(message);
     let desc = new RTCSessionDescription(message.sdp);
     //TODO test this
     if (desc != null && message.sdp != null) {
@@ -415,11 +417,11 @@ const RtcRoom = () => {
       myPeerConnection
         .setRemoteDescription(desc)
         .then(function () {
-          log("Set up local media stream");
+          console.log("Set up local media stream");
           return navigator.mediaDevices.getUserMedia(mediaConstraints);
         })
         .then(function (stream) {
-          log("-- Local video stream obtained");
+          console.log("-- Local video stream obtained");
           localStream = stream;
           try {
             localVideo.srcObject = localStream;
@@ -427,11 +429,11 @@ const RtcRoom = () => {
             localVideo.src = window.URL.createObjectURL(stream);
           }
 
-          log("-- Adding stream to the RTCPeerConnection");
+          console.log("-- Adding stream to the RTCPeerConnection");
           localStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, localStream));
         })
         .then(function () {
-          log("-- Creating answer");
+          console.log("-- Creating answer");
           // Now that we've successfully set the remote description, we need to
           // start our stream up locally then create an SDP answer. This SDP
           // data describes the local end of our call, including the codec
@@ -497,7 +499,7 @@ const RtcRoom = () => {
                       style={{ display: "none" }}
                       autoComplete="off"
                     />
-                    Video On
+                    Video Off
                   </label>
                   <label
                     className="btn btn-outline-warning active"
@@ -509,9 +511,9 @@ const RtcRoom = () => {
                       name="options"
                       style={{ display: "none" }}
                       autoComplete="off"
-                      checked={true}
+                      defaultChecked={true}
                     />
-                    Video Off
+                    Video On
                   </label>
                 </div>
                 <div className="mr-2" data-toggle="buttons">
@@ -538,7 +540,7 @@ const RtcRoom = () => {
                       name="options"
                       style={{ display: "none" }}
                       autoComplete="off"
-                      checked={true}
+                      defaultChecked={true}
                     />
                     Audio Off
                   </label>
