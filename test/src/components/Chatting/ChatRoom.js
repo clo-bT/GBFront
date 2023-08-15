@@ -113,8 +113,8 @@ const ChatRoom = () => {
             <div className={styles.chatlist}><ChatList /></div>
             <button onClick={() => enterLive(id)}>화상채팅하기</button>
             <div className={styles.chatballoon}>
-            {previousmessage && previousmessage.map((chat, index) => (
-                <div key={index} className={styles.chatmessage}>
+            {previousmessage && previousmessage.map((chat) => (
+                <div key={chat.id} className={styles.chatmessage}>
                     {/* 보낸 사람이 상대방 */}
                     {chat.sender !== useruuid ? (
                         <div className={styles.yourchatbox}>
@@ -130,8 +130,8 @@ const ChatRoom = () => {
                     )}
                 </div>
             ))}
-            {messages.map((chat, index) => (
-                <div key={index} className={styles.chatmessage}>
+            {messages.map((chat) => (
+                <div key={chat.id} className={styles.chatmessage}>
                     {/* 보낸 사람이 상대방 */}
                     {chat.sender !== useruuid ? (
                         <div className={styles.yourchatbox}>

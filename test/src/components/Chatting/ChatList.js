@@ -50,13 +50,13 @@ const ChatList = () => {
                 <div className={styles.h1}>Message</div>
                 <div className={styles.chatlist}>
                 {chatData.length > 0 ? (
-                        chatData.map((ChatRoom, index) => (
+                        chatData.map((ChatRoom) => (
                             <div
+                                key={ChatRoom.id}
                                 className={styles.chatlistnickname}
                             >
                                 {ChatRoom.grantorId !== userid ? (
                                     <label
-                                        key={index}
                                         onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
                                     >
                                     {ChatRoom.grantorId.nickname} 님과의 대화
@@ -64,7 +64,6 @@ const ChatList = () => {
                                 </label>
                                 ) : (
                                     <label
-                                        key={index}
                                         onClick={() => enterChatRoom(ChatRoom.id, ChatRoom.roomDealId)}
                                     >
                                         {ChatRoom.assignee.nickname} 님과의 대화
