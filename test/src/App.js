@@ -8,6 +8,7 @@ import GbbCreate from './pages/Create';
 import TestApp from './components/TestApp';
 import ChatRoom from './components/Chatting/ChatRoom';
 import ChatList from './components/Chatting/ChatList';
+import RtcRoom from './components/Chatting/RtcRoom';
 import Main from './pages/Main';
 import Auth from './pages/Auth';
 import Facechat from './pages/Facechat';
@@ -33,10 +34,11 @@ const App = () => {
           <Route path="/roomout" element={<Roomout />} />
           <Route path="/login" element={<Signuplogin />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/test" element={<TestApp />} />
+          {/* <Route path="/test" element={<TestApp />} /> */}
           <Route path="/chatroom/:id/:roomDealId" element={<ChatRoom />} />
           <Route path="/chatlist" element={<ChatList />} />
           <Route path="/facechat" element={<Facechat />} />
+          <Route path="/rtcroom/:roomId" element={<RtcRoom />} />
         </Routes>
       </div>
     </BrowserRouter>
