@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Header";
+
 // import { useNavigate, useParams } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import styles from "../Chatting/ChatRoom.module.css";
@@ -10,6 +11,7 @@ const RtcRoom = () => {
   // const navigate = useNavigate();
   const { roomId } = useParams();
   const [userid, setUserid] = useState("");
+  //   const [message, setMessage] = useState("");
   //   const [messages, setMessages] = useState([]);
   //   const [previousmessage, setPreviousmessage] = useState([]);
   //   const [connecting, setConnecting] = useState(true);
@@ -24,7 +26,7 @@ const RtcRoom = () => {
   //   const exitButton = document.querySelector("#exit");
   var localVideo = document.getElementById("local_video");
   const remoteVideo = document.getElementById("remote_video");
-  var localUserName;
+  // var localUserName;
 
   useEffect(() => {
     const member = JSON.parse(sessionStorage.getItem("member"));
@@ -102,11 +104,11 @@ const RtcRoom = () => {
     // ICE 를 위한 chatList 인원 확인
     function createLiveRoom() {
       axios
-        .post(`${process.env.REACT_APP_API_ROOT}/rtc/create`, {
-          roomId: roomId,
+        .post(`http://localhost:8080/rtc/create`, {
+          roomId: `${roomId}`,
         })
         .then((response) => {
-            console.log(response);
+          //   console.log(response);
         })
         .catch((error) => {
           console.log("오류:", error);
@@ -116,7 +118,7 @@ const RtcRoom = () => {
     // ICE 를 위한 chatList 인원 확인
     function chatListCount() {
       axios
-        .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${roomId}`)
+        .get(`http://localhost:8080/rtc/usercount/${roomId}`)
         .then((response) => {
           console.log(response.data.data.overOne);
           return response.data.data.overOne;
@@ -132,7 +134,7 @@ const RtcRoom = () => {
       console.log("WebSocket connection opened to Room: #" + roomId);
       // send a message to the server to join selected room with Web Socket
       sendToServer({
-        from: localUserName,
+        from: userid,
         type: "join",
         data: roomId,
       });
@@ -153,7 +155,7 @@ const RtcRoom = () => {
 
   // 브라우저 종료 시 이벤트
   // 그냥...브라우저 종료 시 stop 함수를 부르면 된다ㅠㅠ
-  window.addEventListener("unload", stop());
+  window.addEventListener("unload", stop);
 
   // 브라우저 뒤로가기 시 이벤트
   window.onhashchange = function () {
@@ -164,7 +166,7 @@ const RtcRoom = () => {
     // send a message to the server to remove this client from the room clients list
     log("Send 'leave' message to server");
     sendToServer({
-      from: localUserName,
+      from: userid,
       type: "leave",
       data: roomId,
     });
@@ -243,6 +245,8 @@ const RtcRoom = () => {
   function handleErrorMessage(message) {
     console.error(message);
   }
+
+  // use JSON format to send WebSocket message
   function waitForSocketConnection(socket, callback){
     setTimeout(
         function(){
@@ -264,14 +268,13 @@ const RtcRoom = () => {
     });
     // socket.send(msgJSON);
   }
-  
 
   // initialize media stream
   async function getMedia(constraints) {
     if (localStream) {
-      localStream.getTracks().forEach((track) => 
-        track.stop()
-      );
+      localStream.getTracks().forEach((track) => {
+        track.stop();
+      });
     }
 
     let mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -362,7 +365,7 @@ const RtcRoom = () => {
   function handleICECandidateEvent(event) {
     if (event.candidate) {
       sendToServer({
-        from: localUserName,
+        from: userid,
         data: roomId,
         type: "ice",
         candidate: event.candidate,
@@ -389,7 +392,7 @@ const RtcRoom = () => {
       })
       .then(function () {
         sendToServer({
-          from: localUserName,
+          from: userid,
           data: roomId,
           type: "offer",
           sdp: myPeerConnection.localDescription,
@@ -446,7 +449,7 @@ const RtcRoom = () => {
           log("Sending answer packet back to other peer");
 
           sendToServer({
-            from: localUserName,
+            from: userid,
             data: roomId,
             type: "answer",
             sdp: myPeerConnection.localDescription,
