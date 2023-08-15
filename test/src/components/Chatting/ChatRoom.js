@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from "./ChatRoom.module.css";
 import axios from 'axios';
 import Header from '../Header';
@@ -102,10 +102,16 @@ const ChatRoom = () => {
     
         return `${period} ${formattedHours}:${formattedMinutes}`;
     }
+    const navigate = useNavigate();
+    function enterLive(roomId) {
+        navigate(`/rtcroom/${roomId}`);
+      }
 
     return (
         <div className={styles.ChatRoom}>
-            <div className={ styles.chatlist}><ChatList /></div>
+
+            <div className={styles.chatlist}><ChatList /></div>
+            <button onClick={() => enterLive(id)}>화상채팅하기</button>
             <div className={styles.chatballoon}>
             {previousmessage && previousmessage.map((chat, index) => (
                 <div key={index} className={styles.chatmessage}>

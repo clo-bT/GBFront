@@ -10,6 +10,7 @@ const Create = ({ onImageUpload }) => {
     const navigate = useNavigate  ();
     const apiUrl = process.env.REACT_APP_API_ROOT; // 백엔드 서버의 주소
     const uploadUrl = `${apiUrl}/show/add`;
+    const [showImages, setShowImages] = useState([]);
         
         const handleImageChange = (event) => {
         const files = event.target.files;

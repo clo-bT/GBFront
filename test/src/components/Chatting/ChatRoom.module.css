@@ -1,10 +1,10 @@
-.chatlist{
+/* .chatlist{
     position: relative;
     display: flex;
     justify-content: left;
     align-items: start;
     flex-direction: column;
-}
+} */
 
 .chatmessage {
     position: relative;
