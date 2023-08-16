@@ -8,7 +8,7 @@ export default function Main() {
         <div>
             <Header/>
             <div className="main">
-                <RoomFilterForm/>
+                <RoomFilterForm/> 
                 <PopularListContainer/>
             </div>
         </div>
