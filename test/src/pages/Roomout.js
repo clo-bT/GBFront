@@ -138,25 +138,24 @@ export default function Roomout() {
     setFloor(value);
 };
 
-const onRealSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    // console.log(selectedImages);
-    // formData.append("checkFiles", selectedImages);
-    // console.log(formData);
-    // selectedImages.forEach(image => {
-    //     formData.append('file', image);
-    //     console.log('중간점검',formData.file)
-    // });
-    formData.append('file', selectedImages);
+    const onRealSubmit = useCallback(async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        // console.log(selectedImages);
+        // formData.append("checkFiles", selectedImages);
+        // console.log(formData);
+        // selectedImages.forEach(image => {
+        //     formData.append('file', image);
+        //     console.log('중간점검',formData.file)
+        // });
+        formData.append('file', selectedImages);
 
-
-    for (let file of formData.getAll('file')) {
-        console.log('File Name:', file['name']);
-        console.log('File Type:', file.type);
-        console.log('File Size:', file.size);
+        // for (let file of formData.getAll('file')) {
+        //     console.log('File Name:', file['name']);
+        //     console.log('File Type:', file.type);
+        //     console.log('File Size:', file.size);
         // You can log other properties as needed
-    }
+    // }
     const value = {
         "roomDealRegisterRequestDto": {
             "roomDealRegisterDefaultDto": {
@@ -199,10 +198,10 @@ const onRealSubmit = useCallback(async (e) => {
         }
     };
     console.log(value)
-    const sj = new Blob([JSON.stringify(value)], { type: "application/json" });
-    formData.append("data",sj);
+    const blob = new Blob([JSON.stringify(value)], { type: "application/json" });
+    formData.append("data",blob);
     console.log('보내기 전 폼데이터!!!!!!!!!!!!!', formData);
-    console.log('보내기 전 blob',sj);
+    console.log('보내기 전 blob',blob);
     console.log(selectedImages);
     // const formData = {
     //     "files": selectedImages,
@@ -257,7 +256,8 @@ const onRealSubmit = useCallback(async (e) => {
             {
                 headers: {
                     "Content-Type" : "multipart/form-data", 
-                    // charset : 'utf-8'// Content-Type을 반드시 이렇게 하여야 합니다.
+                    // charset : 'utf-8'
+                    // Content-Type을 반드시 이렇게 하여야 합니다.
                 },
             }
         );
@@ -334,7 +334,7 @@ const onRealSubmit = useCallback(async (e) => {
         axios
             .get(apiUrl, {
                 headers: {
-                    Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_MAP_KEY}`,
+                    Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_KEY}`,
             },
         }).then((response) => {
             const { documents } = response.data;
