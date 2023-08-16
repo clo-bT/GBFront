@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Header from '../components/Header';
+// import Header from '../components/Header';
 import axios from 'axios';
 import styles from './Auth.module.css'
 export const API_BASE_URL = process.env.REACT_APP_API_ROOT;
@@ -27,6 +27,10 @@ export default function Auth() {
                         // setuserinfo(r.data.data.member);
                         sessionStorage.setItem("isAuthorized", "true")
                         sessionStorage.setItem("member",JSON.stringify(r.data.data.member))
+		                sessionStorage.setItem("eventSource",new EventSource(
+                            `http://localhost:8080/notification/subscribe/${r.data.data.member.id}`
+                        ));
+                        
                         setshownameform(false)
                         window.location.href = HOME_URL
                     }
@@ -66,6 +70,9 @@ export default function Auth() {
                     // setuserinfo(response.data.data.member);
                     sessionStorage.setItem("member",JSON.stringify(response.data.data.member))
                     setshownameform(false);
+                    sessionStorage.setItem("eventSource",new EventSource(
+                        `http://localhost:8080/notification/subscribe/${response.data.data.member.id}`
+                    ));
                     window.location.href = HOME_URL
                 }
                 else if(response.data.code === 2102){
