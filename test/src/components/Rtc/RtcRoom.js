@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Header from "../Header";
 
 // import { useNavigate, useParams } from 'react-router-dom';
 import { useParams } from "react-router-dom";
@@ -9,8 +10,7 @@ import ChatRoom from "../Chatting/ChatRoom";
 
 const RtcRoom = () => {
   // const navigate = useNavigate();
-    const { id, roomDealId } = useParams();
-    // const { id } = useParams();
+  const { id } = useParams();
   //   const [message, setMessage] = useState("");
   //   const [messages, setMessages] = useState([]);
   //   const [previousmessage, setPreviousmessage] = useState([]);
@@ -33,7 +33,7 @@ const RtcRoom = () => {
     localVideo = document.getElementById("local_video");
     remoteVideo = document.getElementById("remote_video");
     localUserName = member.id;
-    socket = new WebSocket("ws://localhost:8080/signal");
+    socket = new WebSocket(`${process.env.REACT_APP_WS_URL}/signal`);
 
     start();
   }, []);
@@ -91,7 +91,6 @@ const RtcRoom = () => {
           axios
             .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${id}`)
             .then((response) => {
-              console.log(response.data.data.overOne);
               message.data = response.data.data.overOne;
               return message;
             })
@@ -220,36 +219,16 @@ const RtcRoom = () => {
  UI Handlers
   */
   // mute video buttons handler
-  async function videoOff() {
-    // localVideoTracks = localStream.getVideoTracks();
-    // localVideoTracks.forEach((track) => localStream.removeTrack(track));
-    // localVideo.setAttribute(styles, "display:none");
-    localStream = null;
-    localVideo.style.display = "none"; // 스타일 적용
-    console.log("Video Off");
-  }
-
-  async function videoOn() {
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~`', localVideoTracks);
-    
-    // 비디오 트랙 가져오기
-    localStream = await navigator.mediaDevices.getUserMedia({ video: true });
+  function videoOff() {
     localVideoTracks = localStream.getVideoTracks();
-    
-    if (localStream) {
-      localVideoTracks.forEach((track) => {
-        if (track.kind === 'video') {
-          localStream.addTrack(track); // 비디오 트랙 추가
-        }
-      });
-  
-      // 오디오 트랙 관련 코드는 그대로 유지
-      // ...
-  
-      localVideo.style.display = "inline"; // 스타일 적용
-      localVideo.srcObject = localStream; // 비디오 요소에 스트림 연결
-      console.log("Video On");
-    }
+    localVideoTracks.forEach((track) => localStream.removeTrack(track));
+    localVideo.setAttribute(styles, "display:none");
+    log("Video Off");
+  }
+  function videoOn() {
+    localVideoTracks.forEach((track) => localStream.addTrack(track));
+    localVideo.setAttribute(styles, "display:inline");
+    log("Video On");
   }
   // mute audio buttons handler
   function audioOff() {
@@ -308,10 +287,7 @@ const RtcRoom = () => {
 
     getMedia(mediaConstraints);
 
-    console.log(typeof message.data);
-
     if (message.data === true) {
-      console.log("여기");
       myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
     }
   }
@@ -337,7 +313,6 @@ const RtcRoom = () => {
   function handleICEConnectionStateChangeEvent() {
     let status = myPeerConnection.iceConnectionState;
     remoteVideo = document.getElementById("remote_video");
-    console.log(status);
 
     if (status === "connected") {
       log("status : " + status);
@@ -399,12 +374,15 @@ const RtcRoom = () => {
   // 2. local media description 생성?
   // 3. 미디어 형식, 해상도 등에 대한 내용을 서버에 전달
   function handleNegotiationNeededEvent() {
+    console.log("----------------------- 1");
     myPeerConnection
       .createOffer()
       .then(function (offer) {
+        console.log("----------------------- 2");
         return myPeerConnection.setLocalDescription(offer);
       })
       .then(function () {
+        console.log("----------------------- 3");
         sendToServer({
           from: localUserName,
           data: id,
@@ -511,7 +489,7 @@ const RtcRoom = () => {
                       style={{ display: "none" }}
                       autoComplete="off"
                     />
-                    Video Off
+                    Video On
                   </label>
                   <label
                     className="btn btn-outline-warning active"
@@ -525,7 +503,7 @@ const RtcRoom = () => {
                       autoComplete="off"
                       defaultChecked={true}
                     />
-                    Video On
+                    Video Off
                   </label>
                 </div>
                 <div className="mr-2" data-toggle="buttons">
@@ -576,7 +554,7 @@ const RtcRoom = () => {
 
         <div className="row justify-content-around mb-3">
           <div className="col-lg-6 mb-3">
-            <video id="local_video" style={{width:'100px'}} autoPlay playsInline></video>
+            <video id="local_video" autoPlay playsInline></video>
           </div>
           <div className="col-lg-6 mb-3">
             <video id="remote_video" autoPlay playsInline></video>
