@@ -1,5 +1,6 @@
 import "./Signuplogin.css";
 export const HOME_URL = process.env.REACT_APP_HOME_URL;
+console.log(HOME_URL)
 const Loginpage = () => {
 
   const Rest_api_key= process.env.REACT_APP_REST_API_MAP_KEY //REST API KEY
