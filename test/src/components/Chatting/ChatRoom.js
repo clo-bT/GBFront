@@ -104,7 +104,7 @@ const ChatRoom = () => {
     }
     const navigate = useNavigate();
     function enterLive(roomId) {
-        navigate(`/rtcroom/${roomId}`);
+        navigate(`/rtcroom/${roomId}/${roomDealId}`);
       }
 
     return (
@@ -114,8 +114,9 @@ const ChatRoom = () => {
             <button onClick={() => enterLive(id)}>화상채팅하기</button>
             <div className={styles.chatballoon}>
             {previousmessage && previousmessage.map((chat) => (
-                <div key={chat.id} className={styles.chatmessage}>
+                <div key={chat.sender+chat.time} className={styles.chatmessage}>
                     {/* 보낸 사람이 상대방 */}
+                    {/* {console.log(chat)} */}
                     {chat.sender !== useruuid ? (
                         <div className={styles.yourchatbox}>
                             <span className={styles.yourballoon}>상대방: {chat.message}</span>
@@ -131,7 +132,7 @@ const ChatRoom = () => {
                 </div>
             ))}
             {messages.map((chat) => (
-                <div key={chat.id} className={styles.chatmessage}>
+                <div key={chat.sender+chat.time} className={styles.chatmessage}>
                     {/* 보낸 사람이 상대방 */}
                     {chat.sender !== useruuid ? (
                         <div className={styles.yourchatbox}>
