@@ -28,7 +28,7 @@ export default function Auth() {
                         sessionStorage.setItem("isAuthorized", "true")
                         sessionStorage.setItem("member",JSON.stringify(r.data.data.member))
 		                sessionStorage.setItem("eventSource",new EventSource(
-                            `http://localhost:8080/notification/subscribe/${r.data.data.member.id}`
+                            `${process.env.REACT_APP_API_ROOT}/notification/subscribe/${r.data.data.member.id}`
                         ));
                         
                         setshownameform(false)
@@ -71,7 +71,7 @@ export default function Auth() {
                     sessionStorage.setItem("member",JSON.stringify(response.data.data.member))
                     setshownameform(false);
                     sessionStorage.setItem("eventSource",new EventSource(
-                        `http://localhost:8080/notification/subscribe/${response.data.data.member.id}`
+                        `${process.env.REACT_APP_API_ROOT}/notification/subscribe/${response.data.data.member.id}`
                     ));
                     window.location.href = HOME_URL
                 }

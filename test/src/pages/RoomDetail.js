@@ -5,7 +5,7 @@ import axios from 'axios';
 const RoomDetail = () => {
     const [roomdata, setRoomData] = useState([]);
     const [roomoption, setRoomOption] = useState([]);
-    const roomid=''
+    const roomid=1
     axios.get(`${process.env.REACT_APP_API_ROOT}/roomdeal/${roomid}`)
     .then(response => {
         console.log('받아온 정보 : ', response.data);
@@ -21,8 +21,9 @@ const RoomDetail = () => {
     return (
         <div>
             <Header />
-            <div>{ roomdata.id }</div>
-            <div>{ roomdata.member.id }</div>
+            {/* <div>{ roomdata.id }</div> */}
+            <button>양도자와 채팅하기</button>
+            {/* <div>{ roomdata.member.id }</div> */}
             <div>{ roomdata.roomType }</div>
             <div>{ roomdata.roomSize }</div>
             <div>{ roomdata.roomCount }</div>
@@ -38,7 +39,7 @@ const RoomDetail = () => {
             <div>{roomdata.expirationDate}</div>
             <div>{roomdata.floor}</div>
             <div>{roomdata.totalFloor}</div>
-            <div>{roomoption.airConditioner}</div>
+            {/* <div>{roomoption}</div> */}
 
         </div>
     );
