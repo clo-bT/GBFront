@@ -8,13 +8,15 @@ import GbbCreate from './pages/Create';
 import TestApp from './components/TestApp';
 import ChatRoom from './components/Chatting/ChatRoom';
 import ChatList from './components/Chatting/ChatList';
-import RtcRoom from './components/Chatting/RtcRoom';
-import Main from './pages/Main';
-import Auth from './pages/Auth';
+import AssigneeRtcRoom from "./components/Rtc/AssigneeRtcRoom";
+import RtcRoom from "./components/Rtc/RtcRoom";
+import GrantorRtcRoom from "./components/Rtc/GrantorRtcRoom";
 import Facechat from './pages/Facechat';
+import Main from "./pages/Main";
+import Auth from "./pages/Auth";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import './App.css';
+import "./App.css";
 
 const App = () => {
   const [imageList, setImageList] = useState([]);
@@ -34,11 +36,13 @@ const App = () => {
           <Route path="/roomout" element={<Roomout />} />
           <Route path="/login" element={<Signuplogin />} />
           <Route path="/auth" element={<Auth />} />
-          {/* <Route path="/test" element={<TestApp />} /> */}
-          <Route path="/chatroom/:id/:roomDealId" element={<ChatRoom />} />
+          <Route path="/test" element={<TestApp />} />
+          <Route path="/chatroom/:isGrantor/:id/:roomDealId" element={<ChatRoom />} />
           <Route path="/chatlist" element={<ChatList />} />
-          <Route path="/facechat" element={<Facechat />} />
           <Route path="/rtcroom/:id/:roomDealId" element={<RtcRoom />} />
+          <Route path="/rtcroom/grantor/:id/:roomDealId" element={<GrantorRtcRoom />} />
+          <Route path="/rtcroom/assignee/:id/:roomDealId" element={<AssigneeRtcRoom />} />
+          <Route path="/rtcroom/qr/:id/:roomDealId" element={<RtcRoomQR />} />
         </Routes>
       </div>
     </BrowserRouter>
