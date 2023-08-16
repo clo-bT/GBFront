@@ -377,41 +377,41 @@ export default function Roomout() {
             <Header />
         <div className={styles.roomout}>
             <div className={styles.roomoutform}>
-                <h1>곰방 내놓기</h1>
+                <h1 className={styles.h1_title}>곰방 내놓기</h1>
                 <div className={styles.gbinfo}>
-                    <h2>곰방 정보</h2>
-                    <h3>곰방 유형</h3>
+                    <h2 className={styles.h2_title}>곰방 정보</h2>
+                    <h3 className={styles.h3_title}>곰방 유형</h3>
                     <div className={styles.gbtype}>
                         <label className={styles.oneroom}>
                             <input type="radio" value="원룸" checked={info === "원룸"} onChange={handleClickInfoButton} />
-                            원룸
+                            <p>원룸</p>
                         </label>
                         <label className={styles.officetell}>
                             <input type="radio" value="오피스텔" checked={info === "오피스텔"} onChange={handleClickInfoButton} />
-                            오피스텔
+                            <p>오피스텔</p>
                         </label>
                         <label className={styles.villa}>
                             <input type="radio" value="빌라" checked={info === "빌라"} onChange={handleClickInfoButton} />
-                            빌라
+                            <p>빌라</p>
                         </label>
                         <label className={styles.apartment}>
                             <input type="radio" value="아파트" checked={info === "아파트"} onChange={handleClickInfoButton} />
-                            아파트
+                            <p>아파트</p>
                         </label>
                     </div>
-                    <h3>곰방 구조</h3>
+                    <h3 className={styles.h3_title}>곰방 구조</h3>
                     <div className={styles.gbstructure}>
                         <label>
                             <input type="radio" value="오픈형" checked={struc === "오픈형"} onChange={handleClickStrucButton} />
-                            오픈형
+                            <p>오픈형</p>
                         </label>
                         <label>
                             <input type="radio" value="분리형" checked={struc === "분리형"} onChange={handleClickStrucButton} />
-                            분리형
+                            <p>분리형</p>
                         </label>
                         <label>
                             <input type="radio" value="복층형" checked={struc === "복층형"} onChange={handleClickStrucButton} />
-                            복층형
+                            <p>복층형</p>
                         </label>
                         {/* <label>
                             <input type="radio" value="tworoom" checked={struc === "tworoom"} onChange={handleClickStrucButton} />
@@ -422,137 +422,166 @@ export default function Roomout() {
                             쓰리룸 이상
                         </label> */}
                     </div>
-                    <h3>주소</h3>
+                    <h3 className={styles.h3_title}>주소</h3>
                     <div className={styles.gbaddress}>
-                        <input type="text" id="postcode" placeholder="우편번호" disabled/>
-                        <input
-                            type="button"
-                            onClick={handleClick}
-                            value="우편번호 찾기"
-                            style={{
-                                padding: '8px 16px',
-                                fontSize: '16px',
-                                // fontWeight: 'bold',
-                                color: 'white',
-                                backgroundColor: '#C7AD92',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                // marginTop: '10px',
-                            }}/><br />
-                        <input type="text" id="roadAddress" placeholder="도로명주소" disabled/>
-                        <input type="text" id="jibunAddress" placeholder="지번주소" disabled/>
-                        <span id="guide" style={{ color: '#999', display: 'none' }}></span>
-                        <input type="text" id="detailAddress" placeholder="상세주소" />
+                        <div className={styles.addresstoparea}>
+                            <input className={styles.postcode} type="text" id="postcode" placeholder="우편번호" disabled/>
+                            <input
+                                type="button"
+                                onClick={handleClick}
+                                value="우편번호 찾기"
+                                style={{
+                                    padding: '8px 16px',
+                                    fontSize: '16px',
+                                    // fontWeight: 'bold',
+                                    color: 'white',
+                                    backgroundColor: '#C7AD92',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    // marginTop: '10px',
+                                }}/>
+                        </div>
+                        <div className={styles.addressbuttomarea}>
+                            <input type="text" id="roadAddress" placeholder="도로명주소" disabled/>
+                            <input type="text" id="jibunAddress" placeholder="지번주소" disabled/>
+                            <span id="guide" style={{ color: '#999', display: 'none' }}></span>
+                            <input className={styles.detailaddress} type="text" id="detailAddress" placeholder="상세주소" />
+                        </div>
                         {/* {<DaumPostcode onComplete={handleExecDaumPostcode} />} */}
                     </div>
-                        <h3>근처 역/학교</h3>
-                        {nearstation ? (
-                            <div className={styles.nearstation} ><div>{nearstation}</div></div>) : (
-                            <div className={styles.nearstation} >가까운 역이 없습니다. </div>)
-                            
-                        }
-                        {nearschool ? (
-                            <div className={styles.nearstation} ><div>{nearschool}</div></div>) : (
-                            <div className={styles.nearstation} >가까운 대학교가 없습니다. </div>)
-                            
-                        }
+                        <h3 className={styles.h3_title}>근처 역/학교</h3>
+                        <div className={styles.stationuniv}>
+                            {nearstation ? (
+                                <div className={styles.nearstation} ><div>{nearstation}</div></div>) : (
+                                <div className={styles.nearstation} >가까운 역이 없습니다. </div>)
+                                
+                            }
+                            {nearschool ? (
+                                <div className={styles.nearstation} ><div>{nearschool}</div></div>) : (
+                                <div className={styles.nearstation} >가까운 대학교가 없습니다. </div>)
+                                
+                            }
+                        </div>
                     <div className={styles.moneybox}>
-                    <div>
-                    <h3>보증금</h3>
-                    <div className={ styles.money }><input type="number" value={deposit} onChange={handleDepositChange} step="10000" min="0" placeholder="보증금"/>원</div>
-                    </div>
-                    <div>
-                    <h3>월세</h3>
-                    <p className={ styles.detailtext }>전세 일 경우 0을 입력하세요.</p>
-                    <div className={ styles.money }><input type="number" value={monthlyRent} onChange={handleMonthlyRentChange} step="10000" min="0" placeholder="월세"/>원</div>
-                    </div>
-                    <div><h3>관리비</h3><p className={ styles.detailtext }>없을 경우 0을 입력하세요.</p>
-                    <div className={ styles.money }><input type="number" value={managementFee} onChange={handleManagementFeeChange} step="10000" min="0" placeholder="관리비 (없을 경우 0 입력)" />원</div>
-                            </div>
-                        </div>
-                        <div className={styles.datebox}>
-                            <div>
-                    <h3>입주 가능 일자</h3>
-                        <DatePicker
-                            showIcon
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            isClearable
-                            locale={ko}
-                            onCalendarClose={handleCalendarClose}
-                            onCalendarOpen={handleCalendarOpen}
-                            dateFormat="yyyy년 MM월 dd일"
-                            minDate={new Date()}
-                            />일
-                            </div>
-                            <div>
-                    <h3>계약 만료 일자</h3>
-                    <DatePicker
-                            showIcon
-                            selected={endDate}
-                            onChange={(date) => setEndDate(date)}
-                            isClearable
-                            locale={ko}
-                            onCalendarClose={handleCalendarClose}
-                            onCalendarOpen={handleCalendarOpen}
-                            dateFormat="yyyy년 MM월 dd일"
-                            minDate={startDate}
-                                />일
-                            </div>
-                            <div>
-                    <h3>사용 승인일</h3>
-                    <DatePicker
-                        showIcon
-                        selected={approveDate}
-                        onChange={(date) => setApproveDate(date)}
-                        isClearable
-                        locale={ko}
-                        onCalendarClose={handleCalendarClose}
-                        onCalendarOpen={handleCalendarOpen}
-                        dateFormat={"yyyy년 MM월 dd일"}
-                        dateFormatCalendar={"yyyy년 MM월"}
-                        // dropdownMode="select"
-                        showYearDropdown
-                        showMonthDropdown
-                                />일
-                                </div>
-                            </div>
-                    <h3>층 수</h3>
                         <div>
-                            <input type="number" value={floor} onChange={handleFloorChange} placeholder="현재 층 수" />층 /
-                            <input type="number" value={totalFloor} onChange={handleTotalFloor} placeholder="건물 전체 층 수" />층
+                            <h3 className={styles.h3_title}>보증금</h3>
+                            <p className={ styles.detailtext }>.</p>
+                            <div className={ styles.money }><input type="number" value={deposit} onChange={handleDepositChange} step="10000" min="0" placeholder="보증금"/>원</div>
                         </div>
-                    <h3>엘리베이터</h3>
-                    <div><label>
-                        <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton} />
-                        있음
-                    </label>
-                        <label>
-                            <input type="radio" value="elevatorno" checked={elevator === "elevatorno"} onChange={handleClickElevatorButton} />
-                            없음
-                            </label></div>
-                    <h3>평 수</h3>
-                    <div><input type="number"  value={pyeong} onChange={handlePyeong} placeholder="평 수"/>평</div>
-                    <h3>방 수</h3>
-                    <div><input type="number"  value={roomCount} onChange={handleRoomCount} placeholder="방 수"/>개</div>
-                    <h3>욕실 수</h3>
-                    <div><input type="number"  value={bathroomCount} onChange={handleBathroomCount} placeholder="욕실 수"/>개</div>
-                    <h3>주차 가능 여부</h3>
-                    <div><label>
-                        <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton} />
-                        가능
-                    </label>
-                        <label>
-                            <input type="radio" value="parkingno" checked={parking === "parkingno"} onChange={handleClickParkingButton} />
-                            불가능
-                        </label></div>
+                        <div>
+                            <h3 className={styles.h3_title}>월세</h3>
+                            <p className={ styles.detailtext }>전세 일 경우 0을 입력하세요.</p>
+                            <div className={ styles.money }><input type="number" value={monthlyRent} onChange={handleMonthlyRentChange} step="10000" min="0" placeholder="월세"/>원</div>
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>관리비</h3><p className={ styles.detailtext }>없을 경우 0을 입력하세요.</p>
+                            <div className={ styles.money }><input type="number" value={managementFee} onChange={handleManagementFeeChange} step="10000" min="0" placeholder="관리비 (없을 경우 0 입력)" />원</div>
+                        </div>
+                    </div>
+                    <div className={styles.datebox}>
+                        <div>
+                            <h3 className={styles.h3_title}>입주 가능 일자</h3>
+                                <DatePicker
+                                    showIcon
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    isClearable
+                                    locale={ko}
+                                    onCalendarClose={handleCalendarClose}
+                                    onCalendarOpen={handleCalendarOpen}
+                                    dateFormat="yyyy년 MM월 dd일"
+                                    minDate={new Date()}
+                                    />일
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>계약 만료 일자</h3>
+                            <DatePicker
+                                    showIcon
+                                    selected={endDate}
+                                    onChange={(date) => setEndDate(date)}
+                                    isClearable
+                                    locale={ko}
+                                    onCalendarClose={handleCalendarClose}
+                                    onCalendarOpen={handleCalendarOpen}
+                                    dateFormat="yyyy년 MM월 dd일"
+                                    minDate={startDate}
+                                        />일
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>사용 승인일</h3>
+                            <DatePicker
+                                showIcon
+                                selected={approveDate}
+                                onChange={(date) => setApproveDate(date)}
+                                isClearable
+                                locale={ko}
+                                onCalendarClose={handleCalendarClose}
+                                onCalendarOpen={handleCalendarOpen}
+                                dateFormat={"yyyy년 MM월 dd일"}
+                                dateFormatCalendar={"yyyy년 MM월"}
+                                // dropdownMode="select"
+                                showYearDropdown
+                                showMonthDropdown
+                                        />일
+                        </div>
+                    </div>
+                    <div className={styles.cmd}>
+                        <div>
+                            <h3 className={styles.h3_title}>층 수</h3>
+                            <div>
+                                <input type="number" value={floor} onChange={handleFloorChange} placeholder="현재 층 수" />층 /
+                                <input type="number" value={totalFloor} onChange={handleTotalFloor} placeholder="건물 전체 층 수" />층
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>엘리베이터</h3>
+                            <div className={styles.elevator}>
+                                <label>
+                                    <input type="radio" value="elevatoryes" checked={elevator === "elevatoryes"} onChange={handleClickElevatorButton} />
+                                    있음
+                                </label>
+                                <label>
+                                    <input type="radio" value="elevatorno" checked={elevator === "elevatorno"} onChange={handleClickElevatorButton} />
+                                    없음
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>주차 가능 여부</h3>
+                            <div className={styles.elevator}>
+                                <label>
+                                    <input type="radio" value="parkingyes" checked={parking === "parkingyes"} onChange={handleClickParkingButton} />
+                                    가능
+                                </label>
+                                <label>
+                                    <input type="radio" value="parkingno" checked={parking === "parkingno"} onChange={handleClickParkingButton} />
+                                    불가능
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.roomoption}>
+                        <div>
+                            <h3 className={styles.h3_title}>평 수</h3>
+                            <div><input type="number"  value={pyeong} onChange={handlePyeong} placeholder="평 수"/>평</div>
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>방 수</h3>
+                            <div><input type="number"  value={roomCount} onChange={handleRoomCount} placeholder="방 수"/>개</div>
+                        </div>
+                        <div>
+                            <h3 className={styles.h3_title}>욕실 수</h3>
+                            <div><input type="number"  value={bathroomCount} onChange={handleBathroomCount} placeholder="욕실 수"/>개</div>
+                        </div>
+                    </div>
+                    
                 
-                    <h3>추가 옵션</h3>
-                    <form onSubmit={onSubmit}>
-                        <div className='checkbox-group'>
+                    <h3 className={styles.h3_title}>추가 옵션</h3>
+                    <form className={styles.option} onSubmit={onSubmit}>
+                        <div className={styles.checkboxgroup}>
                             {checkBoxList.map((item, idx) => (
-                                <div className='checkbox' key={idx}>
+                                <div className={styles.checkbox} key={idx}>
                                     <input
                                         type='checkbox'
                                         id={item}
@@ -567,7 +596,7 @@ export default function Roomout() {
                         {/* <button type='submit'>저장</button> */}
                     </form>
                     
-                    <h3>매물 사진</h3>
+                    <h3 className={styles.h3_title}>매물 사진</h3>
                     <div>
                         <input
                             type="file"
@@ -575,10 +604,11 @@ export default function Roomout() {
                             multiple
                             onChange={handleImageChange} />
                     </div>
-                    <h3>상세 설명</h3>
-                    <div><textarea value={content} onChange={handleContent} rows="5" cols="50"/></div>
+                    <h3 className={styles.h3_title}>상세 설명</h3>
+                    <div className={styles.textarea}>
+                        <textarea value={content} onChange={handleContent} rows="5" cols="50"/></div>
                     </div>
-                    <div>
+                    <div className={styles.check}>
                         <input type="checkbox" id="check1" checked={agreement} onChange={agreeBtnEvent}/>
                         <label htmlFor="check1">매물관리규정을 확인하였으며, 입력한 정보는 실제 매물과 다름이 없습니다. <span className='pilsoo'>(필수)</span></label>
                     </div>
