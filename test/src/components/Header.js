@@ -6,24 +6,26 @@ import { useState, useEffect } from "react";
 const Header = () => {
 	const [isAuthorized, setIsAuthorized] = useState("");
 	const [userinfo, setUserinfo] = useState({});
+	const [eventSource,setEventSource] = useState(()=>{});
 	useEffect(() => {
 		setIsAuthorized(sessionStorage.getItem("isAuthorized"));
 		setUserinfo(JSON.parse(sessionStorage.getItem("member")));
 	}, []); // This effect runs once when the component mounts
 
+	useEffect(()=>{
+		if(userinfo === undefined || userinfo === null) return;
+		if( Object.keys(userinfo).length === 0 ) return;
+		if(sessionStorage.getItem("notification_issubscribe")){return}
+		setEventSource(new EventSource(
+			`http://localhost:8080/notification/subscribe/${userinfo.id}`))
+		sessionStorage.setItem("notification_issubscribe",true)
+	},[userinfo])
+
+
 	useEffect(() => {
-		const member = JSON.parse(sessionStorage.getItem("member"));
-		if (member === null) return;
-		const userid = member.id;
-		// 로그아웃하면 eventSource 비워줘야 함
-		// const eventSource = new EventSource(
-		// 	`http://localhost:8080/notification/subscribe/${userid}`
-		// );
-		const eventSource = sessionStorage.getItem("eventSource");
-
+		if (eventSource === null) return;
+		if (typeof(eventSource) === 'undefined') return;
 		eventSource.addEventListener("sse", function (event) {
-			console.log(event.data);
-
 			// const data = JSON.parse(event.data);
 
 			(async () => {
@@ -59,7 +61,7 @@ const Header = () => {
 				}
 			})();
 		});
-	}, [userinfo]);
+	}, [eventSource]);
 
 	function handleLogout() {
 		setIsAuthorized(false);
