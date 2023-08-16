@@ -5,8 +5,9 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import ChatList from './ChatList';
+import ChatList from "./ChatList";
 import axios from "axios";
+import styles from "./ChatRoom.module.css";
 
 var stompClient = null;
 var useruuid;
@@ -29,7 +30,7 @@ const ChatRoom = () => {
 
   function connect() {
     // 연결하고자하는 Socket 의 endPoint
-    const socket = new SockJS("http://localhost:8080/ws-stomp");
+    const socket = new SockJS(`${process.env.REACT_APP_API_ROOT}/ws-stomp`);
     stompClient = Stomp.over(socket);
     // {}는 header에 담길 내용, 뒤의 함수들은 콜백 함수
     stompClient.connect({}, onConnected, onError);
@@ -64,7 +65,7 @@ const ChatRoom = () => {
   }
   function gethistory() {
     axios
-      .get(`http://localhost:8080/chat/history/${id}`)
+      .get(`${process.env.REACT_APP_API_ROOT}/chat/history/${id}`)
       .then((response) => {
         console.log("받아온 정보 : ", response.data);
         setPreviousmessage(response.data.data.history);
@@ -92,6 +93,17 @@ const ChatRoom = () => {
       setMessage("");
     }
   }
+  function formatTime(timeString) {
+    const date = new Date(timeString);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const period = hours >= 12 ? "오후" : "오전";
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+    return `${period} ${formattedHours}:${formattedMinutes}`;
+  }
+
   function onMessageReceived(payload) {
     const chat = JSON.parse(payload.body);
     setMessages((prevMessages) => [...prevMessages, chat]);
@@ -105,38 +117,63 @@ const ChatRoom = () => {
 
   return (
     <div className={styles.ChatRoom}>
-      <Header />
-      <button onClick={() => enterLive()}></button>
-      <ul id="messageArea">
-        {previousmessage.map((chat, index) => (
-          <li key={index} className="chat-message">
-            {/* <i>{chat.sender[0]}</i> */}
-            {/* <span>{chat.sender}</span> */}
-            <p>{chat.message}</p>
-          </li>
+      <div className={styles.chatlist}>
+        <ChatList />
+      </div>
+      <button onClick={() => enterLive()}>화상채팅하기</button>
+      <div className={styles.chatballoon}>
+        {previousmessage &&
+          previousmessage.map((chat) => (
+            <div key={chat.sender + chat.time} className={styles.chatmessage}>
+              {/* 보낸 사람이 상대방 */}
+              {/* {console.log(chat)} */}
+              {chat.sender !== useruuid ? (
+                <div className={styles.yourchatbox}>
+                  <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                  <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
+                </div>
+              ) : (
+                // 보낸 사람이 나
+                <div className={styles.mychatbox}>
+                  <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
+                  <span className={styles.myballoon}>나: {chat.message}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        {messages.map((chat) => (
+          <div key={chat.sender + chat.time} className={styles.chatmessage}>
+            {/* 보낸 사람이 상대방 */}
+            {chat.sender !== useruuid ? (
+              <div className={styles.yourchatbox}>
+                <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
+              </div>
+            ) : (
+              // 보낸 사람이 나
+              <div className={styles.mychatbox}>
+                <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
+                <span className={styles.myballoon}>나: {chat.message}</span>
+              </div>
+            )}
+          </div>
         ))}
-        {messages.map((chat, index) => (
-          <li key={index} className="chat-message">
-            {/* <i>{chat.sender[0]}</i> */}
-            <span>{chat.sender}</span>
-            <p>{chat.message}</p>
-          </li>
-        ))}
-      </ul>
-      <form id="messageForm">
-        <input
-          id="message"
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button type="submit" onClick={sendMessage}>
-          Send
-        </button>
-      </form>
-      <div>채팅방 id : {id}</div>
-      <div>방 매물 id : {roomDealId}</div>
-      <div className={`connecting ${connecting ? "show" : ""}`}>Connecting...</div>
+      </div>
+
+      {/* --------------- 메세지 입력하는 부분 ------------ */}
+      <div className={styles.sendmessage}>
+        <form id="messageForm">
+          <input
+            id="message"
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button type="submit" onClick={sendMessage}>
+            Send
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

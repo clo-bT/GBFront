@@ -3,7 +3,7 @@ import Header from "../Header";
 
 // import { useNavigate, useParams } from 'react-router-dom';
 import { useParams } from "react-router-dom";
-import styles from "../Chatting/Chat.module.css";
+import styles from "../Chatting/ChatRoom.module.css";
 import axios from "axios";
 import ChatRoom from "../Chatting/ChatRoom";
 // import { click } from "@testing-library/user-event/dist/click";
@@ -33,7 +33,7 @@ const RtcRoom = () => {
     localVideo = document.getElementById("local_video");
     remoteVideo = document.getElementById("remote_video");
     localUserName = member.id;
-    socket = new WebSocket("ws://localhost:8080/signal");
+    socket = new WebSocket(`${process.env.REACT_APP_WS_URL}/signal`);
 
     start();
   }, []);
@@ -89,7 +89,7 @@ const RtcRoom = () => {
           // ajax 요청을 보내서 userList 를 다시 확인함
           //   message.data = await chatListCount();
           axios
-            .get(`http://localhost:8080/rtc/usercount/${id}`)
+            .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${id}`)
             .then((response) => {
               message.data = response.data.data.overOne;
               return message;
@@ -114,7 +114,7 @@ const RtcRoom = () => {
     // ICE 를 위한 chatList 인원 확인
     function createLiveRoom() {
       axios
-        .post(`http://localhost:8080/rtc/create`, {
+        .post(`${process.env.REACT_APP_API_ROOT}/rtc/create`, {
           roomId: `${id}`,
         })
         .then((response) => {

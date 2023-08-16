@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../Header";
 
 import { useParams } from "react-router-dom";
-import styles from "../Chatting/Chat.module.css";
+import styles from "../Chatting/ChatRoom.module.css";
 import axios from "axios";
 import ChatRoom from "../Chatting/ChatRoom";
 
@@ -19,7 +19,7 @@ const GrantorRtcRoom = () => {
     const member = JSON.parse(sessionStorage.getItem("member"));
     localVideo = document.getElementById("local_video");
     localUserName = member.id;
-    socket = new WebSocket("ws://localhost:8080/signal");
+    socket = new WebSocket(`${process.env.REACT_APP_WS_URL}/signal`);
 
     start();
   }, []);
@@ -75,7 +75,7 @@ const GrantorRtcRoom = () => {
           // ajax 요청을 보내서 userList 를 다시 확인함
           //   message.data = await chatListCount();
           axios
-            .get(`http://localhost:8080/rtc/usercount/${id}`)
+            .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${id}`)
             .then((response) => {
               console.log(response.data.data.overOne);
               message.data = response.data.data.overOne;
@@ -101,7 +101,7 @@ const GrantorRtcRoom = () => {
     // ICE 를 위한 chatList 인원 확인
     function createLiveRoom() {
       axios
-        .post(`http://localhost:8080/rtc/create`, {
+        .post(`${process.env.REACT_APP_API_ROOT}/rtc/create`, {
           roomId: `${id}`,
         })
         .then((response) => {
