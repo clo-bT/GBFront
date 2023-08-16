@@ -38,7 +38,7 @@ const App = () => {
           <Route path="/chatroom/:id/:roomDealId" element={<ChatRoom />} />
           <Route path="/chatlist" element={<ChatList />} />
           <Route path="/facechat" element={<Facechat />} />
-          <Route path="/rtcroom/:roomId" element={<RtcRoom />} />
+          <Route path="/rtcroom/:id/:roomDealId" element={<RtcRoom />} />
         </Routes>
       </div>
     </BrowserRouter>
