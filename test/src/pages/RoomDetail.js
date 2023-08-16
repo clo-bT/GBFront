@@ -5,7 +5,7 @@ import axios from 'axios';
 const RoomDetail = () => {
     const [roomdata, setRoomData] = useState([]);
     const [roomoption, setRoomOption] = useState([]);
-    const roomid=1
+    const roomid = 3
     axios.get(`${process.env.REACT_APP_API_ROOT}/roomdeal/${roomid}`)
     .then(response => {
         console.log('받아온 정보 : ', response.data);
