@@ -1,0 +1,52 @@
+.content {
+  margin: auto 100px;
+}
+
+.detail {
+  margin: 50px auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.contentTab {
+  flex: 2 1;
+}
+
+.contentDetail {
+  margin-bottom: 80px;
+}
+
+.detailInfo {
+  display: flex;
+}
+
+.detailInfoItem {
+  flex: 1 1;
+}
+
+.detailInfo .detailInfoItem:nth-child(2) h2 {
+  font-weight: normal;
+}
+
+.contentDetail:first-child .detailInfo:last-child .detailInfoItem:last-child {
+  line-height: 1.5;
+}
+
+.expectedFeeFont {
+  font-weight: bold;
+  color: #c7ad92;
+}
+
+/* 
+"airConditioner": boolean,
+"refrigerator": boolean,
+"washer": boolean,
+"dryer": boolean,
+"sink": boolean,
+"gasRange": boolean,
+"closet": boolean,
+"shoeCloset": boolean,
+"fireAlarm": boolean,
+"elevator": boolean,
+"parkingLot": boolean
+*/
