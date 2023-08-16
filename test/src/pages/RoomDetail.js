@@ -128,69 +128,137 @@ const RoomDetail = () => {
                                 </div>
                             </div>
                         </div>
-                        <div> {/* 옵션 - 이미지 10개 + 이미지 Name  => flex & wrap*/}
+                        <div className={styles.contentDetail}> {/* 옵션 - 이미지 10개 + 이미지 Name  => grid */}
+                            <h1>옵션</h1>
+                            <div className={styles.detailInfoGrid}>
+                                {
+                                    roomoption.airConditioner
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/airConditioner.png`} /><h3>에어컨</h3></div></>)
+                                        : (null)
 
+                                }
+                                {
+                                    roomoption.refrigerator
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/refrigerator.png`} /><h3>냉장고</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.washer
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/washer.png`} /><h3>세탁기</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.dryer
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/dryer.png`} /><h3>건조기</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.sink
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/sink.png`} /><h3>싱크대</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.gasRange
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/gasRange.png`} /><h3>가스레인지</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.closet
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/closet.png`} /><h3>옷장</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.shoeCloset
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/shoeCloset.png`} /><h3>신발장</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.fireAlarm
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/fireAlarm.png`} /><h3>화재경보기</h3></div></>)
+                                        : (null)
+
+                                }
+                                {
+                                    roomoption.elevator
+                                        ? (<><div className={styles.detailInfoGridItem}><img src={`${process.env.PUBLIC_URL}/assets/roomoption/elevator.png`} /><h3>엘레베이터</h3></div></>)
+                                        : (null)
+
+                                }
+                            </div>
                         </div>
-                        <div> {/* 위치 및 주변 시설 */}
-                            <h3> 주소 </h3>
-                            <h4>인근 역부터 25m 부근</h4> {/* 버릴듯 */}
-                            {/* 지도 + 마커 + 주변 원 (25m ??) */}
+                        <div className={styles.contentDetail}> {/* 위치 및 주변 시설 */}
+                            <h1>위치 및 주변 시설</h1>
+                            <h3 className={styles.contentDetailRoadAddress}>{roomdata.roadAddress}</h3>
+                            {/* ----------------- 지도 + 마커 + 주변 원 (25m ??) ----------------- */}
                         </div>
                     </div>
                     <div className={styles.contentTab}> {/* 매물 상세 우측 탭 */}
-                        <div> {/* 우측 채팅 탭 -> fixed */}
-                            <div> {/* 상위 탭 */}
-                                <div> {/* 왼쪽 */}
-                                    <h3>주소</h3>
-                                    <h2>월세</h2>
-                                    <h4>관리비</h4>
+                        <div className={styles.fixedTab}> {/* 우측 채팅 탭 -> fixed */}
+                            <div className={styles.fixedInfo}> {/* 상위 탭 */}
+                                <div className={styles.fixedTopInfoLeft}> {/* 왼쪽 */}
+                                    <h3>{roomdata.jibunAddress}</h3>
+                                    <h2>월세 {roomdata.deposit}/{roomdata.monthlyFee}</h2>
+                                    <h4>관리비 {roomdata.managementFee}만원</h4>
                                 </div>
-                                <div> {/* 오른쪽 - flex justify-content 멀리 */}
+                                <div className={styles.fixedTopInfoRight}> {/* 오른쪽 - flex justify-content 멀리 */}
                                     <h5>몇일전</h5>
-                                    <h4>
-                                        <a onClick="??">곰방봐</a>로 이동</h4>
+                                    <h4><a onClick="??">곰방봐</a>로 이동</h4> {/* --------- 이동 링크 달아야 함 --------- */}
                                 </div>
                             </div>
-                            <div> {/* 중간 탭 */}
-                                <div> {/* 인근 역 ??m - ??m 없는데;; */}
-
-                                </div>
-                                <div> {/* 면적 + 원룸 유형 - flex space-between */}
-
-                                </div>
-                                <div> {/* 층 / 층 + 주차 여부 - flex space-between */}
-
+                            <hr />
+                            <div className={styles.fixedInfoNotFlex}> {/* 중간 탭 */}
+                                <div className={styles.fixedInfoGrid}>
+                                    {/* 면적 + 원룸 유형 - flex space-between */}
+                                    <div className={styles.fixedInfoGridItem}>
+                                        <h3>전용 {roomdata.roomSize}m^3</h3>
+                                    </div>
+                                    <div className={styles.fixedInfoGridItem}>
+                                        <h3>{roomdata.oneroomType}</h3>
+                                    </div>
+                                    {/* 층 / 층 + 주차 여부 - flex space-between */}
+                                    <div className={styles.fixedInfoGridItem}>
+                                        <h3>{roomdata.floor}층 / {roomdata.totalFloor}층</h3>
+                                    </div>
+                                    <div className={styles.fixedInfoGridItem}>
+                                        <h3>주차 {roomoption.parkingLot ? "가능" : "불가능"}</h3>
+                                    </div>
                                 </div>
                             </div>
-                            <div> {/* 양도자와 채팅 버튼 */}
-                                <button onClick={""}>양도자와 채팅하기</button> {/* 중앙 배치 - 가로 세로 둘 다 */}
+                            <hr />
+                            <div className={styles.fixedInfoBottomTab}> {/* 양도자와 채팅 버튼 */}
+                                <button onClick={""} className={styles.chatButton}>
+                                    <h3>양도자와 채팅하기</h3>
+                                </button> {/* 중앙 배치 - 가로 세로 둘 다 */}
                             </div>
                         </div>
                     </div>
                 </div>
             </div >
-            {/* <div>{ roomdata.id }</div> */}
-            {/* <button>양도자와 채팅하기</button> */}
-            {/* <div>{ roomdata.member.id }</div> */}
-            <div>{roomdata.roomType}</div>
-            <div>{roomdata.roomSize}</div>
-            <div>{roomdata.roomCount}</div>
-            <div>{roomdata.oneroomType}</div>
-            <div>{roomdata.bathroomCount}</div>
-            <div>{roomdata.roadAddress}</div>
-            <div>{roomdata.jibunAddress}</div>
-            <div>{roomdata.monthlyFee}</div>
-            <div>{roomdata.deposit}</div>
-            <div>{roomdata.managementFee}</div>
-            <div>{roomdata.usageDate}</div>
-            <div>{roomdata.moveInDate}</div>
-            <div>{roomdata.expirationDate}</div>
-            <div>{roomdata.floor}</div>
-            <div>{roomdata.totalFloor}</div>
-            {/* <div>{roomoption}</div> */}
-
         </div >
     );
 };
 
 export default RoomDetail;
+
+{/* <div>{roomdata.roomType}</div>
+<div>{roomdata.roomSize}</div>
+<div>{roomdata.roomCount}</div>
+<div>{roomdata.oneroomType}</div>
+<div>{roomdata.bathroomCount}</div>
+<div>{roomdata.roadAddress}</div>
+<div>{roomdata.jibunAddress}</div>
+<div>{roomdata.monthlyFee}</div>
+<div>{roomdata.deposit}</div>
+<div>{roomdata.managementFee}</div>
+<div>{roomdata.usageDate}</div>
+<div>{roomdata.moveInDate}</div>
+<div>{roomdata.expirationDate}</div>
+<div>{roomdata.floor}</div>
+<div>{roomdata.totalFloor}</div> */}
