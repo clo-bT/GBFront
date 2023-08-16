@@ -220,16 +220,36 @@ const RtcRoom = () => {
  UI Handlers
   */
   // mute video buttons handler
-  function videoOff() {
-    localVideoTracks = localStream.getVideoTracks();
-    localVideoTracks.forEach((track) => localStream.removeTrack(track));
-    localVideo.setAttribute(styles, "display:none");
-    log("Video Off");
+  async function videoOff() {
+    // localVideoTracks = localStream.getVideoTracks();
+    // localVideoTracks.forEach((track) => localStream.removeTrack(track));
+    // localVideo.setAttribute(styles, "display:none");
+    localStream = null;
+    localVideo.style.display = "none"; // 스타일 적용
+    console.log("Video Off");
   }
-  function videoOn() {
-    localVideoTracks.forEach((track) => localStream.addTrack(track));
-    localVideo.setAttribute(styles, "display:inline");
-    log("Video On");
+
+  async function videoOn() {
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~`', localVideoTracks);
+    
+    // 비디오 트랙 가져오기
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    localVideoTracks = localStream.getVideoTracks();
+    
+    if (localStream) {
+      localVideoTracks.forEach((track) => {
+        if (track.kind === 'video') {
+          localStream.addTrack(track); // 비디오 트랙 추가
+        }
+      });
+  
+      // 오디오 트랙 관련 코드는 그대로 유지
+      // ...
+  
+      localVideo.style.display = "inline"; // 스타일 적용
+      localVideo.srcObject = localStream; // 비디오 요소에 스트림 연결
+      console.log("Video On");
+    }
   }
   // mute audio buttons handler
   function audioOff() {
@@ -491,7 +511,7 @@ const RtcRoom = () => {
                       style={{ display: "none" }}
                       autoComplete="off"
                     />
-                    Video On
+                    Video Off
                   </label>
                   <label
                     className="btn btn-outline-warning active"
@@ -505,7 +525,7 @@ const RtcRoom = () => {
                       autoComplete="off"
                       defaultChecked={true}
                     />
-                    Video Off
+                    Video On
                   </label>
                 </div>
                 <div className="mr-2" data-toggle="buttons">
@@ -556,7 +576,7 @@ const RtcRoom = () => {
 
         <div className="row justify-content-around mb-3">
           <div className="col-lg-6 mb-3">
-            <video id="local_video" autoPlay playsInline></video>
+            <video id="local_video" style={{width:'100px'}} autoPlay playsInline></video>
           </div>
           <div className="col-lg-6 mb-3">
             <video id="remote_video" autoPlay playsInline></video>
