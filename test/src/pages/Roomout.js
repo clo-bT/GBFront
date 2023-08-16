@@ -1,6 +1,6 @@
 // import Gbaddress from "../components/Gbaddress";
 import Header from "../components/Header";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import styles from "./Roomout.module.css";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
@@ -9,10 +9,18 @@ import axios from 'axios';
 import { useDaumPostcodePopup }  from 'react-daum-postcode';
 
 export default function Roomout() {
+    const [userid, setUserid] = useState('');
+    useEffect(() => {
+        const member = JSON.parse(sessionStorage.getItem("member"));
+        const useruuid = member.id;
+        setUserid(useruuid)
+    },[setUserid]);
     const [info, setInfo] = useState([]);
     const [struc, setStruc] = useState([]);
     const [nearstation, setNearstation] = useState('');
     const [nearschool, setNearschool] = useState('');
+    const [doroaddress, setDoroaddress] = useState('');
+    const [jibunaddress, setJibunaddress] = useState('');
     const [lat, setLat] = useState('');
     const [lon, setLon] = useState('');
     const [deposit, setDeposit] = useState(0);
@@ -74,6 +82,7 @@ export default function Roomout() {
     const handleImageChange = (event) => {
         const files = event.target.files;
         setSelectedImages([...selectedImages, ...files]);
+        console.log(selectedImages)
     };
     const checkBoxList = ['에어컨', '냉장고', '세탁기', '건조기', '싱크대', '가스레인지', '장롱', '신발장', '화재경보기'];
     const [checkedList, setCheckedList] = useState([]);
@@ -109,6 +118,19 @@ export default function Roomout() {
     const [approveDate, setApproveDate] = useState(new Date());
     const handleCalendarClose = () => console.log("Calendar closed");
     const handleCalendarOpen = () => console.log("Calendar opened");
+        // 날짜를 "YYYY-MM-DD" 형식의 문자열로 변환하는 함수
+    const formatDate = (date) => {
+        if (date) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        return ''; // 날짜가 선택되지 않았을 때 처리
+    };
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+    const formattedApproveDate = formatDate(approveDate);
 
     const [floor, setFloor] = useState('');
     const handleFloorChange = (event) => {
@@ -118,58 +140,136 @@ export default function Roomout() {
 
 const onRealSubmit = useCallback(async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    // console.log(selectedImages);
+    // formData.append("checkFiles", selectedImages);
+    // console.log(formData);
+    // selectedImages.forEach(image => {
+    //     formData.append('file', image);
+    //     console.log('중간점검',formData.file)
+    // });
+    formData.append('file', selectedImages);
 
-    const formData = {
-        data: {
-            default: {
+
+    for (let file of formData.getAll('file')) {
+        console.log('File Name:', file['name']);
+        console.log('File Type:', file.type);
+        console.log('File Size:', file.size);
+        // You can log other properties as needed
+    }
+    const value = {
+        "roomDealRegisterRequestDto": {
+            "roomDealRegisterDefaultDto": {
+                'id': userid,
                 "roomType": info,
                 "roomSize": pyeong,
                 "roomCount": roomCount,
                 "oneroomType": struc,
                 "bathroomCount": bathroomCount,
-                "roadAddress": info,
-                "jibunAddress": info,
+                "roadAddress": doroaddress,
+                "jibunAddress": jibunaddress,
                 "monthlyFee": monthlyRent,
                 "deposit": deposit,
                 "managementFee": managementFee,
-                "usageDate": approveDate,
-                "moveInDate": startDate,
-                "expirationDate": endDate,
+                "usageDate": formattedApproveDate,
+                "moveInDate": formattedStartDate,
+                "expirationDate": formattedEndDate,
                 "floor": floor,
                 "totalFloor": totalFloor,
                 "lat": lat,
                 "lon": lon,
-                "thumbnail": info,
                 "station": nearstation,
                 "univ": nearschool,
                 "content": content,
                 // 다른 속성들도 유사하게 추가해주세요
             },
-            options: {
-                airConditioner: checkedList.includes("에어컨"),
-                refrigerator: checkedList.includes("냉장고"),
-                washer: checkedList.includes("세탁기"),
-                dryer: checkedList.includes("건조기"),
-                sink: checkedList.includes("싱크대"),
-                gasRange: checkedList.includes("가스레인지"),
-                closet: checkedList.includes("장롱"),
-                shoeCloset: checkedList.includes("신발장"),
-                fireAlarm: checkedList.includes("화재경보기"),
-                elevator: elevator === "elevatoryes",
-                parkingLot: parking === "parkingyes"
+            "roomDealRegisterOptionDto": {
+                "airConditioner": checkedList.includes("에어컨"),
+                "refrigerator": checkedList.includes("냉장고"),
+                "washer": checkedList.includes("세탁기"),
+                "dryer": checkedList.includes("건조기"),
+                "sink": checkedList.includes("싱크대"),
+                "gasRange": checkedList.includes("가스레인지"),
+                "closet": checkedList.includes("장롱"),
+                "shoeCloset": checkedList.includes("신발장"),
+                "fireAlarm": checkedList.includes("화재경보기"),
+                "elevator": elevator === "elevatoryes",
+                "parkingLot": parking === "parkingyes"
             }
         }
     };
-
+    console.log(value)
+    const sj = new Blob([JSON.stringify(value)], { type: "application/json" });
+    formData.append("data",sj);
+    console.log('보내기 전 폼데이터!!!!!!!!!!!!!', formData);
+    console.log('보내기 전 blob',sj);
+    console.log(selectedImages);
+    // const formData = {
+    //     "files": selectedImages,
+    //     "roomDealRegisterRequestDto": {
+    //         "roomDealRegisterDefaultDto": {
+    //             'id': userid,
+    //             "roomType": info,
+    //             "roomSize": pyeong,
+    //             "roomCount": roomCount,
+    //             "oneroomType": struc,
+    //             "bathroomCount": bathroomCount,
+    //             "roadAddress": doroaddress,
+    //             "jibunAddress": jibunaddress,
+    //             "monthlyFee": monthlyRent,
+    //             "deposit": deposit,
+    //             "managementFee": managementFee,
+    //             "usageDate": approveDate,
+    //             "moveInDate": startDate,
+    //             "expirationDate": endDate,
+    //             "floor": floor,
+    //             "totalFloor": totalFloor,
+    //             "lat": lat,
+    //             "lon": lon,
+    //             "station": nearstation,
+    //             "univ": nearschool,
+    //             "content": content,
+    //             // 다른 속성들도 유사하게 추가해주세요
+    //         },
+    //         "roomDealRegisterOptionDto": {
+    //             "airConditioner": checkedList.includes("에어컨"),
+    //             "refrigerator": checkedList.includes("냉장고"),
+    //             "washer": checkedList.includes("세탁기"),
+    //             "dryer": checkedList.includes("건조기"),
+    //             "sink": checkedList.includes("싱크대"),
+    //             "gasRange": checkedList.includes("가스레인지"),
+    //             "closet": checkedList.includes("장롱"),
+    //             "shoeCloset": checkedList.includes("신발장"),
+    //             "fireAlarm": checkedList.includes("화재경보기"),
+    //             "elevator": elevator === "elevatoryes",
+    //             "parkingLot": parking === "parkingyes"
+    //         }
+    //     }
+    // };
+    // console.log(formData)
     try {
-        const response = await axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/register`, formData);
+        for (let value of formData.values()) {
+            console.log(value);
+          }
+        const response = await axios.post(
+            `${process.env.REACT_APP_API_ROOT}/roomdeal/register`,
+            formData,
+            {
+                headers: {
+                    "Content-Type" : "multipart/form-data", 
+                    // charset : 'utf-8'// Content-Type을 반드시 이렇게 하여야 합니다.
+                },
+            }
+        );
+        console.log(formData)
         console.log("데이터 전송 성공:", response.data);
+
         // 선택적으로 성공을 처리하거나 사용자에게 성공 메시지를 보여줄 수 있습니다
     } catch (error) {
         console.error("데이터 전송 오류:", error);
         // 선택적으로 오류를 처리하거나 사용자에게 오류 메시지를 보여줄 수 있습니다
     }
-}, [info,struc,approveDate, nearstation,roomCount,deposit,pyeong, elevator, endDate, floor, managementFee, monthlyRent, parking,startDate,bathroomCount, checkedList,content,totalFloor,lat,lon,nearschool]);
+}, [info,struc,formattedStartDate, nearstation,roomCount,deposit,pyeong, elevator, formattedEndDate, floor, managementFee, monthlyRent, parking,formattedApproveDate,bathroomCount, checkedList,content,totalFloor,lat,lon,nearschool,userid,doroaddress,jibunaddress,selectedImages]);
 
     // 여기는 주소 입력창 팝업 열리는 부분 ---------------------------------------------------------------------------------
     const scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -204,8 +304,9 @@ const onRealSubmit = useCallback(async (e) => {
         // 우편번호와 주소 정보를 해당 필드에 넣는다.
         document.getElementById('postcode').value = data.zonecode;
         document.getElementById("roadAddress").value = roadAddr;
+        setDoroaddress(roadAddr)
         document.getElementById("jibunAddress").value = data.jibunAddress;
-                
+        setJibunaddress(data.jibunAddress)
         // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
         // if (roadAddr !== '') {
         //     document.getElementById("extraAddress").value = extraRoadAddr;
@@ -251,8 +352,9 @@ const onRealSubmit = useCallback(async (e) => {
                 axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/search-nearest`,addressData
                     ).then((response) => {
                         console.log(response)
-                        // setNearstation(near.data.data.stationName)
-                        // setNearschool(near.data.univName)
+                        console.log(response.data.data.stationName)
+                        setNearstation(response.data.data.stationName)
+                        setNearschool(response.data.data.univName)
 
                     }).catch((error) => {
                         console.error('Error fetching data:', error);
@@ -281,44 +383,44 @@ const onRealSubmit = useCallback(async (e) => {
                     <h3>곰방 유형</h3>
                     <div className={styles.gbtype}>
                         <label className={styles.oneroom}>
-                            <input type="radio" value="oneroom" checked={info === "oneroom"} onChange={handleClickInfoButton} />
+                            <input type="radio" value="원룸" checked={info === "원룸"} onChange={handleClickInfoButton} />
                             원룸
                         </label>
                         <label className={styles.officetell}>
-                            <input type="radio" value="officetell" checked={info === "officetell"} onChange={handleClickInfoButton} />
+                            <input type="radio" value="오피스텔" checked={info === "오피스텔"} onChange={handleClickInfoButton} />
                             오피스텔
                         </label>
                         <label className={styles.villa}>
-                            <input type="radio" value="villa" checked={info === "villa"} onChange={handleClickInfoButton} />
+                            <input type="radio" value="빌라" checked={info === "빌라"} onChange={handleClickInfoButton} />
                             빌라
                         </label>
                         <label className={styles.apartment}>
-                            <input type="radio" value="apartment" checked={info === "apartment"} onChange={handleClickInfoButton} />
+                            <input type="radio" value="아파트" checked={info === "아파트"} onChange={handleClickInfoButton} />
                             아파트
                         </label>
                     </div>
                     <h3>곰방 구조</h3>
                     <div className={styles.gbstructure}>
                         <label>
-                            <input type="radio" value="open" checked={struc === "open"} onChange={handleClickStrucButton} />
+                            <input type="radio" value="오픈형" checked={struc === "오픈형"} onChange={handleClickStrucButton} />
                             오픈형
                         </label>
                         <label>
-                            <input type="radio" value="seperate" checked={struc === "seperate"} onChange={handleClickStrucButton} />
+                            <input type="radio" value="분리형" checked={struc === "분리형"} onChange={handleClickStrucButton} />
                             분리형
                         </label>
                         <label>
-                            <input type="radio" value="multiple" checked={struc === "multiple"} onChange={handleClickStrucButton} />
-                            복층
+                            <input type="radio" value="복층형" checked={struc === "복층형"} onChange={handleClickStrucButton} />
+                            복층형
                         </label>
-                        <label>
+                        {/* <label>
                             <input type="radio" value="tworoom" checked={struc === "tworoom"} onChange={handleClickStrucButton} />
                             투룸
                         </label>
                         <label>
                             <input type="radio" value="threenmore" checked={struc === "threenmore"} onChange={handleClickStrucButton} />
                             쓰리룸 이상
-                        </label>
+                        </label> */}
                     </div>
                     <h3>주소</h3>
                     <div className={styles.gbaddress}>
@@ -348,6 +450,11 @@ const onRealSubmit = useCallback(async (e) => {
                         {nearstation ? (
                             <div className={styles.nearstation} ><div>{nearstation}</div></div>) : (
                             <div className={styles.nearstation} >가까운 역이 없습니다. </div>)
+                            
+                        }
+                        {nearschool ? (
+                            <div className={styles.nearstation} ><div>{nearschool}</div></div>) : (
+                            <div className={styles.nearstation} >가까운 대학교가 없습니다. </div>)
                             
                         }
                     <div className={styles.moneybox}>
@@ -457,7 +564,7 @@ const onRealSubmit = useCallback(async (e) => {
                             ))}
                         </div>
 
-                        <button type='submit'>저장</button>
+                        {/* <button type='submit'>저장</button> */}
                     </form>
                     
                     <h3>매물 사진</h3>

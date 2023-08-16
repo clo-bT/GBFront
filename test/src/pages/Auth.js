@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Header from '../components/Header';
+// import Header from '../components/Header';
 import axios from 'axios';
 import styles from './Auth.module.css'
 export const API_BASE_URL = process.env.REACT_APP_API_ROOT;
@@ -95,27 +95,29 @@ export default function Auth() {
                 인가코드 :  {c}
                 {id? <div>uuid : {id}</div> :''}
             </div> */}
-            <div className={styles.loginpage}>
-                <div className={styles.gombang}><b className='b5'>곰방</b> 회원가입하기</div>
-                <img className={styles.logoimg} alt="곰방로고" src='/assets/logo.png'/>
-                <div className={styles.namestyle}>이름을 입력하세요.</div>
-                <div className={styles.inputcontainer}>
-                    {shownameform &&
-                        <input 
-                            type="text" 
-                            // placeholder='이름을 입력하시오'
-                            value={name}
-                            onChange={handleNameChange}
-                            className={styles.inputbox}
-                        />
-                    }
+            {shownameform &&
+                <div className={styles.loginpage}>
+                    <div className={styles.gombang}><b className='b5'>곰방</b> 회원가입하기</div>
+                    <img className={styles.logoimg} alt="곰방로고" src='/assets/logo.png'/>
+                    <div className={styles.namestyle}>이름을 입력하세요.</div>
+                    <div className={styles.inputcontainer}>
+                            <input 
+                                type="text" 
+                                // placeholder='이름을 입력하시오'
+                                value={name}
+                                onChange={handleNameChange}
+                                className={styles.inputbox}
+                            />
+                    </div>
+                    <div>※ 실명이 아닐 경우 추후 계약 진행에 불이익이 있을 수 있습니다.</div>
+                    <div>
+                        <button className={ styles.signupbutton } onClick={handleNameSubmit} >회원가입</button>
+                    </div>
+                    {/* {userinfo && Object.entries(userinfo).map((value,index)=>{return <div key={index}>{value[0]}: {value[1]}</div>})} */}
                 </div>
-                <div>※ 실명이 아닐 경우 추후 계약 진행에 불이익이 있을 수 있습니다.</div>
-                <div>
-                    <button className={ styles.signupbutton } onClick={handleNameSubmit} >회원가입</button>
-                </div>
-                {/* {userinfo && Object.entries(userinfo).map((value,index)=>{return <div key={index}>{value[0]}: {value[1]}</div>})} */}
-            </div>
+            }
+            <img className={styles.logoimg} alt="곰방로고" src='/assets/logo.png'/>
+            <div className={styles.gombang}>로딩중...</div>
         </div>
         
     )
