@@ -9,13 +9,11 @@ import Header from "../Header";
 
 const ChatList = () => {
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState("");
   // const [userid, setUserid] = useState('');
   const [chatData, setChatData] = useState([]);
   const [useruuid, setUserUuid] = useState("");
 
   useEffect(() => {
-    setIsAuthorized(sessionStorage.getItem("isAuthorized"));
     // setUserid(JSON.parse(sessionStorage.getItem("member")).id);
     const member = JSON.parse(sessionStorage.getItem("member"));
     setUserUuid(member.id);
@@ -41,7 +39,7 @@ const ChatList = () => {
   useEffect(() => {
     if (useruuid === "") return;
     axios
-      .get(`http://localhost:8080/chatroom/list/${useruuid}`)
+      .get(`${process.env.REACT_APP_API_ROOT}/chatroom/list/${useruuid}`)
       .then((response) => {
         console.log("받아온 정보:", response.data);
         // data : chat_room_id, grantor_id, assignee_id, room_deal_id
@@ -64,22 +62,32 @@ const ChatList = () => {
   };
 
   return (
-    <div className={styles.chatlist}>
+    <div>
       <Header />
-      <div className={styles.h1}>Message</div>
-      {chatData &&
-        chatData.map((ChatRoom, index) => (
-          <label
-            className={styles.chatlistnickname}
-            key={index}
-            onClick={() => enterChatRoom(ChatRoom)}
-          >
-            {/* 채팅방 ID: {ChatRoom.id}<br /> */}
-            {/* 방 매물 ID: {ChatRoom.roomDealId} */}
-            {ChatRoom.grantorId.nickname} 님과의 대화
-            <div>입장하기</div>
-          </label>
-        ))}
+      <div className={styles.chatlistpage}>
+        <div className={styles.h1}>Message</div>
+        <div className={styles.chatlist}>
+          {chatData.length > 0 ? (
+            chatData.map((ChatRoom) => (
+              <div key={ChatRoom.id} className={styles.chatlistnickname}>
+                {ChatRoom.grantorId !== useruuid ? (
+                  <label onClick={() => enterChatRoom(ChatRoom)}>
+                    {ChatRoom.grantorId.nickname} 님과의 대화
+                    <div className={styles.entering}>입장하기</div>
+                  </label>
+                ) : (
+                  <label onClick={() => enterChatRoom(ChatRoom)}>
+                    {ChatRoom.assignee.nickname} 님과의 대화
+                    <div className={styles.entering}>입장하기</div>
+                  </label>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className={styles.nochat}>채팅 목록이 없습니다.</div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
