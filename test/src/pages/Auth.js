@@ -28,7 +28,7 @@ export default function Auth() {
                         sessionStorage.setItem("isAuthorized", "true")
                         sessionStorage.setItem("member",JSON.stringify(r.data.data.member))
 		                sessionStorage.setItem("eventSource",new EventSource(
-                            `http://localhost:8080/notification/subscribe/${r.data.data.member.id}`
+                            `${process.env.REACT_APP_API_ROOT}/notification/subscribe/${r.data.data.member.id}`
                         ));
                         
                         setshownameform(false)
@@ -71,7 +71,7 @@ export default function Auth() {
                     sessionStorage.setItem("member",JSON.stringify(response.data.data.member))
                     setshownameform(false);
                     sessionStorage.setItem("eventSource",new EventSource(
-                        `http://localhost:8080/notification/subscribe/${response.data.data.member.id}`
+                        `${process.env.REACT_APP_API_ROOT}/notification/subscribe/${response.data.data.member.id}`
                     ));
                     window.location.href = HOME_URL
                 }
@@ -123,8 +123,12 @@ export default function Auth() {
                     {/* {userinfo && Object.entries(userinfo).map((value,index)=>{return <div key={index}>{value[0]}: {value[1]}</div>})} */}
                 </div>
             }
-            <img className={styles.logoimg} alt="곰방로고" src='/assets/logo.png'/>
-            <div className={styles.gombang}>로딩중...</div>
+            {!shownameform &&
+                <div>
+                    <img className={styles.logoimg} alt="곰방로고" src='/assets/logo.png' />
+                    <div className={styles.gombang}>로딩중...</div>
+                </div>}
+
         </div>
         
     )
