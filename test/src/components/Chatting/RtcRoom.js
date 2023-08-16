@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import Header from "../Header";
 
 // import { useNavigate, useParams } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import styles from "../Chatting/ChatRoom.module.css";
 import axios from "axios";
+import ChatRoom from "../Chatting/ChatRoom";
 // import { click } from "@testing-library/user-event/dist/click";
 
 const RtcRoom = () => {
   // const navigate = useNavigate();
-  const { roomId } = useParams();
-  const [userid, setUserid] = useState("");
+    const { id, roomDealId } = useParams();
+    // const { id } = useParams();
   //   const [message, setMessage] = useState("");
   //   const [messages, setMessages] = useState([]);
   //   const [previousmessage, setPreviousmessage] = useState([]);
   //   const [connecting, setConnecting] = useState(true);
 
-  var socket = new WebSocket("ws://localhost:8080/signal");
+  var socket;
 
   // UI elements
   //   const videoButtonOff = document.querySelector("#video_off");
@@ -25,12 +25,16 @@ const RtcRoom = () => {
   //   const audioButtonOn = document.querySelector("#audio_on");
   //   const exitButton = document.querySelector("#exit");
   var localVideo = document.getElementById("local_video");
-  const remoteVideo = document.getElementById("remote_video");
-  // var localUserName;
+  var remoteVideo = document.getElementById("remote_video");
+  var localUserName;
 
   useEffect(() => {
     const member = JSON.parse(sessionStorage.getItem("member"));
-    setUserid(member.id);
+    localVideo = document.getElementById("local_video");
+    remoteVideo = document.getElementById("remote_video");
+    localUserName = member.id;
+    socket = new WebSocket("ws://localhost:8080/signal");
+
     start();
   }, []);
 
@@ -62,7 +66,7 @@ const RtcRoom = () => {
   async function start() {
     await createLiveRoom();
     // 페이지 시작시 실행되는 메서드 -> socket 을 통해 server 와 통신한다
-    socket.onmessage = function (msg) {
+    socket.onmessage = async function (msg) {
       let message = JSON.parse(msg.data);
 
       switch (message.type) {
@@ -83,13 +87,20 @@ const RtcRoom = () => {
 
         case "join":
           // ajax 요청을 보내서 userList 를 다시 확인함
-          message.data = chatListCount();
-
-          console.log(
-            "Client is starting to " + (message.data === "true") ? "negotiate" : "wait for a peer"
-          );
-          console.log("messageDATA : " + message.data);
-          handlePeerConnection(message);
+          //   message.data = await chatListCount();
+          axios
+            .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${id}`)
+            .then((response) => {
+              console.log(response.data.data.overOne);
+              message.data = response.data.data.overOne;
+              return message;
+            })
+            .then((message) => {
+              handlePeerConnection(message);
+            })
+            .catch((error) => {
+              console.log("오류:", error);
+            });
           break;
 
         case "leave":
@@ -103,26 +114,12 @@ const RtcRoom = () => {
 
     // ICE 를 위한 chatList 인원 확인
     function createLiveRoom() {
-      const roomiddata = {
-        'roomId': roomId,
-      }
       axios
-        .post(`${process.env.REACT_APP_API_ROOT}/rtc/create`, roomiddata)
-        .then((response) => {
-            console.log(response);
+        .post(`${process.env.REACT_APP_API_ROOT}/rtc/create`, {
+          roomId: `${id}`,
         })
-        .catch((error) => {
-          console.log("오류:", error);
-        });
-    }
-
-    // ICE 를 위한 chatList 인원 확인
-    function chatListCount() {
-      axios
-        .get(`${process.env.REACT_APP_API_ROOT}/rtc/usercount/${roomId}`)
         .then((response) => {
-          console.log(response.data.data.overOne);
-          return response.data.data.overOne;
+          //   console.log(response);
         })
         .catch((error) => {
           console.log("오류:", error);
@@ -132,12 +129,12 @@ const RtcRoom = () => {
     // add an event listener to get to know when a connection is open
     // 웹 소켓 연결 되었을 때 - open - 상태일때 이벤트 처리
     socket.onopen = function () {
-      console.log("WebSocket connection opened to Room: #" + roomId);
+      console.log("WebSocket connection opened to Room: #" + id);
       // send a message to the server to join selected room with Web Socket
       sendToServer({
-        from: userid,
+        from: localUserName,
         type: "join",
-        data: roomId,
+        data: id,
       });
     };
 
@@ -163,49 +160,59 @@ const RtcRoom = () => {
     stop();
   };
 
+  function stopToServer(msg) {
+    let msgJSON = JSON.stringify(msg);
+    socket.send(msgJSON);
+    return new Promise((resolve, reject) => resolve(1));
+  }
+
   function stop() {
     // send a message to the server to remove this client from the room clients list
     log("Send 'leave' message to server");
-    sendToServer({
-      from: userid,
+    stopToServer({
+      from: localUserName,
       type: "leave",
-      data: roomId,
+      data: id,
+    }).then((response) => {
+      if (myPeerConnection) {
+        log("Close the RTCPeerConnection");
+
+        // disconnect all our event listeners
+        myPeerConnection.onicecandidate = null;
+        myPeerConnection.ontrack = null;
+        myPeerConnection.onnegotiationneeded = null;
+        myPeerConnection.oniceconnectionstatechange = null;
+        myPeerConnection.onsignalingstatechange = null;
+        myPeerConnection.onicegatheringstatechange = null;
+        myPeerConnection.onnotificationneeded = null;
+        myPeerConnection.onremovetrack = null;
+
+        // Stop the videos
+        // 비디오 정지
+        if (remoteVideo.srcObject) {
+          remoteVideo.srcObject.getTracks().forEach((track) => track.stop());
+        }
+        if (localVideo.srcObject) {
+          localVideo.srcObject.getTracks().forEach((track) => track.stop());
+        }
+
+        remoteVideo.src = null;
+        localVideo.src = null;
+
+        // close the peer connection
+        // myPeerConnection 초기화
+        myPeerConnection.close();
+        myPeerConnection = null;
+
+        closeSocket();
+      }
     });
+  }
 
-    if (myPeerConnection) {
-      log("Close the RTCPeerConnection");
-
-      // disconnect all our event listeners
-      myPeerConnection.onicecandidate = null;
-      myPeerConnection.ontrack = null;
-      myPeerConnection.onnegotiationneeded = null;
-      myPeerConnection.oniceconnectionstatechange = null;
-      myPeerConnection.onsignalingstatechange = null;
-      myPeerConnection.onicegatheringstatechange = null;
-      myPeerConnection.onnotificationneeded = null;
-      myPeerConnection.onremovetrack = null;
-
-      // Stop the videos
-      // 비디오 정지
-      if (remoteVideo.srcObject) {
-        remoteVideo.srcObject.getTracks().forEach((track) => track.stop());
-      }
-      if (localVideo.srcObject) {
-        localVideo.srcObject.getTracks().forEach((track) => track.stop());
-      }
-
-      remoteVideo.src = null;
-      localVideo.src = null;
-
-      // close the peer connection
-      // myPeerConnection 초기화
-      myPeerConnection.close();
-      myPeerConnection = null;
-
-      log("Close the socket");
-      if (socket != null) {
-        socket.close();
-      }
+  async function closeSocket() {
+    log("Close the socket");
+    if (socket != null) {
+      socket.close();
     }
   }
 
@@ -213,50 +220,29 @@ const RtcRoom = () => {
  UI Handlers
   */
   // mute video buttons handler
-  async function videoOff() {
-    // localVideoTracks = localStream.getVideoTracks();
-    // localVideoTracks.forEach((track) => localStream.removeTrack(track));
-    // localVideo.setAttribute(styles, "display:none");
-    // localStream = await navigator.mediaDevices.getUserMedia({ video: false });
-    localVideo.style.display = "none"; // 스타일 적용
-    console.log("Video Off");
-  }
-
-  async function videoOn() {
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~`', localVideoTracks);
-    
-    // 비디오 트랙 가져오기
-    localStream = await navigator.mediaDevices.getUserMedia({ video: true });
+  function videoOff() {
     localVideoTracks = localStream.getVideoTracks();
-    
-    if (localStream) {
-      localVideoTracks.forEach((track) => {
-        if (track.kind === 'video') {
-          localStream.addTrack(track); // 비디오 트랙 추가
-        }
-      });
-  
-      // 오디오 트랙 관련 코드는 그대로 유지
-      // ...
-  
-      localVideo.style.display = "inline"; // 스타일 적용
-      localVideo.srcObject = localStream; // 비디오 요소에 스트림 연결
-      console.log("Video On");
-    }
+    localVideoTracks.forEach((track) => localStream.removeTrack(track));
+    localVideo.setAttribute(styles, "display:none");
+    log("Video Off");
   }
-  
+  function videoOn() {
+    localVideoTracks.forEach((track) => localStream.addTrack(track));
+    localVideo.setAttribute(styles, "display:inline");
+    log("Video On");
+  }
   // mute audio buttons handler
   function audioOff() {
     localVideo.muted = true;
-    console.log("Audio Off");
+    log("Audio Off");
   }
   function audioOn() {
     localVideo.muted = false;
-    console.log("Audio On");
+    log("Audio On");
   }
 
   // room exit button handler
-  function exit() {
+  function exitLive() {
     stop();
   }
 
@@ -269,26 +255,9 @@ const RtcRoom = () => {
   }
 
   // use JSON format to send WebSocket message
-  function waitForSocketConnection(socket, callback){
-    setTimeout(
-        function(){
-            if (socket.readyState === 1) {
-                if(callback !== undefined){
-                    callback();
-                }
-                return;
-            } else {
-                waitForSocketConnection(socket,callback);
-            }
-        }, 5);
-};
-  // use JSON format to send WebSocket message
   function sendToServer(msg) {
     let msgJSON = JSON.stringify(msg);
-    waitForSocketConnection(socket, function() {
-      socket.send(msgJSON);
-    });
-    // socket.send(msgJSON);
+    socket.send(msgJSON);
   }
 
   // initialize media stream
@@ -299,18 +268,15 @@ const RtcRoom = () => {
       });
     }
 
-    let mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    let mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
     try {
-      // const videoTracks = mediaStream.getVideoTracks();
-      
       getLocalMediaStream(mediaStream);
-      
     } catch (error) {
       handleGetUserMediaError(error);
     }
 
     // navigator.mediaDevices
-    //   .getUserMedia({ video: true })
+    //   .getUserMedia(constraints)
     //   .then(getLocalMediaStream)
     //   .catch(handleGetUserMediaError);
   }
@@ -322,9 +288,10 @@ const RtcRoom = () => {
 
     getMedia(mediaConstraints);
 
-    console.log("getMedia 복귀 + ", message.data);
+    console.log(typeof message.data);
 
-    if (message.data === "true") {
+    if (message.data === true) {
+      console.log("여기");
       myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
     }
   }
@@ -349,13 +316,15 @@ const RtcRoom = () => {
    * **/
   function handleICEConnectionStateChangeEvent() {
     let status = myPeerConnection.iceConnectionState;
+    remoteVideo = document.getElementById("remote_video");
+    console.log(status);
 
     if (status === "connected") {
       log("status : " + status);
-      remoteVideo.setAttribute(styles, "display:inline");
+      remoteVideo.setAttribute("style", "display:inline");
     } else if (status === "disconnected") {
       log("status : " + status);
-      remoteVideo.setAttribute(styles, "display:none");
+      remoteVideo.setAttribute("style", "display:none");
     }
   }
 
@@ -390,8 +359,8 @@ const RtcRoom = () => {
   function handleICECandidateEvent(event) {
     if (event.candidate) {
       sendToServer({
-        from: userid,
-        data: roomId,
+        from: localUserName,
+        data: id,
         type: "ice",
         candidate: event.candidate,
       });
@@ -417,8 +386,8 @@ const RtcRoom = () => {
       })
       .then(function () {
         sendToServer({
-          from: userid,
-          data: roomId,
+          from: localUserName,
+          data: id,
           type: "offer",
           sdp: myPeerConnection.localDescription,
         });
@@ -431,8 +400,8 @@ const RtcRoom = () => {
   }
 
   function handleOfferMessage(message) {
-    console.log("Accepting Offer Message");
-    console.log(message);
+    log("Accepting Offer Message");
+    log(message);
     let desc = new RTCSessionDescription(message.sdp);
     //TODO test this
     if (desc != null && message.sdp != null) {
@@ -440,11 +409,11 @@ const RtcRoom = () => {
       myPeerConnection
         .setRemoteDescription(desc)
         .then(function () {
-          console.log("Set up local media stream");
+          log("Set up local media stream");
           return navigator.mediaDevices.getUserMedia(mediaConstraints);
         })
         .then(function (stream) {
-          console.log("-- Local video stream obtained");
+          log("-- Local video stream obtained");
           localStream = stream;
           try {
             localVideo.srcObject = localStream;
@@ -452,11 +421,11 @@ const RtcRoom = () => {
             localVideo.src = window.URL.createObjectURL(stream);
           }
 
-          console.log("-- Adding stream to the RTCPeerConnection");
+          log("-- Adding stream to the RTCPeerConnection");
           localStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, localStream));
         })
         .then(function () {
-          console.log("-- Creating answer");
+          log("-- Creating answer");
           // Now that we've successfully set the remote description, we need to
           // start our stream up locally then create an SDP answer. This SDP
           // data describes the local end of our call, including the codec
@@ -474,8 +443,8 @@ const RtcRoom = () => {
           log("Sending answer packet back to other peer");
 
           sendToServer({
-            from: userid,
-            data: roomId,
+            from: localUserName,
+            data: id,
             type: "answer",
             sdp: myPeerConnection.localDescription,
           });
@@ -504,7 +473,7 @@ const RtcRoom = () => {
 
   return (
     <div className={styles.ChatRoom}>
-      <Header />
+      <ChatRoom />
       <div className="col-lg-12 mb-3">
         <div className="col-lg-12 mb-3">
           <div className="d-flex justify-content-around mb-3">
@@ -522,7 +491,7 @@ const RtcRoom = () => {
                       style={{ display: "none" }}
                       autoComplete="off"
                     />
-                    Video Off
+                    Video On
                   </label>
                   <label
                     className="btn btn-outline-warning active"
@@ -536,7 +505,7 @@ const RtcRoom = () => {
                       autoComplete="off"
                       defaultChecked={true}
                     />
-                    Video On
+                    Video Off
                   </label>
                 </div>
                 <div className="mr-2" data-toggle="buttons">
@@ -551,7 +520,7 @@ const RtcRoom = () => {
                       style={{ display: "none" }}
                       autoComplete="off"
                     />
-                    Audio Off
+                    Audio On
                   </label>
                   <label
                     className="btn btn-outline-warning active"
@@ -565,7 +534,7 @@ const RtcRoom = () => {
                       autoComplete="off"
                       defaultChecked={true}
                     />
-                    Audio On
+                    Audio Off
                   </label>
                 </div>
               </div>
@@ -576,7 +545,7 @@ const RtcRoom = () => {
                   className="btn btn-outline-danger"
                   id="exit"
                   name="exit"
-                  onClick={() => exit()}
+                  onClick={() => exitLive()}
                 >
                   Exit Room
                 </button>
