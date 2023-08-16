@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './RoomList.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import RoomListItem from './RoomListItem';
 
 
 const RoomList = () => {
@@ -34,9 +35,10 @@ const RoomList = () => {
                     scrollableTarget="scrollableDiv"
                 >
                 {items.map((i, index) => (
-                    <div className={styles.ListItems} key={index}>
-                        room - #{index}
-                    </div>
+                    <RoomListItem key={index} roomid={index}/>
+                    // <div className={styles.ListItems} key={index}>
+                    //     room - #{index}
+                    // </div>
                 ))}
                 </InfiniteScroll>
             </div>
