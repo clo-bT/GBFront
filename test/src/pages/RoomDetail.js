@@ -1,22 +1,61 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from 'axios';
 import Header from "../components/Header";
 import styles from "./RoomDetail.module.css";
+import { Link,useParams } from "react-router-dom";
+
 
 const RoomDetail = () => {
+    const { roomDealid } = useParams();
     const [roomdata, setRoomData] = useState([]);
     const [roomoption, setRoomOption] = useState([]);
-    const roomid = 3
+    // const roomid = 3
     const expectedFee = roomdata.monthlyFee + roomdata.managementFee;
+    const [userid, setUserid] = useState('');
+    
+    useEffect(() => {
+        const member = JSON.parse(sessionStorage.getItem("member"));
+        const useruuid = member.id;
+        setUserid(useruuid)
+    }, [setUserid]);
+    
+    useEffect(() => {
+        console.log(roomDealid)
+        axios.get(`${process.env.REACT_APP_API_ROOT}/roomdeal/${roomDealid}`)
+            .then(response => {
+                console.log('받아온 정보 : ', response.data);
+                setRoomData(response.data.data.roomDeal);
+                setRoomOption(response.data.data.roomDealOption);
+            }).catch(error => {
+                console.log('오류:', error);
+            });
+    },[roomDealid]);
+    const handleChat = async () => {
+        try {
+            // 백엔드로 보낼 데이터 생성
+            const requestData = {
+                grantorId: roomdata.member.id,
+                assigneeId: userid,
+                roomDealId:  roomDealid// your room deal id here
+            };
 
-    axios.get(`${process.env.REACT_APP_API_ROOT}/roomdeal/${roomid}`)
-        .then(response => {
-            console.log('받아온 정보 : ', response.data);
-            setRoomData(response.data.data.roomDeal);
-            setRoomOption(response.data.data.roomDealOption);
-        }).catch(error => {
-            console.log('오류:', error);
-        });
+            // 백엔드 API 호출
+            const response = await axios.post(`${process.env.REACT_APP_API_ROOT}/chatroom/create`, requestData);
+
+            if (response.status !== 200) {
+                throw new Error('Failed to create chat room');
+            }
+
+            const responseData = response.data.data;
+            const isGrantor = roomdata.member.id === userid ? true : false;
+            // 생성된 채팅방으로 페이지 이동
+            window.location.href = `/chatroom/${isGrantor}/${responseData.roomId}/${roomDealid}`; // Assuming you have a route for chat rooms
+
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+        }
+    };
+
 
     /* HTML + CSS */
     return (
@@ -209,7 +248,7 @@ const RoomDetail = () => {
                                 </div>
                                 <div className={styles.fixedTopInfoRight}> {/* 오른쪽 - flex justify-content 멀리 */}
                                     <h5>몇일전</h5>
-                                    <h4><a onClick="??">곰방봐</a>로 이동</h4> {/* --------- 이동 링크 달아야 함 --------- */}
+                                    <h4><Link to='/gbblist' className={styles.b1}>더보기</Link></h4> {/* --------- 이동 링크 달아야 함 --------- */}
                                 </div>
                             </div>
                             <hr />
@@ -233,7 +272,7 @@ const RoomDetail = () => {
                             </div>
                             <hr />
                             <div className={styles.fixedInfoBottomTab}> {/* 양도자와 채팅 버튼 */}
-                                <button onClick={""} className={styles.chatButton}>
+                                <button onClick={handleChat} className={styles.chatButton}>
                                     <h3>양도자와 채팅하기</h3>
                                 </button> {/* 중앙 배치 - 가로 세로 둘 다 */}
                             </div>
@@ -247,7 +286,7 @@ const RoomDetail = () => {
 
 export default RoomDetail;
 
-{/* <div>{roomdata.roomType}</div>
+/* <div>{roomdata.roomType}</div>
 <div>{roomdata.roomSize}</div>
 <div>{roomdata.roomCount}</div>
 <div>{roomdata.oneroomType}</div>
@@ -261,4 +300,4 @@ export default RoomDetail;
 <div>{roomdata.moveInDate}</div>
 <div>{roomdata.expirationDate}</div>
 <div>{roomdata.floor}</div>
-<div>{roomdata.totalFloor}</div> */}
+<div>{roomdata.totalFloor}</div> */
