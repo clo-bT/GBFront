@@ -6,6 +6,7 @@ import gbbCreateStyles from "../components/GbbCreate.module.css";
 
 const Create = ({ onImageUpload }) => {
   const [selectedImages, setSelectedImages] = useState([]);
+  const [imageSrc, setImageSrc] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [selectedHashtags, setSelectedHashtags] = useState([]);
   const navigate = useNavigate();
@@ -14,11 +15,30 @@ const Create = ({ onImageUpload }) => {
 
   const handleImageChange = (event) => {
     const files = event.target.files;
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const imageList = [];
+    Array.from(files).forEach((image) => {
+      const previewImage = URL.createObjectURL(image);
+      imageList.push(previewImage);
+    });
+
+    setImageSrc([...imageSrc, ...imageList]);
     setSelectedImages([...selectedImages, ...files]);
   };
+
+  const handleDeleteImage = (id) => {
+    setSelectedImages(selectedImages.filter((_, index) => index !== id));
+    setImageSrc(imageSrc.filter((_, index) => index !== id));
+  };
+
   const handleHashtagChange = (event) => {
     setHashtag(event.target.value);
   };
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       const value = event.target.value.trim();
@@ -81,11 +101,12 @@ const Create = ({ onImageUpload }) => {
           <div className={gbbCreateStyles.gbbCreateContent}>
             <h2 className={gbbCreateStyles.gbbCreateImageH2}>곰방 사진</h2>
             <div className={styles.inputbox}>
-              <div
-                className={styles.imageinput}
-                onClick={() => document.getElementById("image-upload").click()}
-              >
-                <button> + </button>
+              <div className={styles.imageinput}>
+                <button onClick={() => document.getElementById("image-upload").click()}>
+                  이미지 업로드
+                </button>
+              </div>
+              <div>
                 <input
                   id="image-upload"
                   type="file"
@@ -94,6 +115,18 @@ const Create = ({ onImageUpload }) => {
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                 />
+                <div className={gbbCreateStyles.imageContainer}>
+                  {imageSrc.map((image, id) => (
+                    <div key={id} className={gbbCreateStyles.imageGridItem}>
+                      <img
+                        src={image}
+                        alt={`${image}-${id}`}
+                        width={"200px"}
+                        onClick={() => handleDeleteImage(id)}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
