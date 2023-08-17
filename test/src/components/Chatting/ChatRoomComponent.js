@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-// import axios from 'axios';
-import Header from "../Header";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import ChatList from "./ChatList";
 import axios from "axios";
 import styles from "./ChatRoom.module.css";
 
@@ -18,7 +13,6 @@ const ChatRoomComponent = (props) => {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    // const userid = JSON.parse(sessionStorage.getItem("member")).id;
     const member = JSON.parse(sessionStorage.getItem("member"));
     useruuid = member.id;
     connect();
@@ -41,8 +35,6 @@ const ChatRoomComponent = (props) => {
     // sub 할 url => /sub/chat/room/roomId 로 구독한다
     stompClient.subscribe("/sub/chat/room/" + props.id, onMessageReceived);
 
-    console.log("~~~~~~~~~~~~~~~~~~~~" + useruuid);
-
     // 서버에 유저가 들어왔다는 것을 알림
     // /pub/chat/enterUser 로 메시지를 보냄
     stompClient.send(
@@ -53,13 +45,6 @@ const ChatRoomComponent = (props) => {
         memberId: useruuid,
       })
     );
-
-    // axios.get(`http://localhost:8080/chat/history/${id}`)
-    //     .then(response => {
-    //         console.log('받아온 정보 : ', response.data);
-    //     }).catch(error => {
-    //         console.log('오류:', error);
-    //     });
   }
   function onError(error) {
     // 오류 처리
@@ -120,14 +105,14 @@ const ChatRoomComponent = (props) => {
               {/* {console.log(chat)} */}
               {chat.sender !== useruuid ? (
                 <div className={styles.yourchatbox}>
-                  <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                  <span className={styles.yourballoon}>{chat.message}</span>
                   <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
                 </div>
               ) : (
                 // 보낸 사람이 나
                 <div className={styles.mychatbox}>
                   <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
-                  <span className={styles.myballoon}>나: {chat.message}</span>
+                  <span className={styles.myballoon}>{chat.message}</span>
                 </div>
               )}
             </div>
@@ -137,14 +122,14 @@ const ChatRoomComponent = (props) => {
             {/* 보낸 사람이 상대방 */}
             {chat.sender !== useruuid ? (
               <div className={styles.yourchatbox}>
-                <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                <span className={styles.yourballoon}>{chat.message}</span>
                 <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
               </div>
             ) : (
               // 보낸 사람이 나
               <div className={styles.mychatbox}>
                 <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
-                <span className={styles.myballoon}>나: {chat.message}</span>
+                <span className={styles.myballoon}>{chat.message}</span>
               </div>
             )}
           </div>
