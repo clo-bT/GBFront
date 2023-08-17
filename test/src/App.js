@@ -17,6 +17,7 @@ import "./App.css";
 import RoomDetail from "./pages/RoomDetail";
 import RoomList from "./components/Maps/RoomList";
 import GbbDetail from "./pages/GbbDetail";
+import MyPage from "./pages/MyPage";
 
 const App = () => {
   const [imageList, setImageList] = useState([]);
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/gbbcreate" element={<GbbCreate onImageUpload={handleImageUpload} />} />
           <Route path="/zzim" element={<Zzimlist />} />
           <Route path="/roomout" element={<Roomout />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/roomdetail/:roomDealid" element={<RoomDetail />} />
           <Route path="/login" element={<Signuplogin />} />
           <Route path="/auth" element={<Auth />} />
