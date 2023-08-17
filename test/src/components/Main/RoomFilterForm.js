@@ -15,6 +15,7 @@ const RoomFilterForm = () => {
   }
   const [searchTerm, setSearchTerm] = useState('');
   const [nearsearch, setNearsearch] = useState([]);
+  const [length, setLength] = useState([]);
   const handleSearch = () => {
     const SearchRelatedListRequestDto = {
       "searchWord": searchTerm
@@ -24,6 +25,7 @@ const RoomFilterForm = () => {
     ).then((response) => {
       console.log(response)
       setNearsearch(response.data.data)
+      setLength(response.data.data)
     }).catch((error) => {
       console.error('API 호출 에러:', error);
     });
@@ -31,6 +33,7 @@ const RoomFilterForm = () => {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
+      e.preventDefault(); 
     }
   };
   function handleonclick(word, type, lat, lon) {
@@ -65,7 +68,7 @@ const RoomFilterForm = () => {
           />
           <div className={styles.searchResultScroll}>
             <div className={styles.searchResultFlex}>
-              {searchTerm ? (<>
+              {length.length > 0 ? (<>
                 {nearsearch.map((value, index) => (
                   <div key={index} className={styles.searchResultDiv}>
                     <div onClick={() => handleonclick(value.searchWord, value.searchType, value.lat, value.lon)}>{value.searchWord}</div>
@@ -73,9 +76,10 @@ const RoomFilterForm = () => {
                 ))
                 }
               </>
-              ) : (
-                <div className={styles.searchResultDiv}>검색 결과가 없습니다.</div>
-              )}
+              ) : null}
+              {length.length === 0 && searchTerm.length > 1 ? (
+                <div className={styles.searchResultDiv}>검색결과가 없습니다.</div>
+              ):null}
             </div>
           </div>
         </div>

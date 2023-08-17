@@ -8,8 +8,7 @@ const List = ({ imageList }) => {
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
-    const [responseArticleId, setResponseArticleId] = useState(null); // 응답으로 받은 article_id
-    const [responseRoomId, setResponseRoomId] = useState(null); // 응답으로 받은 room_id
+    const [responseArticleId, setResponseArticleId] = useState([]); // 응답으로 받은 article_id
     const [userid, setUserid] = useState("");
     useEffect(() => {
       const member = JSON.parse(sessionStorage.getItem("member"));
@@ -19,9 +18,8 @@ const List = ({ imageList }) => {
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_ROOT}/showroom`
         ).then((response) => {
-            console.log(response.data)
-            setResponseArticleId(response.data);
-            setResponseRoomId(response.data);
+            console.log(response.data.data)
+            setResponseArticleId(response.data.data);
         }).catch((error) => {
             console.log(error)
         })
@@ -29,11 +27,11 @@ const List = ({ imageList }) => {
     const handleSearch = async () => {
         const ShowRoomSearchRequestDto = {
             "memberId": userid,
-            "searchWord": 'String',
-            "searchType": 'String',
-            "hashTag": 'String',
-            "sortType": 'String',
-            "pageOffset": 'int'
+            "searchWord": searchText,
+            "searchType": 'station',
+            "hashTag": selectedTags,
+            "sortType": 'desc',
+            "pageOffset": 0
         }
         axios.post(`${process.env.REACT_APP_API_ROOT}/showroom/search-result`,ShowRoomSearchRequestDto
         ).then((response) => {
@@ -99,14 +97,16 @@ const List = ({ imageList }) => {
                         <button onClick={handleSearch}>검색</button>
                     </div>
                 </div>
-                {/* 응답으로 받은 데이터 표시 */}
-                {/* {responseArticleId !== null && (
-                    <p>응답으로 받은 article_id: {responseArticleId}</p>
-                )}
-                {responseRoomId !== null && (
-                    <p>응답으로 받은 room_id: {responseRoomId}</p>
-                )} */}
-                {/* 이미지 리스트 출력 부분 */}
+                {responseArticleId.map((value, index) => (
+                    <div key={index}>
+                        <div>구분용 인덱스 : {index}</div>
+                    <div>곰방봐 id : {value.id}</div>
+                    <div>매물번호 : {value.roomDeal.id}</div>
+                    <div>곰방봐 썸네일 : {value.thumbnail}</div>
+                    <div>곰방봐 썸네일 : {value.thumbnail}</div>
+                  </div>
+                ))
+                }
             </div>
         </div>
     );
