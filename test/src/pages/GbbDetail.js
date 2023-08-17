@@ -14,7 +14,7 @@ const GbbDetail = () => {
       }, [setUserid]);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_ROOT}/showroom/{articleId}`
+        axios.get(`${process.env.REACT_APP_API_ROOT}/showroom/${articleId}`
         ).then((response) => {
             console.log(response.data)
         }).catch((error) => {
