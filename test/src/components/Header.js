@@ -117,10 +117,11 @@ const Header = () => {
 					</>
 				) : (
 					<>
-						{/* <Link to="/chatroom" className='b2'>채팅</Link> */}
-						<Link to="/login" className={styles.b2}>
-							회원가입/로그인
-						</Link>
+						<div>
+							<Link to="/login" className={styles.loginBtn}>
+								로그인 / 회원가입
+							</Link>
+						</div>
 					</>
 				)}
 			</div>
