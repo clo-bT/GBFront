@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import styles from "./GbbDetail.module.css";
+import styles from "../components/Gbb.module.css";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -88,7 +88,7 @@ const GbbDetail = () => {
             <div className={styles.container}>
                 {" "}
                 {/* 본문 - margin설정 */}
-                {gbbdata ? (
+                {gbbdata && gbbdata.fileUrls ? (
                     <div className={styles.gbbdetail}>
                         {/* 내용 출력 - 중앙 정렬, flex column */}
 
