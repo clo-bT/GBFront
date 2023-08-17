@@ -15,18 +15,10 @@
 
 .ChatContent {
   flex: 9;
-  height: 70vh;
+  height: 67vh;
   overflow: auto;
   padding: 20px;
   /* width: 90vw; */
-}
-
-.EnterLiveBtn {
-  position: fixed;
-  bottom: 10px;
-  margin-top: 15px;
-  margin-bottom: 20px;
-  left: 31vw;
 }
 
 .chatmessage {
@@ -50,7 +42,7 @@
 
 .yourballoon {
   background-color: rgb(217, 217, 217, 0.8);
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 10px 20px;
   margin-left: 10px;
 }
@@ -67,7 +59,7 @@
 }
 .myballoon {
   background-color: rgba(199, 173, 146, 0.8);
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 10px 20px;
   margin-right: 10px;
 }
@@ -78,10 +70,22 @@
   margin-right: 5px;
 }
 
+.EnterLiveBtn {
+  background-color: rgb(164, 118, 83);
+  color: white;
+  border-radius: 15px;
+  position: fixed;
+  bottom: 0px;
+  padding: 20px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  right: 3vw;
+}
+
 .sendmessage {
   position: fixed;
-  bottom: 10px;
-  left: 40vw;
+  bottom: 5px;
+  left: 30vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,7 +94,19 @@
 }
 
 .sendmessage input {
-  margin-right: 8px;
   width: 100vh;
-  height: 20px;
+  height: 25px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding: 10px;
+  padding-left: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: rgb(233, 233, 233);
+}
+
+.sendmessage button {
+  border-radius: 15px;
 }
