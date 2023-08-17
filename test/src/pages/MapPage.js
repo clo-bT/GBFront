@@ -14,7 +14,7 @@ const MapPage = () => {
       <Header/>
       <div className={styles.body}>
         <div className={styles.background}><KakaoMap/></div>
-        <div className={styles.nav}><FilterNav/></div>
+        <div className={styles.nav}><FilterNav word={word}/></div>
         <div className={styles.rlist}><RoomList word={word} lat={lat} lon={lon}/></div>
       </div>
     </div>
