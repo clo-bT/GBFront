@@ -35,6 +35,7 @@ const RoomFilterForm = () => {
   };
   function handleonclick(word, type, lat, lon) {
     if (type === 'address') {
+      localStorage.setItem('searchloc',word)
       navigate(`/map/${word}/${"lat"}/${"lon"}`)
     }
     else if (type === 'station' || type === 'univ') {
