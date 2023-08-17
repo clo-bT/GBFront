@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "../Header";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import styles from "../Chatting/ChatRoom.module.css";
 import axios from "axios";
-import ChatRoom from "../Chatting/ChatRoom";
+import ChatRoomComponent from "../Chatting/ChatRoomComponent";
 
 const GrantorRtcRoom = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, roomDealId } = useParams();
 
   var socket;
 
@@ -433,26 +433,21 @@ const GrantorRtcRoom = () => {
 
   return (
     <div className={styles.ChatRoom}>
-      <ChatRoom />
-      <div className="col-lg-12 mb-3">
-        <div className="col-lg-12 mb-3">
-          <div className="d-flex justify-content-around mb-3">
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              id="exit"
-              name="exit"
-              onClick={() => exitLive()}
-            >
-              Exit Room
-            </button>
-          </div>
-        </div>
-
-        <div className="row justify-content-around mb-3">
-          <div className="col-lg-6 mb-3">
-            <video id="local_video" style={{ width: "100px" }} autoPlay playsInline></video>
-          </div>
+      <Header />
+      <button
+        type="button"
+        className="btn btn-outline-danger"
+        id="exit"
+        name="exit"
+        onClick={() => exitLive()}
+      >
+        Exit Room
+      </button>
+      <video id="local_video" autoPlay playsInline hidden></video>
+      <div className="FlexContainer">
+        <video id="local_video" style={{ width: "100px" }} autoPlay playsInline></video>
+        <div className={styles.ChatArea}>
+          <ChatRoomComponent id={id} roomDealId={roomDealId} />
         </div>
       </div>
     </div>
