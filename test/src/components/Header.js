@@ -6,41 +6,47 @@ import { useState, useEffect } from "react";
 const Header = () => {
 	const [isAuthorized, setIsAuthorized] = useState("");
 	const [userinfo, setUserinfo] = useState({});
-	const [eventSource,setEventSource] = useState(()=>{});
+	const [eventSource, setEventSource] = useState(() => {});
 	useEffect(() => {
 		setIsAuthorized(sessionStorage.getItem("isAuthorized"));
 		setUserinfo(JSON.parse(sessionStorage.getItem("member")));
 	}, []); // This effect runs once when the component mounts
 
-	useEffect(()=>{
-		if(userinfo === undefined || userinfo === null) return;
-		if( Object.keys(userinfo).length === 0 ) return;
-		if(sessionStorage.getItem("notification_issubscribe")){return}
-		setEventSource(new EventSource(
-			`http://localhost:8080/notification/subscribe/${userinfo.id}`))
-		sessionStorage.setItem("notification_issubscribe",true)
-	},[userinfo])
-
+	useEffect(() => {
+		if (userinfo === undefined || userinfo === null) return;
+		if (Object.keys(userinfo).length === 0) return;
+		if (sessionStorage.getItem("notification_issubscribe")) {
+			return;
+		}
+		setEventSource(
+			new EventSource(`http://localhost:8081/notification/subscribe/${userinfo.id}`)
+		);
+		sessionStorage.setItem("notification_issubscribe", true);
+	}, [userinfo]);
 
 	useEffect(() => {
 		if (eventSource === null) return;
-		if (typeof(eventSource) === 'undefined') return;
+		if (typeof eventSource === "undefined") return;
 		eventSource.addEventListener("sse", function (event) {
-			// const data = JSON.parse(event.data);
+			if (event.data.charAt(0) !== "{") return;
+			const data = JSON.parse(event.data);
 
 			(async () => {
 				// 브라우저 알림
 				const showNotification = () => {
-					const notification = new Notification("알림", {
-						body: event.data.content,
-					});
+					const notification = new Notification(
+						data.notificationType === "LIKED" ? "찜 알림" : "추천 알림",
+						{
+							body: data.notificationContent,
+						}
+					);
 
 					setTimeout(() => {
 						notification.close();
 					}, 10 * 1000);
 
 					notification.addEventListener("click", () => {
-						window.open(event.data.url, "_blank");
+						window.open(`roomdetail/${Number(data.relatedUrl)}`, "_blank");
 					});
 					// 클릭하면 읽음 표시하는 api도 요청해야댐
 				};
