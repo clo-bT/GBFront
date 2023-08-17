@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import styles from "./RoomDetail.module.css";
 import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Pagination } from "swiper/modules";
+// import { EffectCoverflow, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -80,6 +80,24 @@ const RoomDetail = () => {
     } catch (error) {
       console.error("Error creating chat room:", error);
     }
+  };
+
+  const detailDate = (cur) => {
+    const milliSeconds = new Date() - cur;
+    const seconds = milliSeconds / 1000;
+    if (seconds < 60) return `방금 전`;
+    const minutes = seconds / 60;
+    if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+    const hours = minutes / 60;
+    if (hours < 24) return `${Math.floor(hours)}시간 전`;
+    const days = hours / 24;
+    if (days < 7) return `${Math.floor(days)}일 전`;
+    const weeks = days / 7;
+    if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+    const months = days / 30;
+    if (months < 12) return `${Math.floor(months)}개월 전`;
+    const years = days / 365;
+    return `${Math.floor(years)}년 전`;
   };
 
   /* HTML + CSS */
@@ -371,7 +389,7 @@ const RoomDetail = () => {
                 </div>
                 <div className={styles.fixedTopInfoRight}>
                   {/* 오른쪽 - flex justify-content 멀리 */}
-                  <h5>몇일전</h5>
+                  <h5>{detailDate(new Date(roomdata.registerTime))}</h5>
                   <div className={styles.moveToShowRoom}>
                     <h3>
                       <Link to="/gbblist" className={styles.moveToShowRoomLink}>
