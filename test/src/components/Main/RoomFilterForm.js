@@ -8,8 +8,8 @@ import axios from 'axios';
 
 const RoomFilterForm = () => {
   const navigate = useNavigate();
-  const [selectedOpt,setselectedOpt] = useState('전체')
-  const optionList = ['전체','원룸','오피스텔','빌라','아파트']
+  const [selectedOpt, setselectedOpt] = useState('전체')
+  const optionList = ['전체', '원룸', '오피스텔', '빌라', '아파트']
   const handleOptionClick = (option) => {
     setselectedOpt(option)
   }
@@ -44,36 +44,39 @@ const RoomFilterForm = () => {
 
   return (
     <div className={styles.bbody}>
-      <div className={styles.parent}>
-        <div className={styles.head}>어떤 방을 찾으시나?</div>
-        <div className={styles.group}>
-          {optionList.map((value)=>(
-            <div key={value} className={`${styles.option} ${selectedOpt === value ? styles.selected : ''}`} onClick={()=>handleOptionClick(value)}>
-              {value}
-            </div>
-          ))}
-        </div>
-        <input
-          className={styles.myinput}
-          type="text"
-          placeholder="지역을 입력하세요"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={handleKeyPress}
-        />
-        <div>
-          {searchTerm ? (
-          <div>
-              {nearsearch.map((value, index) => (
-                <div key={index}>
-                  <div onClick={()=>handleonclick(value.searchWord,value.searchType,value.lat,value.lon)}>{value.searchWord}</div>
-                </div>
-              ))
-              }
+      <div className={styles.roomFilterBody}>
+        <div className={styles.parent}>
+          <div className={styles.head}>어떤 방을 찾으시나?</div>
+          <div className={styles.group}>
+            {optionList.map((value) => (
+              <div key={value} className={`${styles.option} ${selectedOpt === value ? styles.selected : ''}`} onClick={() => handleOptionClick(value)}>
+                {value}
               </div>
-          ) : (
-              <div>검색어를 다시 입력하세요</div>
-          )}
+            ))}
+          </div>
+          <input
+            className={styles.myinput}
+            type="text"
+            placeholder="지역을 입력하세요"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleKeyPress}
+          />
+          <div className={styles.searchResultScroll}>
+            <div className={styles.searchResultFlex}>
+              {searchTerm ? (<>
+                {nearsearch.map((value, index) => (
+                  <div key={index} className={styles.searchResultDiv}>
+                    <div onClick={() => handleonclick(value.searchWord, value.searchType, value.lat, value.lon)}>{value.searchWord}</div>
+                  </div>
+                ))
+                }
+              </>
+              ) : (
+                <div className={styles.searchResultDiv}>검색 결과가 없습니다.</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
