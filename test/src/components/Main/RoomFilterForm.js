@@ -12,6 +12,7 @@ const RoomFilterForm = () => {
     setselectedOpt(option)
   }
   const [searchTerm, setSearchTerm] = useState('');
+  const [nearsearch, setNearsearch] = useState([]);
   const handleSearch = () => {
     const SearchRelatedListRequestDto = {
       "searchWord": searchTerm
@@ -19,7 +20,8 @@ const RoomFilterForm = () => {
     console.log(searchTerm)
     axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/search-related-list`, SearchRelatedListRequestDto
     ).then((response) => {
-      console.log(response.data.data)
+      console.log(response)
+      setNearsearch(response.data.data)
     }).catch((error) => {
       console.error('API 호출 에러:', error);
     });
@@ -29,6 +31,34 @@ const RoomFilterForm = () => {
       handleSearch();
     }
   };
+  function handleonclick(word, type, lat, lon) {
+    const SearchByAddressRequestDto = {
+      "address": word,
+      "content": '',
+    };
+    const SearchByStationUnivRequestDto = {
+      "lat": lat,
+      "lon": lon,
+      "content":'',
+    };
+    if (type === 'address') {
+      axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/search-address`, SearchByAddressRequestDto
+      ).then((response) => {
+        console.log("주소주소",response.data)
+      }).catch((error) => {
+        console.error('API 호출 에러:', error);
+      })
+    }
+    else if (type === 'station' || type === 'univ') {
+      axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/search-station-univ`, SearchByStationUnivRequestDto
+      ).then((response) => {
+        console.log("역역",response.data)
+      }).catch((error) => {
+        console.error('API 호출 에러:', error);
+      })
+    }
+  }
+  
 
   return (
     <div className={styles.bbody}>
@@ -49,6 +79,20 @@ const RoomFilterForm = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyPress={handleKeyPress}
         />
+        <div>
+          {searchTerm ? (
+          <div>
+              {nearsearch.map((value, index) => (
+                <div key={index}>
+                  <div onClick={()=>handleonclick(value.searchWord,value.searchType,value.lat,value.lon)}>{value.searchWord}</div>
+                </div>
+              ))
+              }
+              </div>
+          ) : (
+              <div>검색어를 다시 입력하세요</div>
+          )}
+        </div>
       </div>
     </div>
   );
