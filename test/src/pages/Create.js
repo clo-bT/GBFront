@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback,useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import styles from "../components/Gbb.module.css";
 import gbbCreateStyles from "../components/GbbCreate.module.css";
+import axios from "axios";
 
 const Create = ({ onImageUpload }) => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -10,8 +11,24 @@ const Create = ({ onImageUpload }) => {
   const [hashtag, setHashtag] = useState("");
   const [selectedHashtags, setSelectedHashtags] = useState([]);
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_ROOT; // 백엔드 서버의 주소
-  const uploadUrl = `${apiUrl}/show/add`;
+  const [userid, setUserid] = useState("");
+  const [roomid, setRoomid] = useState("");
+  // 아이디 가져오는 거
+  useEffect(() => {
+    const member = JSON.parse(sessionStorage.getItem("member"));
+    const useruuid = member.id;
+    setUserid(useruuid);
+  }, [setUserid]);
+  // 아이디 가지고 내가 올린 매물 방 아이디 가져오는 거
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_ROOT}/roomdeal/myroomdeal/${userid}`
+    ).then((response) => {
+      console.log(response.data.data)
+      setRoomid(response.data.data)
+    }).catch((error) => {
+      console.log(error)
+    })
+  }, [userid]);
 
   const handleImageChange = (event) => {
     const files = event.target.files;
@@ -52,39 +69,46 @@ const Create = ({ onImageUpload }) => {
     }
   };
 
-  const handleUpload = async () => {
-    if (selectedImages.length > 0 || hashtag.trim() !== "") {
-      const newImageGroup = {
-        room_deal_id: 123, // 실제 room_deal_id로 변경해야 합니다
-        user_id: "user123", // 실제 user_id로 변경해야 합니다
-        images: selectedImages.map((image) => ({
-          src: URL.createObjectURL(image),
-        })),
-        tags: selectedHashtags.map((tag) => ({ tag_name: tag })),
-      };
-      try {
-        const response = await fetch(uploadUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newImageGroup),
-        });
-
-        if (response.ok) {
-          // 성공 시, 필요한 동작을 수행합니다
-          setSelectedImages([]);
-          setHashtag("");
-          navigate("/gbblist");
-        } else {
-          // 에러 처리
-          console.error("에러:", response.status);
-        }
-      } catch (error) {
-        console.error("에러:", error);
+  const handleUpload = useCallback(
+    async (e) => {
+      e.preventDefault();
+    const formData = new FormData();
+    selectedImages.forEach((image) => {
+      formData.append("files", image);
+      // console.log("중간점검", formData.file);
+      console.log("중간점검", image);
+    });
+    const ShowRoomHashTagRequestDto = {
+      'showRoomRegisterRequestDto': {
+        'roomDealId': roomid[0].id,
+        'memberId': userid,
+      },
+      'hashTagRegisterRequestDto': {
+        'hashTagNames':selectedHashtags
       }
+      }
+      console.log(ShowRoomHashTagRequestDto)
+    const blob = new Blob([JSON.stringify(ShowRoomHashTagRequestDto)], {
+      type: "application/json",
+    });
+    formData.append("showRoomHashTagRequestDto", blob);
+    axios.post(`${process.env.REACT_APP_API_ROOT}/showroom/register`,
+      formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        // charset : 'utf-8'// Content-Type을 반드시 이렇게 하여야 합니다.
+      },
     }
-  };
+      ).then((response) => {
+        console.log(response)
+        navigate('/gbblist')
+    }).catch((error) => {
+      console.log(error)
+    })
+
+    
+  },[roomid,selectedHashtags,selectedImages,userid]);
 
   return (
     <div>
