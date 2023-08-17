@@ -100,16 +100,6 @@ const RoomDetail = () => {
     return `${Math.floor(years)}년 전`;
   };
 
-  const newJiBunAddress = (cur) => {
-    const arr = roomdata.jibunAddress.split('동');
-    return arr[0] + "동";
-  }
-
-  const newRoadAddress = (cur) => {
-    const arr = roomdata.roadAddress.split('로');
-    return arr[0] + "로";
-  }
-
   /* HTML + CSS */
   return (
     <div>
@@ -380,7 +370,7 @@ const RoomDetail = () => {
             </div>
             <div className={styles.contentDetail}>
               <h2>위치 및 주변 시설</h2> {/* 위치 및 주변 시설 */}
-              <h4 className={styles.contentDetailRoadAddress}>{newRoadAddress(roomdata.roadAddress)}</h4>
+              <h4 className={styles.contentDetailRoadAddress}>{roomdata.roadAddress}</h4>
               {/* ----------------- 지도 + 마커 + 주변 원 ----------------- */}
             </div>
           </div>
@@ -392,7 +382,7 @@ const RoomDetail = () => {
                 {/* 상위 탭 */}
                 <div className={`${styles.fixedTopInfoLeft} ${styles.fixedTopInfoItem}`}>
                   {/* 왼쪽 */}
-                  <h3>{newJiBunAddress(roomdata.jibunAddress)}</h3>
+                  <h3>{roomdata.jibunAddress}</h3>
                   <h2>
                     월세 {roomdata.deposit}/{roomdata.monthlyFee}
                   </h2>
