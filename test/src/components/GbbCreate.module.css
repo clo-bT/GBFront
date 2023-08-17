@@ -11,6 +11,16 @@
   text-align: center;
 }
 
+.imageContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.imageGridItem {
+  padding: 0px 5px;
+  margin-bottom: 20px;
+}
+
 .gbbCreateContent {
   margin-bottom: 100px;
 }
