@@ -18,8 +18,8 @@
 }
 
 .swiperImg {
-  width: 500px;
-  height: 300px;
+  width: 600px;
+  height: 380px;
 }
 
 .detail {
@@ -29,7 +29,7 @@
 }
 
 .contentTab:first-child {
-  flex-grow: 3;
+  flex-grow: 6;
   margin-right: 100px;
 }
 
