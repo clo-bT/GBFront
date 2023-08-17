@@ -1,15 +1,15 @@
 import styles from "./FilterAdjust.module.css";
 import 'rc-slider/assets/index.css';
 import Slider from "rc-slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const FilterAdjust = () => {
   const roomTypelist = ['원룸','빌라','오피스텔','아파트']
-  const [type, setType] = useState(roomTypelist);
   const roomstructurelist = ['오픈형','분리형','복층','투룸','쓰리룸 이상']
-  const [structure, setStructure] = useState(roomstructurelist)
-  
   const addtionaloptionlist = ['에어컨','냉장고','세탁기','싱크대','옷장','가스레인지','신발장','화재경보기','엘리베이터','주차가능','건조기']
   const addtionaloptionENGlist = ['airConditioner','refrigerator','washer','sink','closet','gasRange','shoeCloset','fireAlarm','elevator','parkingLot','dryer']
+  
+  const [type, setType] = useState(JSON.parse(localStorage.getItem('roomType'))?JSON.parse(localStorage.getItem('roomType')):[]);
+  const [structure, setStructure] = useState(JSON.parse(localStorage.getItem('oneroomType'))?JSON.parse(localStorage.getItem('oneroomType')):[]);
 
 
   /*boolean값은 localstorage에 저장할 때 string으로 바뀌어서 JSON.parse로 다시 값을 읽어줌 */
@@ -17,61 +17,64 @@ const FilterAdjust = () => {
   const handleClickTypeButton = (e) => {
     if(type.includes(e.target.id)){setType(type.filter((element)=>element!==e.target.id))}
     else{setType([...type,e.target.id])}
-    localStorage.setItem('roomType',type)
   };
 
   const handleClickStructureButton = (e) => {
     if(structure.includes(e.target.id)){setStructure(structure.filter((element)=>element!==e.target.id))}
     else{setStructure([...structure,e.target.id])}
-    localStorage.setItem('oneroomType', structure)
   };
 
   const handleClickAdditionaloptionButton = (e) => {
     if(additionaloption.includes(e.target.id)){setAdditionaloption(additionaloption.filter((element)=>element!==e.target.id))}
     else{setAdditionaloption([...additionaloption,e.target.id])}
-    addtionaloptionENGlist.map((value)=>{
-      localStorage.setItem(value,false)
-    })
-    additionaloption.map((value)=>{
-      localStorage.setItem(addtionaloptionENGlist[addtionaloptionlist.indexOf(value)],true)
-    })
   };
-  
-  const [floorrange,setFloorrange] = useState([0,10])
+
+  const [floorrange,setFloorrange] = useState([localStorage.getItem('startFloor')?localStorage.getItem('startFloor'):0,localStorage.getItem('endFloor')?localStorage.getItem('endFloor'):0])
   const handleFloorrangeChange = (e) => {
     setFloorrange(e)
-    localStorage.setItem('startFloor',floorrange[0])
-    localStorage.setItem('endFloor',floorrange[1])
   }
-  const [depositrange,setDepositrange] = useState([0,10090])
+  const [depositrange,setDepositrange] = useState([localStorage.getItem('startDeposit')?localStorage.getItem('startDeposit'):0,localStorage.getItem('endDeposit')?localStorage.getItem('endDeposit'):0])
   const handleDepositrangeChange = (e) => {
     setDepositrange(e)
-    localStorage.setItem('startDeposit',depositrange[0])
-    localStorage.setItem('endDeposit',depositrange[1])
   }
-  const [monthlyfeerange,setMonthlyfeerange] = useState([0,121])
+  const [monthlyfeerange,setMonthlyfeerange] = useState([localStorage.getItem('startMonthlyFee')?localStorage.getItem('startMonthlyFee'):0,localStorage.getItem('endMonthlyFee')?localStorage.getItem('endMonthlyFee'):0])
   const handleMonthlyfeerangeChange = (e) => {
     setMonthlyfeerange(e)
-    localStorage.setItem('startMonthlyFee',monthlyfeerange[0])
-    localStorage.setItem('endMonthlyFee',monthlyfeerange[1])
   }
-  const [maintenancefeerange,setMaintenancefeerange] = useState([0,50.5])
+  const [maintenancefeerange,setMaintenancefeerange] = useState([localStorage.getItem('startManagementFee')?localStorage.getItem('startManagementFee'):0,localStorage.getItem('endManagementFee')?localStorage.getItem('endManagementFee'):0])
   const handleMaintenancefeerangeChange = (e) => {
     setMaintenancefeerange(e)
-    localStorage.setItem('startManagementFee',maintenancefeerange[0])
-    localStorage.setItem('endManagementFee',maintenancefeerange[1])
   }
-  const [roomsizerange,setRoomsizerange] = useState([0,200])
+  const [roomsizerange,setRoomsizerange] = useState([localStorage.getItem('startRoomSize')?localStorage.getItem('startRoomSize'):0,localStorage.getItem('endRoomSize')?localStorage.getItem('endRoomSize'):0])
   const handleRoomsizerangeChange = (e) => {
     setRoomsizerange(e)
-    localStorage.setItem('startRoomSize',roomsizerange[0])
-    localStorage.setItem('endRoomSize',roomsizerange[1])
   }
   const addComma = (price) => {
     let returnString = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return returnString;
-}
+  }
 
+  useEffect(()=>{
+      localStorage.setItem('roomType',JSON.stringify(type))
+      localStorage.setItem('oneroomType', JSON.stringify(structure))
+      addtionaloptionENGlist.map((value)=>{
+        localStorage.setItem(value,false)
+      })
+      additionaloption.map((value)=>{
+        localStorage.setItem(addtionaloptionENGlist[addtionaloptionlist.indexOf(value)],true)
+      })
+      localStorage.setItem('startFloor',floorrange[0])
+      localStorage.setItem('endFloor',floorrange[1])
+      localStorage.setItem('startDeposit',depositrange[0])
+      localStorage.setItem('endDeposit',depositrange[1])
+      localStorage.setItem('startMonthlyFee',monthlyfeerange[0])
+      localStorage.setItem('endMonthlyFee',monthlyfeerange[1])
+      localStorage.setItem('startManagementFee',maintenancefeerange[0])
+      localStorage.setItem('endManagementFee',maintenancefeerange[1])
+      localStorage.setItem('startRoomSize',roomsizerange[0])
+      localStorage.setItem('endRoomSize',roomsizerange[1])
+
+  },[type,structure,additionaloption,floorrange,depositrange,monthlyfeerange,maintenancefeerange,roomsizerange])
 
   return (
       <div className={styles.Frame}>  
@@ -146,7 +149,7 @@ const FilterAdjust = () => {
           <div className={styles.container} id="roomfloor">
           <div className={styles.headline}>층 수</div>
           <div className={styles.sliderparent} style={{height:"100px"}} id="층 수">
-              <div className={styles.sliderindex}><span>층 수</span><span>{floorrange[0]<1?"반지하":addComma(floorrange[0])}~{floorrange[1]>9?"옥상":addComma(floorrange[1])}{'층'}</span></div>
+              <div className={styles.sliderindex}><span>층 수</span><span>{floorrange[0]==0?"반지하":floorrange[0]==10?"옥상":floorrange[0]}{'층'}~{floorrange[1]==0?"반지하":floorrange[1]==10?"옥상":floorrange[1]}{'층'}</span></div>
               <Slider
                 vertical
                 range
