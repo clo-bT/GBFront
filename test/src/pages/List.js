@@ -1,20 +1,24 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import styles from "../components/Gbb.module.css";
+import gbbListStyles from "../components/GbbList.module.css";
 import axios from "axios";
 
 const List = ({ imageList }) => {
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
+    const [hashtag, setHashtag] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
     const [responseArticleId, setResponseArticleId] = useState([]); // 응답으로 받은 article_id
     const [userid, setUserid] = useState("");
+
     useEffect(() => {
-      const member = JSON.parse(sessionStorage.getItem("member"));
-      const useruuid = member.id;
-      setUserid(useruuid);
+        const member = JSON.parse(sessionStorage.getItem("member"));
+        const useruuid = member.id;
+        setUserid(useruuid);
     }, [setUserid]);
+
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_ROOT}/showroom`
         ).then((response) => {
@@ -23,7 +27,8 @@ const List = ({ imageList }) => {
         }).catch((error) => {
             console.log(error)
         })
-    },[])
+    }, [])
+
     const handleSearch = async () => {
         const ShowRoomSearchRequestDto = {
             "memberId": userid,
@@ -33,7 +38,7 @@ const List = ({ imageList }) => {
             "sortType": 'desc',
             "pageOffset": 0
         }
-        axios.post(`${process.env.REACT_APP_API_ROOT}/showroom/search-result`,ShowRoomSearchRequestDto
+        axios.post(`${process.env.REACT_APP_API_ROOT}/showroom/search-result`, ShowRoomSearchRequestDto
         ).then((response) => {
             console.log(response.data)
         }).catch((error) => {
@@ -41,72 +46,124 @@ const List = ({ imageList }) => {
         })
     }
 
+    function handleStar(roomDealid) {
+        const StarRoomDealDeleteRequestDto = {
+            memberId: userid,
+            roomDealId: roomDealid,
+        };
 
+        axios
+            .delete(`${process.env.REACT_APP_API_ROOT}/star/delete`, {
+                data: StarRoomDealDeleteRequestDto,
+            })
+            .then((response) => {
+                console.log(response.data.data);
+            })
+            .catch((error) => {
+                console.error("API 호출 에러:", error);
+            })
+            .then(window.location.reload());
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            const value = event.target.value.trim();
+            if (hashtag.trim() !== "" && !selectedTags.includes("#" + value)) {
+                setSelectedTags([...selectedTags, "#" + hashtag]);
+                setHashtag("");
+            } else {
+                event.preventDefault(); // 기본 동작 방지하여 커서가 입력창에 남아있게 함
+                event.target.value = ""; // 이미 있는 해시태그나 유효하지 않은 입력일 경우 입력창 비우기
+            }
+        }
+    };
+
+    const handleHashtagChange = (event) => {
+        setHashtag(event.target.value);
+    };
+
+    const handleDeleteTag = (id) => {
+        setSelectedTags(selectedTags.filter((_, index) => index !== id));
+    };
 
     return (
         <div>
             <Header />
-            <div className={styles.gbblist}>
-                <div className={styles.header}>
-                    <div className={styles.h1}>
-                        당신의 <span className={styles.h2}>곰방</span>을
-                        보여주세요.
-                    </div>
+            <div className={gbbListStyles.gbbListBody}>
+                <div className={gbbListStyles.gbbListTop}>
+                    {/* 당신의 곰방을 보여달라 */}
+                    <div className={gbbListStyles.showMeTheGbbList}>
+                        당신의
+                        <span className={gbbListStyles.showMeTheGbbListBold}> 곰방</span>을
+                        보여주세요
+                    </div >
                     <div>
-                        <button
-                            onClick={() => navigate("/gbbcreate")}
-                            className={styles.plusbutton}
-                        >
-                            +
-                        </button>
+                        <button onClick={() => navigate("/gbbcreate")}
+                            className={gbbListStyles.uploadBtn}>+</button>
                     </div>
                 </div>
-                <div className={styles.search}>
-                    <div className={styles.inputbox}>
-                        <div>
+                {/* 검색창 */}
+                <div className={gbbListStyles.gbbListMid}>
+                    <div className={gbbListStyles.gbbListMidItem}>
+                        <input
+                            className={gbbListStyles.gbbListMidInput}
+                            value={searchText}
+                            onChange={(event) =>
+                                setSearchText(event.target.value)
+                            }
+                            placeholder="보고 싶은 지역을 입력하세요"
+                        />
+                    </div>
+                    <div className={gbbListStyles.gbbListMidItem}>
+                        <div className={gbbListStyles.hashTagInputMargin}>
                             <input
-                                className={styles.searchbox}
-                                value={searchText}
-                                onChange={(event) =>
-                                    setSearchText(event.target.value)
-                                }
-                                placeholder="보고싶은 지역을 입력하세요."
+                                type="text"
+                                className={gbbListStyles.gbbListMidInput}
+                                value={hashtag}
+                                onKeyDown={handleKeyDown}
+                                onChange={handleHashtagChange}
+                                placeholder="해시태그를 입력하세요"
                             />
                         </div>
-                        <div>
+                        <div className={gbbListStyles.tagList}>
                             {selectedTags.map((tag, index) => (
-                                <span className={styles.tag} key={index}>
+                                <span className={gbbListStyles.tagListItem} key={index}
+                                    onClick={() => handleDeleteTag(index)}>
                                     {tag}
                                 </span>
                             ))}
                         </div>
-                        <div>
-                            <input
-                                className={styles.searchbox}
-                                value={selectedTags}
-                                onChange={(event) =>
-                                    setSelectedTags(
-                                        event.target.value.split(",")
-                                    )
-                                }
-                                placeholder="해시태그를 입력하세요."
-                            />
-                        </div>
                     </div>
-                    <div>
-                        <button onClick={handleSearch}>검색</button>
+                    <div className={gbbListStyles.gbbListMidItem}>
+                        <button onClick={handleSearch} className={gbbListStyles.gbbSearchBtn}>검색</button>
                     </div>
                 </div>
-                {responseArticleId.map((value, index) => (
-                    <div key={index}>
-                        <div>구분용 인덱스 : {index}</div>
-                    <div>곰방봐 id : {value.id}</div>
-                    <div>매물번호 : {value.roomDeal.id}</div>
-                    <div>곰방봐 썸네일 : {value.thumbnail}</div>
-                    <div>곰방봐 썸네일 : {value.thumbnail}</div>
-                  </div>
-                ))
-                }
+                <div className={gbbListStyles.gbbListBottom}>
+                    {/* 사진 Grid 3*X */}
+                    <div className={gbbListStyles.imageContainer}>
+                        {responseArticleId.map((value, id) => (
+                            // <div key={index}>
+                            //     <div>구분용 인덱스 : {index}</div>
+                            //     <div>곰방봐 id : {value.id}</div>
+                            //     <div>매물번호 : {value.roomDeal.id}</div>
+                            //     <div>곰방봐 썸네일 : {value.thumbnail}</div>
+                            // </div>
+                            <div key={id} className={gbbListStyles.imageGridItem}>
+                                <img
+                                    src={value.thumbnail}
+                                    alt={`${value}-${id}`}
+                                    className={gbbListStyles.showRoomImg}
+                                />
+                                <div
+                                    className={gbbListStyles.heartBtn}
+                                    onClick={() => handleStar(value.roomDeal.id)}
+                                >
+                                    ♥
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
