@@ -1,10 +1,15 @@
 import axios from "axios";
 import React, { useState,useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 
 const GbbDetail = () => {
+  const navigate = useNavigate();
+
     const [userid, setUserid] = useState("");
+    const [roomDealId, setRoomDealId] = useState("");
+    const [gbbdata, setGbbdata] = useState([]);
     const { articleId } = useParams();
     // showroom/{articleId}
     useEffect(() => {
@@ -14,15 +19,37 @@ const GbbDetail = () => {
       }, [setUserid]);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_ROOT}/showroom/${articleId}`
+        const showRoomDetailRequestDto = {
+            memberId: userid,
+            showRoomId:articleId
+        }
+        axios.post(`${process.env.REACT_APP_API_ROOT}/showroom/detail`,showRoomDetailRequestDto
         ).then((response) => {
-            console.log(response.data)
+            console.log(response.data.data)
+            setGbbdata(response.data.data)
+            const data = response.data.data.showRoom
+            setRoomDealId(data.roomDeal.id)
         }).catch((error) => {
             console.log(error)
         })
-    })
+    }, [userid, articleId])
+
+    function handleOnClick(id) {
+        navigate(`/roomdetail/${id}`)
+    }
     return (
-        <div>여긴 방꾸 디테일</div>
+        <div>
+            <Header />
+            {gbbdata ? (
+                <div>
+                    <div>{ gbbdata.CheckLike }</div>
+                    <div>{ gbbdata.fileUrls }</div>
+                    <div>{ gbbdata.hashTag }</div>
+                    <button onClick={()=>handleOnClick(roomDealId)}>매물로 이동하기</button>
+                </div>
+            ):<div>로딩중</div>}
+            
+        </div>
     )
 }
 export default GbbDetail;

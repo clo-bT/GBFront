@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/map" element={<Map />} />
           <Route path="/map/:word/:lat/:lon" element={<Map />} />
           <Route path="/gbblist" element={<GbbList imageList={imageList} />} />
-          <Route path="/gbblist/:{articleId} " element={<GbbDetail/>} />
+          <Route path="/gbblist/:articleId" element={<GbbDetail/>} />
           <Route path="/gbbcreate" element={<GbbCreate onImageUpload={handleImageUpload} />} />
           <Route path="/zzim" element={<Zzimlist />} />
           <Route path="/roomout" element={<Roomout />} />
