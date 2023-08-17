@@ -537,17 +537,15 @@ const RtcRoom = () => {
                 </div>
               </div>
 
-              <a href="/">
-                <button
-                  type="button"
-                  className="btn btn-outline-danger"
-                  id="exit"
-                  name="exit"
-                  onClick={() => exitLive()}
-                >
-                  Exit Room
-                </button>
-              </a>
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                id="exit"
+                name="exit"
+                onClick={() => exitLive()}
+              >
+                Exit Room
+              </button>
             </div>
           </div>
         </div>
