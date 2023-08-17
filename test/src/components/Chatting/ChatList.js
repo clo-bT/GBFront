@@ -72,12 +72,12 @@ const ChatList = () => {
               <div key={ChatRoom.id} className={styles.chatlistnickname}>
                 {ChatRoom.grantorId !== useruuid ? (
                   <label onClick={() => enterChatRoom(ChatRoom)}>
-                    {ChatRoom.grantorId.nickname} 님과의 대화
+                    <div>{ChatRoom.grantorId.nickname} 님과의 대화</div>
                     <div className={styles.entering}>입장하기</div>
                   </label>
                 ) : (
                   <label onClick={() => enterChatRoom(ChatRoom)}>
-                    {ChatRoom.assignee.nickname} 님과의 대화
+                    <div>{ChatRoom.assignee.nickname} 님과의 대화</div>
                     <div className={styles.entering}>입장하기</div>
                   </label>
                 )}
