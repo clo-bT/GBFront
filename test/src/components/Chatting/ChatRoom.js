@@ -109,8 +109,8 @@ const ChatRoom = () => {
     setMessages((prevMessages) => [...prevMessages, chat]);
   }
   function enterLive() {
-    // if (isGrantor === "true") navigate(`/rtcroom/grantor/${id}/${roomDealId}`);
-    if (isGrantor === "true") navigate(`/rtcroom/qr/${id}/${roomDealId}`);
+    if (isGrantor === "true") navigate(`/rtcroom/grantor/${id}/${roomDealId}`);
+    // if (isGrantor === "true") navigate(`/rtcroom/qr/${id}/${roomDealId}`);
     else navigate(`/rtcroom/assignee/${id}/${roomDealId}`);
     // navigate(`/rtcroom/${room_id}/${roomDealId}`);
   }
@@ -129,14 +129,14 @@ const ChatRoom = () => {
               {/* {console.log(chat)} */}
               {chat.sender !== useruuid ? (
                 <div className={styles.yourchatbox}>
-                  <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                  <span className={styles.yourballoon}>{chat.message}</span>
                   <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
                 </div>
               ) : (
                 // 보낸 사람이 나
                 <div className={styles.mychatbox}>
                   <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
-                  <span className={styles.myballoon}>나: {chat.message}</span>
+                  <span className={styles.myballoon}> {chat.message}</span>
                 </div>
               )}
             </div>
