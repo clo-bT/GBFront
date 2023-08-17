@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
-import styles from "../components/Gbb.module.css";
 import gbbListStyles from "../components/GbbList.module.css";
 import axios from "axios";
 
@@ -12,6 +11,8 @@ const List = ({ imageList }) => {
     const [selectedTags, setSelectedTags] = useState([]);
     const [responseArticleId, setResponseArticleId] = useState([]); // 응답으로 받은 article_id
     const [userid, setUserid] = useState("");
+    const [nearsearch, setNearsearch] = useState([]);
+    const [length, setLength] = useState([]);
 
     useEffect(() => {
         const member = JSON.parse(sessionStorage.getItem("member"));
@@ -46,15 +47,16 @@ const List = ({ imageList }) => {
         })
     }
 
-    function handleStar(roomDealid) {
-        const StarRoomDealDeleteRequestDto = {
+    function handleLike(showRoomId) {
+        const LikeShowRoomRegisterRequestDto = {
             memberId: userid,
-            roomDealId: roomDealid,
+            showRoomId: showRoomId,
         };
 
+        // 좋아요 체크하고 보내야 함
         axios
             .delete(`${process.env.REACT_APP_API_ROOT}/star/delete`, {
-                data: StarRoomDealDeleteRequestDto,
+                data: LikeShowRoomRegisterRequestDto,
             })
             .then((response) => {
                 console.log(response.data.data);
@@ -64,6 +66,46 @@ const List = ({ imageList }) => {
             })
             .then(window.location.reload());
     }
+
+    const handleSearchRelated = () => {
+        const SearchRelatedListRequestDto = {
+            "searchWord": searchText
+        }
+
+        console.log(searchText)
+
+        axios.post(`${process.env.REACT_APP_API_ROOT}/roomdeal/search-related-list`, SearchRelatedListRequestDto
+        ).then((response) => {
+            console.log(response)
+            setNearsearch(response.data.data)
+            setLength(response.data.data)
+        }).catch((error) => {
+            console.error('API 호출 에러:', error);
+        });
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearchRelated();
+            e.preventDefault();
+        }
+    };
+
+    function handleOnClick(word, type, lat, lon) {
+        if (type === 'address') {
+            localStorage.setItem('searchloc', word)
+            navigate(`/map/${word}/${"lat"}/${"lon"}`)
+        }
+        else if (type === 'station' || type === 'univ') {
+            navigate(`/map/${"word"}/${lat}/${lon}`)
+        }
+    };
+
+    const handleXClick = () => {
+        setSearchText("");
+        setNearsearch([])
+        setLength([])
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
@@ -111,8 +153,30 @@ const List = ({ imageList }) => {
                             onChange={(event) =>
                                 setSearchText(event.target.value)
                             }
+                            onKeyDown={handleKeyPress}
                             placeholder="보고 싶은 지역을 입력하세요"
                         />
+                        <div className={gbbListStyles.gbbXBtnDiv}>
+                            <button className={gbbListStyles.gbbXBtn} onClick={() => handleXClick()}>X</button>
+                        </div>
+                        <div className={gbbListStyles.searchResultScroll}>
+                            <div className={gbbListStyles.searchResultFlex}>
+                                {length.length > 0 ? (
+                                    <>
+                                        {
+                                            nearsearch.map((value, index) => (
+                                                <div key={index} className={gbbListStyles.searchResultDiv}>
+                                                    <div onClick={() => handleOnClick(value.searchWord, value.searchType, value.lat, value.lon)}>{value.searchWord}</div>
+                                                </div>
+                                            ))
+                                        }
+                                    </>
+                                ) : null}
+                                {length.length === 0 && searchText.length > 1 ? (
+                                    <div className={gbbListStyles.searchResultDiv}>검색결과가 없습니다.</div>
+                                ) : null}
+                            </div>
+                        </div>
                     </div>
                     <div className={gbbListStyles.gbbListMidItem}>
                         <div className={gbbListStyles.hashTagInputMargin}>
@@ -154,12 +218,26 @@ const List = ({ imageList }) => {
                                     alt={`${value}-${id}`}
                                     className={gbbListStyles.showRoomImg}
                                 />
-                                <div
-                                    className={gbbListStyles.heartBtn}
-                                    onClick={() => handleStar(value.roomDeal.id)}
-                                >
-                                    ♥
-                                </div>
+                                {
+                                    value.checkLike ?
+                                        <>
+                                            <div
+                                                className={gbbListStyles.heartBtn}
+                                                onClick={() => handleLike(value.id)}
+                                            >
+                                                ♥
+                                            </div>
+                                        </>
+                                        :
+                                        <>
+                                            <div
+                                                className={gbbListStyles.notHeartBtn}
+                                                onClick={() => handleLike(value.id)}
+                                            >
+                                                ♥
+                                            </div>
+                                        </>
+                                }
                             </div>
                         ))}
                     </div>
