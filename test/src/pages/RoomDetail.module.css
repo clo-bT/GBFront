@@ -1,5 +1,9 @@
+hr {
+  margin: 0;
+}
+
 .content {
-  margin: auto 100px;
+  margin: auto 250px;
 }
 
 .swiper {
@@ -18,8 +22,8 @@
 }
 
 .swiperImg {
-  width: 600px;
-  height: 380px;
+  width: 450px;
+  height: 280px;
 }
 
 .detail {
@@ -29,12 +33,12 @@
 }
 
 .contentTab:first-child {
-  flex-grow: 6;
-  margin-right: 100px;
+  flex-grow: 10;
+  margin-right: 50px;
 }
 
 .contentTab:last-child {
-  flex-grow: 1;
+  flex-grow: 0;
 }
 
 .contentDetail {
@@ -76,6 +80,11 @@
   text-align: center;
 }
 
+.roomOptionImg {
+  width: 50px;
+  height: 50px;
+}
+
 .contentDetailRoadAddress {
   font-weight: normal;
   font-size: 20px;
@@ -83,7 +92,7 @@
 
 .fixedTab {
   position: sticky;
-  padding: 0px 20px;
+  padding: 0px 15px;
   border: 3px solid;
   border-color: #c7ad92;
   border-radius: 10px;
@@ -128,6 +137,11 @@
 
 .fixedIntoGridImg {
   margin-right: 20px;
+}
+
+.fixedIntoGridImgSize {
+  width: 40px;
+  height: 40px;
 }
 
 .fixedInfoBottomTab {
