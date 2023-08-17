@@ -9,15 +9,13 @@ import GbbCreate from "./pages/Create";
 import ChatRoom from "./components/Chatting/ChatRoom";
 import ChatList from "./components/Chatting/ChatList";
 import AssigneeRtcRoom from "./components/Rtc/AssigneeRtcRoom";
-import RtcRoom from "./components/Rtc/RtcRoom";
 import GrantorRtcRoom from "./components/Rtc/GrantorRtcRoom";
 import Main from "./pages/Main";
 import Auth from "./pages/Auth";
-import RtcRoomQR from "./components/Rtc/RtcRoomQR";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import RoomDetail from "./pages/RoomDetail";
+import RoomList from "./components/Maps/RoomList";
 
 const App = () => {
   const [imageList, setImageList] = useState([]);
@@ -30,7 +28,8 @@ const App = () => {
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/map" element={<Map />} />
+          {/* <Route path="/map" element={<Map />} /> */}
+          <Route path="/map/:word/:lat/:lon" element={<Map />} />
           <Route path="/gbblist" element={<GbbList imageList={imageList} />} />
           <Route path="/gbbcreate" element={<GbbCreate onImageUpload={handleImageUpload} />} />
           <Route path="/zzim" element={<Zzimlist />} />
@@ -41,10 +40,8 @@ const App = () => {
           {/* <Route path="/test" element={<TestApp />} /> */}
           <Route path="/chatroom/:isGrantor/:id/:roomDealId" element={<ChatRoom />} />
           <Route path="/chatlist" element={<ChatList />} />
-          <Route path="/rtcroom/:id/:roomDealId" element={<RtcRoom />} />
           <Route path="/rtcroom/grantor/:id/:roomDealId" element={<GrantorRtcRoom />} />
           <Route path="/rtcroom/assignee/:id/:roomDealId" element={<AssigneeRtcRoom />} />
-          <Route path="/rtcroom/qr/:id/:roomDealId" element={<RtcRoomQR />} />
         </Routes>
       </div>
     </BrowserRouter>
