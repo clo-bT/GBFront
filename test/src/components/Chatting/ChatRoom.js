@@ -17,7 +17,6 @@ const ChatRoom = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [previousmessage, setPreviousmessage] = useState([]);
-  const [connecting, setConnecting] = useState(true);
 
   useEffect(() => {
     // const userid = JSON.parse(sessionStorage.getItem("member")).id;
@@ -109,8 +108,8 @@ const ChatRoom = () => {
     setMessages((prevMessages) => [...prevMessages, chat]);
   }
   function enterLive() {
-    // if (isGrantor === "true") navigate(`/rtcroom/grantor/${id}/${roomDealId}`);
-    if (isGrantor === "true") navigate(`/rtcroom/qr/${id}/${roomDealId}`);
+    if (isGrantor === "true") navigate(`/rtcroom/grantor/${id}/${roomDealId}`);
+    // if (isGrantor === "true") navigate(`/rtcroom/qr/${id}/${roomDealId}`);
     else navigate(`/rtcroom/assignee/${id}/${roomDealId}`);
     // navigate(`/rtcroom/${room_id}/${roomDealId}`);
   }
@@ -120,13 +119,31 @@ const ChatRoom = () => {
       <div className={styles.chatlist}>
         <ChatList />
       </div>
-      <button onClick={() => enterLive()}>화상채팅하기</button>
-      <div className={styles.chatballoon}>
-        {previousmessage &&
-          previousmessage.map((chat) => (
+      <div className={styles.ChatContent}>
+        <button onClick={() => enterLive()}>화상채팅하기</button>
+        <div className={styles.chatballoon}>
+          {previousmessage &&
+            previousmessage.map((chat) => (
+              <div key={chat.sender + chat.time} className={styles.chatmessage}>
+                {/* 보낸 사람이 상대방 */}
+                {/* {console.log(chat)} */}
+                {chat.sender !== useruuid ? (
+                  <div className={styles.yourchatbox}>
+                    <span className={styles.yourballoon}>상대방: {chat.message}</span>
+                    <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
+                  </div>
+                ) : (
+                  // 보낸 사람이 나
+                  <div className={styles.mychatbox}>
+                    <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
+                    <span className={styles.myballoon}>나: {chat.message}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          {messages.map((chat) => (
             <div key={chat.sender + chat.time} className={styles.chatmessage}>
               {/* 보낸 사람이 상대방 */}
-              {/* {console.log(chat)} */}
               {chat.sender !== useruuid ? (
                 <div className={styles.yourchatbox}>
                   <span className={styles.yourballoon}>상대방: {chat.message}</span>
@@ -141,38 +158,22 @@ const ChatRoom = () => {
               )}
             </div>
           ))}
-        {messages.map((chat) => (
-          <div key={chat.sender + chat.time} className={styles.chatmessage}>
-            {/* 보낸 사람이 상대방 */}
-            {chat.sender !== useruuid ? (
-              <div className={styles.yourchatbox}>
-                <span className={styles.yourballoon}>상대방: {chat.message}</span>
-                <span className={styles.yourballoontime}>{formatTime(chat.time)}</span>
-              </div>
-            ) : (
-              // 보낸 사람이 나
-              <div className={styles.mychatbox}>
-                <span className={styles.myballoontime}>{formatTime(chat.time)}</span>
-                <span className={styles.myballoon}>나: {chat.message}</span>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+        </div>
 
-      {/* --------------- 메세지 입력하는 부분 ------------ */}
-      <div className={styles.sendmessage}>
-        <form id="messageForm">
-          <input
-            id="message"
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button type="submit" onClick={sendMessage}>
-            Send
-          </button>
-        </form>
+        {/* --------------- 메세지 입력하는 부분 ------------ */}
+        <div className={styles.sendmessage}>
+          <form id="messageForm">
+            <input
+              id="message"
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button type="submit" onClick={sendMessage}>
+              Send
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
