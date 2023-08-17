@@ -11,21 +11,36 @@ export default function Zimlist() {
         const member = JSON.parse(sessionStorage.getItem("member"));
         const useruuid = member.id
         setUserid(useruuid);
-        axios.post(`${process.env.REACT_APP_API_ROOT}/star/my-list/${userid}`
-        ).then((response) => {
-            console.log(response.data.data)
-            SetStarroomDeal(response.data.data.starRoomDealList.roomDeal)
-        }).catch((error) => {
-          console.error('API 호출 에러:', error);
-        });
+    },[])
+    useEffect(() => {
+        if (userid) {
+            axios.get(`${process.env.REACT_APP_API_ROOT}/star/my-list/${userid}`
+            ).then((response) => {
+                console.log(response.data)
+                SetStarroomDeal(response.data.data.starRoomDealList)
+            }).catch((error) => {
+                console.error('API 호출 에러:', error);
+            });
+        }
     },[userid])
     return (
         <div>
             <Header/>
             <div className="zzimlist">
-                <div>{ starroomDeal.id }</div>
-                <div>{ starroomDeal.member.name}</div>
-                <div>{ starroomDeal.roadAddress}</div>
+                <div>{starroomDeal.length > 0 ? (
+                    starroomDeal.map((data, index) => (
+                        <div key={index}>
+                            <div>{data.roomDeal.id}</div>
+                            <div>{data.roomDeal.station}</div>
+                            <div>{data.roomDeal.monthlyFee}</div>
+                            <div>{data.roomDeal.moveInDate}</div>
+                            <div>{data.roomDeal.roadAddress}</div>
+                            <div>{data.roomDeal.registerTime}</div>
+                        </div>
+                    ))
+                ) : (
+                        <div>찜 목록이 없습니다. </div>
+                )}</div>
             </div>
         </div>
         
