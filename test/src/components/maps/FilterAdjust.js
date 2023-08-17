@@ -4,56 +4,68 @@ import Slider from "rc-slider";
 import { useState } from "react";
 const FilterAdjust = () => {
   const roomTypelist = ['원룸','빌라','오피스텔','아파트']
-  const roomstructurelist = ['오픈형','분리형','복층','투룸','쓰리룸 이상']
-  const floorlist = ['1-3층','4-6층','7-9층','10층 이상','반지층','옥탑방']
-  const genderlist = ['상관 없음','동성 매물만']
-  const addtionaloptionlist = ['에어컨','냉장고','세탁기','싱크대','옷장','가스레인지','신발장','화재경보기','엘리베이터','주차가능','건조기']
   const [type, setType] = useState(roomTypelist);
+  const roomstructurelist = ['오픈형','분리형','복층','투룸','쓰리룸 이상']
   const [structure, setStructure] = useState(roomstructurelist)
-  const [floor, setFloor] = useState(floorlist)
-  const [gender, setGender] = useState(['상관 없음'])
-  const [additionaloption, setAdditionaloption] = useState([])
+  
+  const addtionaloptionlist = ['에어컨','냉장고','세탁기','싱크대','옷장','가스레인지','신발장','화재경보기','엘리베이터','주차가능','건조기']
+  const addtionaloptionENGlist = ['airConditioner','refrigerator','washer','sink','closet','gasRange','shoeCloset','fireAlarm','elevator','parkingLot','dryer']
 
+
+  /*boolean값은 localstorage에 저장할 때 string으로 바뀌어서 JSON.parse로 다시 값을 읽어줌 */
+  const [additionaloption, setAdditionaloption] = useState(addtionaloptionlist.filter((value,index)=>JSON.parse(localStorage.getItem(addtionaloptionENGlist[index]))))
   const handleClickTypeButton = (e) => {
     if(type.includes(e.target.id)){setType(type.filter((element)=>element!==e.target.id))}
     else{setType([...type,e.target.id])}
+    localStorage.setItem('roomType',type)
   };
-  const handleClickGenderButton = (e) => {
-    if(gender.includes(e.target.id)){setGender(gender.filter((element)=>element!==e.target.id))}
-    else{setGender([...gender,e.target.id])}
-  };
+
   const handleClickStructureButton = (e) => {
     if(structure.includes(e.target.id)){setStructure(structure.filter((element)=>element!==e.target.id))}
     else{setStructure([...structure,e.target.id])}
+    localStorage.setItem('oneroomType', structure)
   };
-  const handleClickFloorButton = (e) => {
-    if(floor.includes(e.target.id)){setFloor(floor.filter((element)=>element!==e.target.id))}
-    else{setFloor([...floor,e.target.id])}
-  };
+
   const handleClickAdditionaloptionButton = (e) => {
     if(additionaloption.includes(e.target.id)){setAdditionaloption(additionaloption.filter((element)=>element!==e.target.id))}
     else{setAdditionaloption([...additionaloption,e.target.id])}
+    addtionaloptionENGlist.map((value)=>{
+      localStorage.setItem(value,false)
+    })
+    additionaloption.map((value)=>{
+      localStorage.setItem(addtionaloptionENGlist[addtionaloptionlist.indexOf(value)],true)
+    })
   };
   
   const [floorrange,setFloorrange] = useState([0,10])
   const handleFloorrangeChange = (e) => {
     setFloorrange(e)
+    localStorage.setItem('startFloor',floorrange[0])
+    localStorage.setItem('endFloor',floorrange[1])
   }
   const [depositrange,setDepositrange] = useState([0,10090])
   const handleDepositrangeChange = (e) => {
     setDepositrange(e)
+    localStorage.setItem('startDeposit',depositrange[0])
+    localStorage.setItem('endDeposit',depositrange[1])
   }
   const [monthlyfeerange,setMonthlyfeerange] = useState([0,121])
   const handleMonthlyfeerangeChange = (e) => {
     setMonthlyfeerange(e)
+    localStorage.setItem('startMonthlyFee',monthlyfeerange[0])
+    localStorage.setItem('endMonthlyFee',monthlyfeerange[1])
   }
   const [maintenancefeerange,setMaintenancefeerange] = useState([0,50.5])
   const handleMaintenancefeerangeChange = (e) => {
     setMaintenancefeerange(e)
+    localStorage.setItem('startManagementFee',maintenancefeerange[0])
+    localStorage.setItem('endManagementFee',maintenancefeerange[1])
   }
   const [roomsizerange,setRoomsizerange] = useState([0,200])
   const handleRoomsizerangeChange = (e) => {
     setRoomsizerange(e)
+    localStorage.setItem('startRoomSize',roomsizerange[0])
+    localStorage.setItem('endRoomSize',roomsizerange[1])
   }
   const addComma = (price) => {
     let returnString = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -153,37 +165,6 @@ const FilterAdjust = () => {
                 />
             </div>
           </div>
-          
-          {/* <div className={styles.container} id="roomfloor">
-          <div className={styles.headline}>층 수</div>
-          <div className={styles.subheadline}>중복선택이 가능합니다.</div>
-          <div className={styles.optionbody}>
-            <label className={styles.roomoption} htmlFor='roomfloor_total' onClick={()=>{if(floor.length!==floorlist.length){setFloor([...floorlist])}else{setFloor([])}}} id='roomfloor_total'>
-              <input 
-                type="checkbox"
-                className={styles.mycheckbox}
-                key={floor.length===floorlist.length}
-                id='roomfloor_total'
-                onChange={()=>{if(floor.length!==floorlist.length){setFloor([...floorlist])}else{setFloor([])}}}
-                checked={floor.length===floorlist.length} 
-              />
-              전체
-            </label>
-            {floorlist.map((value,index) => (
-            <label key={index} className={styles.roomoption} htmlFor={value} onClick={handleClickFloorButton} id={value}>
-              <input 
-                type="checkbox"
-                className={styles.mycheckbox}
-                key={floor.includes(value)}
-                id={value}
-                onChange={handleClickFloorButton}
-                checked={floor.includes(value)} 
-                />
-                {value}
-              </label>
-              ))}
-          </div>
-          </div> */}
         </div>
 
         {/*framechild2*/}
@@ -271,26 +252,7 @@ const FilterAdjust = () => {
                   200: <span style={{ whiteSpace: 'nowrap', display: 'inline-block', textAlign: 'right' }}>무제한</span>
                 }}
                 />
-            </div>
-            {/* <div className={styles.gender}>
-              <div className={styles.headline}>성별</div>
-              <div className={styles.FrameChild}>
-              {genderlist.map((value,index) => (
-                <label key={index} className={styles.roomoption} htmlFor={value} onClick={handleClickGenderButton} id={value}>
-                <input 
-                  type="checkbox"
-                  className={styles.mycheckbox}
-                  key={gender.includes(value)}
-                  id={value}
-                  onChange={handleClickGenderButton}
-                  checked={gender.includes(value)} 
-                  />
-                  {value}
-                </label>
-                ))}
-              </div>
-            </div> */}
-          
+            </div>        
           </div>
         </div>
 
