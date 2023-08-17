@@ -2,6 +2,26 @@
   margin: auto 100px;
 }
 
+.swiper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+.swiperSlide {
+  text-align: center;
+  background-position: center;
+  background-size: cover;
+}
+
+.swiperImg {
+  width: 500px;
+  height: 300px;
+}
+
 .detail {
   margin: 50px auto;
   display: flex;
@@ -9,8 +29,8 @@
 }
 
 .contentTab:first-child {
-  flex-grow: 1.2;
-  padding-right: 100px;
+  flex-grow: 3;
+  margin-right: 100px;
 }
 
 .contentTab:last-child {
@@ -62,8 +82,8 @@
 }
 
 .fixedTab {
-  position: fixed;
-  padding: 0px 10px;
+  position: sticky;
+  padding: 0px 20px;
   border: 3px solid;
   border-color: #c7ad92;
   border-radius: 10px;
@@ -72,15 +92,28 @@
 
 .fixedInfo {
   display: flex;
-  padding: 20px 15px;
+  justify-content: space-between;
+  padding: 10px 0px;
 }
 
 .fixedInfoNotFlex {
-  padding: 20px 15px;
+  padding: 10px 0px;
 }
 
 .fixedTopInfoRight {
   text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.fixedTopInfoItem {
+  flex-grow: 1 1;
+}
+
+.moveToShowRoom {
+  display: flex;
+  align-items: center;
 }
 
 .fixedInfoGrid {
@@ -88,13 +121,30 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+.fixedInfoGridItem {
+  display: flex;
+  align-items: center;
+}
+
+.fixedIntoGridImg {
+  margin-right: 20px;
+}
+
 .fixedInfoBottomTab {
   display: flex;
   justify-content: center;
-  padding: 20px 15px;
+  padding: 10px 0px 20px;
 }
 
-.chatButton {
+.fixedInfoBottomBtn {
   padding: 5px 30px;
   border-radius: 15px;
+}
+
+.fixedInfoBottomBtn:first-child {
+  margin-right: 30px;
+}
+
+.moveToShowRoomLink {
+  color: black;
 }
