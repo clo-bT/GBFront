@@ -26,23 +26,23 @@ const RoomListItem = (props) => {
         }
     },[roominfo])
     
-    function getdatesyrializer(dateString) {
-        const inputDate = new Date(dateString);
-        const currentDate = new Date();
+    // function getdatesyrializer(dateString) {
+    //     const inputDate = new Date(dateString);
+    //     const currentDate = new Date();
     
-        const timeDifference = currentDate - inputDate;
-        const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    //     const timeDifference = currentDate - inputDate;
+    //     const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
         
-        if (daysDifference === 0) {
-            return '오늘';
-        } else if (daysDifference === 1) {
-            return '하루전';
-        } else if (daysDifference === 2) {
-            return '이틀전';
-        } else {
-            return `${daysDifference}일전`;
-        }
-    }
+    //     if (daysDifference === 0) {
+    //         return '오늘';
+    //     } else if (daysDifference === 1) {
+    //         return '하루전';
+    //     } else if (daysDifference === 2) {
+    //         return '이틀전';
+    //     } else {
+    //         return `${daysDifference}일전`;
+    //     }
+    // }
 
     function getlocationserializer(fulllocation) {
         if (typeof(fulllocation)==='string'){ 
@@ -75,8 +75,8 @@ const RoomListItem = (props) => {
                     <span className={styles.roomprice}>월세 {roominfo.roomDeal.deposit}/{roominfo.roomDeal.monthlyFee}</span>
                     <span className={styles.roomsize}>{(roominfo.roomDeal.roomSize)*3.306}m<sup>2</sup>({roominfo.roomDeal.roomSize} 평) {roominfo.roomDeal.floor}층</span>
                     <span className={styles.roomlocate}>{getlocationserializer(roomlocate)}</span>
-                    <span className={styles.roomdescription}>{roominfo.roomDeal.content}</span>
-                    <span className={styles.roomdate}>{getdatesyrializer(roomuptime)}</span>
+                    {/* <span className={styles.roomdescription}>{roominfo.roomDeal.content}</span> */}
+                    {/* <span className={styles.roomdate}>{getdatesyrializer(roomuptime)}</span> */}
                 </div>
             </div>
         : 
