@@ -79,10 +79,16 @@ export default function Roomout() {
     };
 
     const [selectedImages, setSelectedImages] = useState([]);
+    const [imageSrc, setImageSrc] = useState([]);
+    
     const handleImageChange = (event) => {
+        
         const files = event.target.files;
+
+        const imagepreview = URL.createObjectURL(files[0]);
+        setImageSrc([...imageSrc, imagepreview])
+        
         setSelectedImages([...selectedImages, ...files]);
-        console.log(selectedImages)
     };
     const checkBoxList = ['에어컨', '냉장고', '세탁기', '건조기', '싱크대', '가스레인지', '장롱', '신발장', '화재경보기'];
     const [checkedList, setCheckedList] = useState([]);
@@ -159,7 +165,7 @@ const onRealSubmit = useCallback(async (e) => {
     }
     const roomDealRegisterRequestDto = {
             "roomDealRegisterDefaultDto": {
-                'id': userid,
+                'memberId': userid,
                 "roomType": info,
                 "roomSize": pyeong,
                 "roomCount": roomCount,
@@ -366,7 +372,10 @@ const onRealSubmit = useCallback(async (e) => {
         });
     }
     //-------------------------------------------------------------------------------------------------------------------
-    
+    const handleDeleteImage = (id) => {
+        setSelectedImages(selectedImages.filter((_, index) => index !== id));
+        setImageSrc(imageSrc.filter((_, index) => index !== id));
+        };
     
     return (
         <div>
@@ -479,6 +488,7 @@ const onRealSubmit = useCallback(async (e) => {
                         <div>
                             <h3 className={styles.h3_title}>입주 가능 일자</h3>
                                 <DatePicker
+                                    className={styles.datepicker}
                                     showIcon
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
@@ -493,6 +503,7 @@ const onRealSubmit = useCallback(async (e) => {
                         <div>
                             <h3 className={styles.h3_title}>계약 만료 일자</h3>
                             <DatePicker
+                                    className={styles.datepicker}
                                     showIcon
                                     selected={endDate}
                                     onChange={(date) => setEndDate(date)}
@@ -507,6 +518,7 @@ const onRealSubmit = useCallback(async (e) => {
                         <div>
                             <h3 className={styles.h3_title}>사용 승인일</h3>
                             <DatePicker
+                                className={styles.datepicker}
                                 showIcon
                                 selected={approveDate}
                                 onChange={(date) => setApproveDate(date)}
@@ -577,14 +589,15 @@ const onRealSubmit = useCallback(async (e) => {
                     <form className={styles.option} onSubmit={onSubmit}>
                         <div className={styles.checkboxgroup}>
                             {checkBoxList.map((item, idx) => (
-                                <div className={styles.checkbox} key={idx}>
+                                <div className={styles.checkdiv} key={idx}>
                                     <input
+                                        className={styles.checkbox}
                                         type='checkbox'
                                         id={item}
                                         checked={checkedList.includes(item)}
                                         onChange={() => checkHandler(item)}
                                         />
-                                    <label htmlFor={item}>{item}</label>
+                                    <label className={styles.checklabel} htmlFor={item}>{item}</label>
                                 </div>
                             ))}
                         </div>
@@ -594,11 +607,22 @@ const onRealSubmit = useCallback(async (e) => {
                     
                     <h3 className={styles.h3_title}>매물 사진</h3>
                     <div>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageChange} />
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageChange} />
+                            <div className={styles.imagecontainer}>
+                            {imageSrc.map((image, id) => (
+                                <div key={id}>
+                                    <img src={image} alt={`${image}-${id}`} width={'200px'} />
+                                        <button onClick={() => handleDeleteImage(id)}>X</button>
+                                </div>
+
+                            ))}
+                            </div>
+                        </div>
                     </div>
                     <h3 className={styles.h3_title}>상세 설명</h3>
                     <div className={styles.textarea}>
