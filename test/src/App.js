@@ -29,7 +29,7 @@ const App = () => {
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
-          {/* <Route path="/map" element={<Map />} /> */}
+          <Route path="/map" element={<Map />} />
           <Route path="/map/:word/:lat/:lon" element={<Map />} />
           <Route path="/gbblist" element={<GbbList imageList={imageList} />} />
           <Route path="/gbblist/:{articleId} " element={<GbbDetail/>} />
