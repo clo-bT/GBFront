@@ -18,6 +18,7 @@ import RtcRoomQR from "./components/Rtc/RtcRoomQR";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import RoomDetail from "./pages/RoomDetail";
+import RoomList from "./components/Maps/RoomList";
 
 const App = () => {
   const [imageList, setImageList] = useState([]);
@@ -30,7 +31,8 @@ const App = () => {
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/map" element={<Map />} />
+          {/* <Route path="/map" element={<Map />} /> */}
+          <Route path="/map/:word/:lat/:lon" element={<Map />} />
           <Route path="/gbblist" element={<GbbList imageList={imageList} />} />
           <Route path="/gbbcreate" element={<GbbCreate onImageUpload={handleImageUpload} />} />
           <Route path="/zzim" element={<Zzimlist />} />
