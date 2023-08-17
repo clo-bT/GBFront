@@ -205,51 +205,6 @@ const GrantorRtcRoom = () => {
     }
   }
 
-  /*
- UI Handlers
-  */
-  // mute video buttons handler
-  async function videoOff() {
-    // localVideoTracks = localStream.getVideoTracks();
-    // localVideoTracks.forEach((track) => localStream.removeTrack(track));
-    // localVideo.setAttribute(styles, "display:none");
-    localStream = null;
-    localVideo.style.display = "none"; // 스타일 적용
-    console.log("Video Off");
-  }
-
-  async function videoOn() {
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~`", localVideoTracks);
-
-    // 비디오 트랙 가져오기
-    localStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    localVideoTracks = localStream.getVideoTracks();
-
-    if (localStream) {
-      localVideoTracks.forEach((track) => {
-        if (track.kind === "video") {
-          localStream.addTrack(track); // 비디오 트랙 추가
-        }
-      });
-
-      // 오디오 트랙 관련 코드는 그대로 유지
-      // ...
-
-      localVideo.style.display = "inline"; // 스타일 적용
-      localVideo.srcObject = localStream; // 비디오 요소에 스트림 연결
-      console.log("Video On");
-    }
-  }
-  // mute audio buttons handler
-  function audioOff() {
-    localVideo.muted = true;
-    log("Audio Off");
-  }
-  function audioOn() {
-    localVideo.muted = false;
-    log("Audio On");
-  }
-
   // room exit button handler
   function exitLive() {
     stop();
