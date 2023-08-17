@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Header";
 
-<<<<<<< HEAD
-// import { useNavigate, useParams } from 'react-router-dom';
-import { Navigate, useParams } from "react-router-dom";
-=======
 import { useNavigate, useParams, useLocation } from "react-router-dom";
->>>>>>> c9d58c4b19301699bf3727e67a4e00704c04158a
 import styles from "../Chatting/ChatRoom.module.css";
 import axios from "axios";
 import ChatRoom from "../Chatting/ChatRoom";
@@ -62,11 +57,7 @@ const AssigneeRtcRoom = () => {
   // WebRTC media
   const mediaConstraints = {
     video: true,
-<<<<<<< HEAD
-    audio: false
-=======
     audio: false,
->>>>>>> c9d58c4b19301699bf3727e67a4e00704c04158a
   };
 
   // WebRTC variables
