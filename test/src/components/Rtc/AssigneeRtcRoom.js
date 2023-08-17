@@ -423,7 +423,6 @@ const AssigneeRtcRoom = () => {
 
   return (
     <div className={styles.ChatRoom}>
-      <Header />
       <button
         type="button"
         className="btn btn-outline-danger"

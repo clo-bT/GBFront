@@ -5,10 +5,16 @@
   /* 추가적인 스타일링을 원하면 여기에 추가 */
 }
 
-.VideoArea {
-  flex: 9;
+.videoElem {
+  width: 80vw;
+  max-height: 90vh;
+  overflow: hidden;
 }
 
-.ChatArea {
-  flex: 1;
+.videoArea {
+  flex: 8;
+}
+
+.chatArea {
+  flex: 2;
 }
