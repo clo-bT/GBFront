@@ -174,12 +174,6 @@ export default function Roomout() {
       });
       // formData.append('file', selectedImages);
 
-      for (let file of formData.getAll("files")) {
-        console.log("File Name:", file["name"]);
-        console.log("File Type:", file.type);
-        console.log("File Size:", file.size);
-        // You can log other properties as needed
-      }
       const roomDealRegisterRequestDto = {
         roomDealRegisterDefaultDto: {
           memberId: userid,
@@ -220,57 +214,11 @@ export default function Roomout() {
         },
       };
       // console.log(value)
-      const jh = new Blob([JSON.stringify(roomDealRegisterRequestDto)], {
+      const blob = new Blob([JSON.stringify(roomDealRegisterRequestDto)], {
         type: "application/json",
       });
-      formData.append("roomDealRegisterRequestDto", jh);
-      // const formData = {
-      //     "files": selectedImages,
-      //     "roomDealRegisterRequestDto": {
-      //         "roomDealRegisterDefaultDto": {
-      //             'id': userid,
-      //             "roomType": info,
-      //             "roomSize": pyeong,
-      //             "roomCount": roomCount,
-      //             "oneroomType": struc,
-      //             "bathroomCount": bathroomCount,
-      //             "roadAddress": doroaddress,
-      //             "jibunAddress": jibunaddress,
-      //             "monthlyFee": monthlyRent,
-      //             "deposit": deposit,
-      //             "managementFee": managementFee,
-      //             "usageDate": approveDate,
-      //             "moveInDate": startDate,
-      //             "expirationDate": endDate,
-      //             "floor": floor,
-      //             "totalFloor": totalFloor,
-      //             "lat": lat,
-      //             "lon": lon,
-      //             "station": nearstation,
-      //             "univ": nearschool,
-      //             "content": content,
-      //             // 다른 속성들도 유사하게 추가해주세요
-      //         },
-      //         "roomDealRegisterOptionDto": {
-      //             "airConditioner": checkedList.includes("에어컨"),
-      //             "refrigerator": checkedList.includes("냉장고"),
-      //             "washer": checkedList.includes("세탁기"),
-      //             "dryer": checkedList.includes("건조기"),
-      //             "sink": checkedList.includes("싱크대"),
-      //             "gasRange": checkedList.includes("가스레인지"),
-      //             "closet": checkedList.includes("장롱"),
-      //             "shoeCloset": checkedList.includes("신발장"),
-      //             "fireAlarm": checkedList.includes("화재경보기"),
-      //             "elevator": elevator === "elevatoryes",
-      //             "parkingLot": parking === "parkingyes"
-      //         }
-      //     }
-      // };
-      // console.log(formData)
+      formData.append("roomDealRegisterRequestDto", blob);
       try {
-        // for (let value of formData.values()) {
-        //     console.log(value);
-        //   }
         const response = await axios.post(
           `${process.env.REACT_APP_API_ROOT}/roomdeal/register`,
           formData,

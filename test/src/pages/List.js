@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import styles from "../components/Gbb.module.css";
+import axios from "axios";
 
 const List = ({ imageList }) => {
     const navigate = useNavigate();
@@ -10,34 +11,21 @@ const List = ({ imageList }) => {
 
     const [responseArticleId, setResponseArticleId] = useState(null); // 응답으로 받은 article_id
     const [responseRoomId, setResponseRoomId] = useState(null); // 응답으로 받은 room_id
-
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_ROOT}/showroom`
+        ).then((response) => {
+            console.log(response.data)
+            setResponseArticleId(response.data);
+            setResponseRoomId(response.data);
+        }).catch((error) => {
+            console.log(error)
+        })
+    },[])
     const handleSearch = async () => {
-        try {
-            const apiUrl = process.env.REACT_APP_API_ROOT; // 백엔드 서버의 주소
+        axios.post(`${process.env.REACT_APP_API_ROOT}`)
+    }
 
-            const requestBody = {
-                filter: searchText,
-                // search: searchText,
-                tags: selectedTags.map((tag) => ({ tagname: tag })),
-            };
 
-            const response = await fetch(`${apiUrl}/showroom/list`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestBody),
-            });
-
-            const data = await response.json();
-
-            // 응답 데이터 처리
-            setResponseArticleId(data.article_id);
-            setResponseRoomId(data.room_id);
-        } catch (error) {
-            console.error("에러:", error);
-        }
-    };
 
     return (
         <div>
