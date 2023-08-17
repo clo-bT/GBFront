@@ -108,7 +108,7 @@ const Create = ({ onImageUpload }) => {
     })
 
     
-  },[roomid,selectedHashtags,selectedImages,userid]);
+  },[navigate,roomid,selectedHashtags,selectedImages,userid]);
 
   return (
     <div>
