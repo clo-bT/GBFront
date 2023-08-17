@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Header from "../Header";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import styles from "../Chatting/ChatRoom.module.css";
+import styles from "./RtcRoom.module.css";
 import axios from "axios";
 import ChatRoomComponent from "../Chatting/ChatRoomComponent";
 
@@ -432,8 +432,7 @@ const GrantorRtcRoom = () => {
   // -------------------------------------------------------------------------
 
   return (
-    <div className={styles.ChatRoom}>
-      <Header />
+    <div>
       <button
         type="button"
         className="btn btn-outline-danger"
@@ -443,10 +442,11 @@ const GrantorRtcRoom = () => {
       >
         Exit Room
       </button>
-      <video id="local_video" autoPlay playsInline hidden></video>
-      <div className="FlexContainer">
-        <video id="local_video" style={{ width: "100px" }} autoPlay playsInline></video>
-        <div className={styles.ChatArea}>
+      <div className={styles.flexContainer}>
+        <div className={styles.videoArea}>
+          <video id="local_video" className={styles.videoElem} autoPlay playsInline></video>
+        </div>
+        <div className={styles.chatArea}>
           <ChatRoomComponent id={id} roomDealId={roomDealId} />
         </div>
       </div>
