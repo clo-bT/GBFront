@@ -35,7 +35,7 @@ const List = ({ imageList }) => {
             "memberId": userid,
             "searchWord": searchText,
             "searchType": 'station',
-            "hashTag": selectedTags,
+            "hashTag": selectedTags.join(' '),
             "sortType": 'desc',
             "pageOffset": 0
         }
@@ -127,6 +127,9 @@ const List = ({ imageList }) => {
     const handleDeleteTag = (id) => {
         setSelectedTags(selectedTags.filter((_, index) => index !== id));
     };
+    function handlegotoDetail(id) {
+        navigate(`/gbblist/${id}`)
+    }
 
     return (
         <div>
@@ -217,6 +220,7 @@ const List = ({ imageList }) => {
                                     src={value.thumbnail}
                                     alt={`${value}-${id}`}
                                     className={gbbListStyles.showRoomImg}
+                                    onClick={() => handlegotoDetail(value.id)}
                                 />
                                 {
                                     value.checkLike ?
